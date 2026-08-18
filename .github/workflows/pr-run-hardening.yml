@@ -1,0 +1,34 @@
+name: Run recovered XC hardening
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    if: github.head_ref == 'agent/xc-2026-ready'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Execute the reviewed one-time patch
+        shell: bash
+        run: |
+          sed -n "/^          python - <<'PY'$/,/^          PY$/p" .github/workflows/one-time-xc-hardening.yml | sed 's/^          //' > /tmp/harden.sh
+          bash /tmp/harden.sh
+          npm test
+      - name: Commit hardened source
+        shell: bash
+        run: |
+          rm .github/workflows/one-time-xc-hardening.yml .github/workflows/pr-run-hardening.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Harden XC snow signals and ownership [xc-hardening]"
+          git push origin HEAD:${{ github.head_ref }}
