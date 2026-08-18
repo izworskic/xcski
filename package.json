@@ -1,0 +1,9 @@
+{
+  "name": "xcski",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "npm run build && node scripts/check-build.mjs"
+  }
+}
