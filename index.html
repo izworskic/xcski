@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northern Michigan Cross Country Ski Trails | Map and Live Snow Conditions</title>
+<meta name="description" content="Interactive map and guide to 48 cross country ski trail systems in northern Michigan, from the Vasa Pathway to Black Mountain, with live snow depth, new snowfall, and temperature at every trailhead.">
+<link rel="canonical" href="https://xcski.chrisizworski.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Northern Michigan Cross Country Ski Trails">
+<meta property="og:description" content="48 trail systems, one map. Groomed centers, volunteer pathways, and backcountry loops with live snow depth at every trailhead.">
+<meta property="og:url" content="https://xcski.chrisizworski.com/">
+<meta property="og:image" content="https://xcski.chrisizworski.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Northern Michigan Cross Country Ski Trails">
+<meta name="twitter:description" content="48 trail systems, one map, live snow depth at every trailhead.">
+<meta name="twitter:image" content="https://xcski.chrisizworski.com/og.png">
+<meta name="author" content="Chris Izworski">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://xcski.chrisizworski.com/#website","url":"https://xcski.chrisizworski.com/","name":"Northern Michigan Cross Country Ski Trails","publisher":{"@id":"https://xcski.chrisizworski.com/#person"}},{"@type":"Person","@id":"https://xcski.chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","sameAs":["https://chrisizworski.com/","https://michigantroutreport.com/chris-izworski/","https://greatlakeslevels.org/chris-izworski/","https://github.com/izworskic","https://izworskic.github.io/"]},{"@type":"WebPage","@id":"https://xcski.chrisizworski.com/#webpage","url":"https://xcski.chrisizworski.com/","name":"Northern Michigan Cross Country Ski Trails Map and Snow Conditions","isPartOf":{"@id":"https://xcski.chrisizworski.com/#website"},"about":"Cross country skiing in northern Michigan","description":"An interactive map and guide to 48 cross country ski trail systems in northern Michigan with live snow depth, new snowfall, and temperature for every trailhead.","dateModified":"2026-07-05","author":{"@id":"https://xcski.chrisizworski.com/#person"},"primaryImageOfPage":"https://xcski.chrisizworski.com/og.png"},{"@type":"ItemList","name":"Northern Michigan cross country ski trail systems","numberOfItems":48,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"SportsActivityLocation","name":"Forbush Corner Nordic","address":{"@type":"PostalAddress","addressLocality":"Frederic","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.7857,"longitude":-84.6975},"description":"A nonprofit nordic center a quarter mile east of I-75 at exit 264, groomed with Pisten Bully cats and backed by a snowmaking loop that runs whenever it is cold enough. Widely considered the best corduroy in the Lower Peninsula, with a pro shop, rentals, and lessons.","url":"https://www.forbushcorner.com/"}},{"@type":"ListItem","position":2,"item":{"@type":"SportsActivityLocation","name":"Hanson Hills Recreation Area","address":{"@type":"PostalAddress","addressLocality":"Grayling","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.651,"longitude":-84.755},"description":"About 35 km of daily groomed trails in loops from 2 to 12 km on mostly hilly terrain southwest of Grayling. A working recreation area with a lodge, rentals, and some of the most honest climbing in the northern Lower.","url":"https://www.hansonhills.org/"}},{"@type":"ListItem","position":3,"item":{"@type":"SportsActivityLocation","name":"Hartwick Pines State Park","address":{"@type":"PostalAddress","addressLocality":"Grayling","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.7405,"longitude":-84.66},"description":"Classic tracks set through and around the largest stand of old growth white pine left in the Lower Peninsula. Quiet, forgiving terrain and a visitor center trailhead.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":4,"item":{"@type":"SportsActivityLocation","name":"Cross Country Ski Headquarters","address":{"@type":"PostalAddress","addressLocality":"Roscommon","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.4345,"longitude":-84.673},"description":"A full service nordic shop and trail system near the south end of Higgins Lake, groomed for skate and classic with snowmaking on part of the network. Rentals, lessons, and a cafe make it the easiest first stop for new skiers.","url":"https://www.cross-country-ski.com/"}},{"@type":"ListItem","position":5,"item":{"@type":"SportsActivityLocation","name":"Tisdale Triangle Pathway","address":{"@type":"PostalAddress","addressLocality":"Roscommon","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.499,"longitude":-84.58},"description":"A community maintained pathway on the edge of Roscommon village with gentle wooded loops along the AuSable South Branch corridor. Good after work skiing when the tracks are in.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":6,"item":{"@type":"SportsActivityLocation","name":"Wakeley Lake","address":{"@type":"PostalAddress","addressLocality":"Grayling","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.641,"longitude":-84.483},"description":"A quiet Huron National Forest non-motorized area off M-72 east of Grayling. Skier tracked loops around the lake, flat to rolling, with a good chance of seeing nobody at all.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":7,"item":{"@type":"SportsActivityLocation","name":"Mason Tract Pathway","address":{"@type":"PostalAddress","addressLocality":"Roscommon","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.633,"longitude":-84.47},"description":"The pathway along the South Branch of the AuSable through the Mason Tract. Rolling river terrain any trout angler already knows, skied on whatever tracks the last party left.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":8,"item":{"@type":"SportsActivityLocation","name":"Aspen Park","address":{"@type":"PostalAddress","addressLocality":"Gaylord","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.021,"longitude":-84.68},"description":"A 100 acre city park tucked behind downtown Gaylord with a groomed 2 mile lighted loop for night skiing plus more challenging outer routes. The most convenient snow in the 45th parallel snowbelt.","url":"https://www.gaylordmichigan.net/pick-your-season/winter/outdoor-winter-activities-in-the-gaylord-area/"}},{"@type":"ListItem","position":9,"item":{"@type":"SportsActivityLocation","name":"Pine Baron Pathway","address":{"@type":"PostalAddress","addressLocality":"Gaylord","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.014,"longitude":-84.793},"description":"A 12 km state forest pathway six miles west of town, mostly flat, nicely wooded, wide enough for two sets of tracks and groomed weekly through the winter.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":10,"item":{"@type":"SportsActivityLocation","name":"Treetops Resort","address":{"@type":"PostalAddress","addressLocality":"Gaylord","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.033,"longitude":-84.622},"description":"Three connected loops totaling about 9 km at the resort east of Gaylord, including a snowmaking stretch at the base of the downhill slopes for thin years. Rentals and lodging on site.","url":"https://www.treetops.com/activities/cross-country-skiing/"}},{"@type":"ListItem","position":11,"item":{"@type":"SportsActivityLocation","name":"Louis M. Groen Nature Preserve","address":{"@type":"PostalAddress","addressLocality":"Johannesburg","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.993,"longitude":-84.464},"description":"A 789 acre Otsego County preserve where staff groom a pair of 3 mile loops, one for classic and one for skate, at one of the highest points in the county. Snowshoe country everywhere else on the property.","url":"https://www.michigan.org/property/louis-m-groen-nature-preserve"}},{"@type":"ListItem","position":12,"item":{"@type":"SportsActivityLocation","name":"Shingle Mill Pathway","address":{"@type":"PostalAddress","addressLocality":"Vanderbilt","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.157,"longitude":-84.534},"description":"Ungroomed loops along the Pigeon River in the Pigeon River Country State Forest, the biggest wild block in the Lower Peninsula. Scenic, remote feeling, and often broken trail after storms.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":13,"item":{"@type":"SportsActivityLocation","name":"Warner Creek Pathway","address":{"@type":"PostalAddress","addressLocality":"Elmira","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.064,"longitude":-84.908},"description":"A lightly used 3.8 mile pathway through the Hardwood Hills west of Gaylord. Mostly level, quiet, and a reliable bet for solitude on a busy Saturday.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":14,"item":{"@type":"SportsActivityLocation","name":"Vasa Pathway","address":{"@type":"PostalAddress","addressLocality":"Williamsburg","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.728,"longitude":-85.47},"description":"The flagship of Traverse City skiing, groomed for skate and classic by TART Trails in loops of 3, 5, 10, and 25 km through state forest east of town. Home course of the North American Vasa and the busiest corduroy in the region.","url":"https://www.traversetrails.org/"}},{"@type":"ListItem","position":15,"item":{"@type":"SportsActivityLocation","name":"Timber Ridge Nordic Center","address":{"@type":"PostalAddress","addressLocality":"Traverse City","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.7135,"longitude":-85.523},"description":"A nordic center bordering the Vasa corridor with about 27 km of groomed trails, lighted loops for night skiing, rentals, and a lodge with a fireplace.","url":"https://www.timberridgeresort.net/"}},{"@type":"ListItem","position":16,"item":{"@type":"SportsActivityLocation","name":"Hickory Hills","address":{"@type":"PostalAddress","addressLocality":"Traverse City","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.756,"longitude":-85.664},"description":"The city owned ski area on the west side of Traverse City, with about 4 km of cross country trails including a 1 km lighted loop under the downhill slopes. A lodge and town proximity make it the easy weeknight option.","url":"https://www.traversecitymi.gov/"}},{"@type":"ListItem","position":17,"item":{"@type":"SportsActivityLocation","name":"Muncie Lakes Pathway","address":{"@type":"PostalAddress","addressLocality":"Traverse City","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.657,"longitude":-85.462},"description":"State forest loops near Ranch Rudolf in the Boardman valley, skier tracked rather than machine groomed most winters. Rolling terrain, small lakes, and a classic Traverse backcountry feel.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":18,"item":{"@type":"SportsActivityLocation","name":"Palmer Woods Forest Reserve","address":{"@type":"PostalAddress","addressLocality":"Glen Arbor","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.858,"longitude":-85.92},"description":"Leelanau Conservancy land near Glen Arbor with groomed skate and classic loops through big hardwoods, free to ski. One of the best conservancy skiing projects in the state.","url":"https://leelanauconservancy.org/"}},{"@type":"ListItem","position":19,"item":{"@type":"SportsActivityLocation","name":"Sleeping Bear Heritage Trail","address":{"@type":"PostalAddress","addressLocality":"Empire to Glen Arbor","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.8814,"longitude":-86.043},"description":"The paved Heritage Trail becomes a groomed winter corridor through the national lakeshore, with the Dune Climb stretch the most popular. Gentle grades and dune country scenery.","url":"https://sleepingbeartrail.org/"}},{"@type":"ListItem","position":20,"item":{"@type":"SportsActivityLocation","name":"Alligator Hill","address":{"@type":"PostalAddress","addressLocality":"Glen Arbor","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.888,"longitude":-86.008},"description":"Sleeping Bear Dunes National Lakeshore loops climbing to Lake Michigan overlooks above Glen Arbor. Ungroomed, honest climbs, and the best summit view you can earn on skinny skis in the Lower Peninsula.","url":"https://www.nps.gov/slbe/"}},{"@type":"ListItem","position":21,"item":{"@type":"SportsActivityLocation","name":"Old Indian Trail","address":{"@type":"PostalAddress","addressLocality":"Frankfort","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.708,"longitude":-86.186},"description":"A quiet national lakeshore loop at the south end of the park near Crystal Lake, rolling through pine and hardwood toward the Lake Michigan shore. Usually skier tracked within a day of new snow.","url":"https://www.nps.gov/slbe/"}},{"@type":"ListItem","position":22,"item":{"@type":"SportsActivityLocation","name":"Shanty Creek","address":{"@type":"PostalAddress","addressLocality":"Bellaire","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.937,"longitude":-85.195},"description":"About 30 km of groomed nordic trails at the Bellaire resort, including terrain used by the White Pine Stampede. Rentals, lessons, and lodging on site.","url":"https://www.shantycreek.com/"}},{"@type":"ListItem","position":23,"item":{"@type":"SportsActivityLocation","name":"Crystal Mountain","address":{"@type":"PostalAddress","addressLocality":"Thompsonville","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.518,"longitude":-85.993},"description":"A full nordic center at the Thompsonville resort with about 25 km of groomed skate and classic trails, rentals, lessons, and the Michigan Legacy Art Park skiable next door.","url":"https://www.crystalmountain.com/"}},{"@type":"ListItem","position":24,"item":{"@type":"SportsActivityLocation","name":"Betsie Valley Pathway","address":{"@type":"PostalAddress","addressLocality":"Thompsonville","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.529,"longitude":-85.937},"description":"A state forest pathway just east of Crystal Mountain with wooded classic loops along the Betsie River corridor. The free and quiet counterpart to the resort next door.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":25,"item":{"@type":"SportsActivityLocation","name":"Big M Recreation Area","address":{"@type":"PostalAddress","addressLocality":"Wellston","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.24,"longitude":-86.035},"description":"Roughly 30 km of volunteer groomed skate and classic loops in the Udell Hills of the Manistee National Forest. Real climbs, a warming shelter at the trailhead, and some of the most consistent lake effect snow in the northwest Lower.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":26,"item":{"@type":"SportsActivityLocation","name":"MacKenzie Trail","address":{"@type":"PostalAddress","addressLocality":"Caberfae","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.245,"longitude":-85.719},"description":"About 10 miles of marked national forest loops next to Caberfae Peaks, free to ski, with terrain from gentle to genuinely hilly. Grooming is intermittent, so expect set tracks some weeks and skier packing others.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":27,"item":{"@type":"SportsActivityLocation","name":"Cadillac Pathway","address":{"@type":"PostalAddress","addressLocality":"Cadillac","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.282,"longitude":-85.36},"description":"A volunteer groomed state forest system northeast of Cadillac along the Clam River, with around 11 miles of loops from flat to rolling. A dependable local favorite.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":28,"item":{"@type":"SportsActivityLocation","name":"The Highlands Cross Country Center","address":{"@type":"PostalAddress","addressLocality":"Harbor Springs","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.468,"longitude":-84.934},"description":"The nordic side of the Harbor Springs resort, with a dozen loops totaling about 35 km through hilly, scenic terrain. Lessons, rentals, and lift access to upper trails.","url":"https://www.highlandsharborsprings.com/"}},{"@type":"ListItem","position":29,"item":{"@type":"SportsActivityLocation","name":"Nub's Nob Cross Country Trails","address":{"@type":"PostalAddress","addressLocality":"Harbor Springs","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.47,"longitude":-84.903},"description":"About 20 km of wide loops groomed and tracked across the road from the alpine area, connecting toward Chestnut Valley. Eighteen feet wide, power tilled, and benefiting from the same lake effect belt that feeds the downhill slopes.","url":"https://www.nubsnob.com/"}},{"@type":"ListItem","position":30,"item":{"@type":"SportsActivityLocation","name":"Avalanche Preserve","address":{"@type":"PostalAddress","addressLocality":"Boyne City","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.204,"longitude":-85.014},"description":"Boyne City's in-town preserve with wooded ski loops below the overlook stairs, plus sledding and skating. Park at the corner of Lake and Ann and ski from downtown.","url":"https://www.michigan.org/property/avalanche-mountain-preserve"}},{"@type":"ListItem","position":31,"item":{"@type":"SportsActivityLocation","name":"Wildwood Hills Pathway","address":{"@type":"PostalAddress","addressLocality":"Indian River","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.362,"longitude":-84.673},"description":"Three loops totaling about 15 km of rolling state forest south of Burt Lake, with the first two double tracked for classic and the third groomed for skate skiing when volunteers can get out.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":32,"item":{"@type":"SportsActivityLocation","name":"Lost Tamarack Pathway","address":{"@type":"PostalAddress","addressLocality":"Wolverine","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.292,"longitude":-84.67},"description":"Quiet state forest loops from Weber Lake northwest of Wolverine. Ungroomed, gentle, and rarely crowded.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":33,"item":{"@type":"SportsActivityLocation","name":"Spring Brook Pathway","address":{"@type":"PostalAddress","addressLocality":"Boyne Falls","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.207,"longitude":-84.828},"description":"A hilly pathway in the Chandler Hills northeast of Boyne Falls. The outer loop earns its difficult rating with a steep climb and a long curving descent, so bring skis you can turn.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":34,"item":{"@type":"SportsActivityLocation","name":"Petoskey State Park","address":{"@type":"PostalAddress","addressLocality":"Petoskey","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.402,"longitude":-84.903},"description":"Ungroomed park trails behind the Lake Michigan dunes at the head of Little Traverse Bay. Short, scenic, and a good half day paired with town.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":35,"item":{"@type":"SportsActivityLocation","name":"NCMC Natural Area","address":{"@type":"PostalAddress","addressLocality":"Petoskey","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.36,"longitude":-84.95},"description":"Four miles of packed but ungroomed trails over three flat loops bordering the Bear River at North Central Michigan College. Free and beginner friendly.","url":"https://www.ncmich.edu/"}},{"@type":"ListItem","position":36,"item":{"@type":"SportsActivityLocation","name":"Black Mountain Recreation Area","address":{"@type":"PostalAddress","addressLocality":"Onaway","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.448,"longitude":-84.135},"description":"A big state forest trail complex southeast of Black Lake with groomed ski loops, a warming cabin, and mile after mile of hardwood ridge. The largest system in the northeast Lower and worth the drive from anywhere.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":37,"item":{"@type":"SportsActivityLocation","name":"Ocqueoc Falls Pathway","address":{"@type":"PostalAddress","addressLocality":"Millersburg","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.396,"longitude":-84.057},"description":"Loops along the Ocqueoc River from the falls trailhead, the only publicly accessible waterfall in the Lower Peninsula. Ungroomed and prettiest right after a storm.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":38,"item":{"@type":"SportsActivityLocation","name":"Clear Lake and Sinkholes","address":{"@type":"PostalAddress","addressLocality":"Atlanta","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.133,"longitude":-84.173},"description":"State park and pathway skiing north of Atlanta, including the Sinkholes Pathway around dry karst craters in the Mackinaw State Forest. Deep snow country most winters.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":39,"item":{"@type":"SportsActivityLocation","name":"Norway Ridge Pathway","address":{"@type":"PostalAddress","addressLocality":"Alpena","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.021,"longitude":-83.524},"description":"Alpena's home pathway off Werth Road, with classic tracks set by local volunteers through red pine plantation and hardwoods. Gentle and dependable when the east side has snow.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":40,"item":{"@type":"SportsActivityLocation","name":"Chippewa Hills Pathway","address":{"@type":"PostalAddress","addressLocality":"Ossineke","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.856,"longitude":-83.728},"description":"Rolling state forest loops inland from Ossineke with more relief than most of the northeast. Ungroomed but regularly skied by locals.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":41,"item":{"@type":"SportsActivityLocation","name":"Eagle Run Trail","address":{"@type":"PostalAddress","addressLocality":"Mio","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.648,"longitude":-84.133},"description":"Gentle national forest loops along the south bank of the AuSable just below Mio. Flat riverside skiing, usually tracked in quickly after snow.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":42,"item":{"@type":"SportsActivityLocation","name":"Corsair Trail System","address":{"@type":"PostalAddress","addressLocality":"East Tawas","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.34,"longitude":-83.635},"description":"One of the largest track set classic networks in the state, spread across three trailheads on Monument Road in the Huron National Forest above Tawas. Groomed by the Corsair Trail Council on donations, with Silver Creek valley terrain that skis bigger than the map suggests.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":43,"item":{"@type":"SportsActivityLocation","name":"Highbanks Trail","address":{"@type":"PostalAddress","addressLocality":"Oscoda","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.436,"longitude":-83.543},"description":"A point to point ski along the bluffs above the AuSable between Iargo Springs and Lumberman's Monument. Ungroomed, mostly level, with the best river overlooks in the state as the payoff.","url":"https://www.fs.usda.gov/hmnf"}},{"@type":"ListItem","position":44,"item":{"@type":"SportsActivityLocation","name":"Rifle River Recreation Area","address":{"@type":"PostalAddress","addressLocality":"Lupton","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":44.411,"longitude":-84.025},"description":"Ungroomed trails through the lakes and cedar bottoms of the recreation area near Lupton. Quiet winter skiing over the same ground the trout crowd works in April.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":45,"item":{"@type":"SportsActivityLocation","name":"Wilderness State Park","address":{"@type":"PostalAddress","addressLocality":"Carp Lake","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":45.742,"longitude":-84.9},"description":"More than 7 miles of designated ski trail plus a larger multi-use network at the tip of the mitt west of Mackinaw City. Big shoreline forest, deep straits snow, varied terrain for novice and intermediate skiers.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":46,"item":{"@type":"SportsActivityLocation","name":"Algonquin Ski Trail","address":{"@type":"PostalAddress","addressLocality":"Sault Ste. Marie","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.479,"longitude":-84.39},"description":"The Soo's community trail system on the west side of town, groomed for skate and classic through flat to rolling pine country. Reliable early snow off Superior and Whitefish Bay.","url":"https://www.saultstemarie.com/"}},{"@type":"ListItem","position":47,"item":{"@type":"SportsActivityLocation","name":"Pine Bowl Pathway","address":{"@type":"PostalAddress","addressLocality":"Kinross","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.245,"longitude":-84.43},"description":"A state forest pathway southeast of Kinross with quiet classic loops through pine plantation and cedar. A dependable eastern UP option minutes off I-75.","url":"https://www.michigan.gov/dnr/things-to-do/cross-country-skiing"}},{"@type":"ListItem","position":48,"item":{"@type":"SportsActivityLocation","name":"Sand Dunes Ski Trail","address":{"@type":"PostalAddress","addressLocality":"Brevort","addressRegion":"MI","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":46.006,"longitude":-85.026},"description":"Hiawatha National Forest loops through wooded Lake Michigan dune country west of St. Ignace, groomed through the season. Rolling glacial terrain with loop options for every level.","url":"https://www.fs.usda.gov/hiawatha"}}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When is cross country ski season in northern Michigan?","acceptedAnswer":{"@type":"Answer","text":"Most groomed systems run from late December through mid March in a normal winter. The Gaylord and Grayling snowbelt, the Little Traverse hills, and the eastern UP open earliest and hold latest, and Forbush Corner and Cross Country Ski Headquarters make snow, so they often ski when nothing else does."}},{"@type":"Question","name":"Which trails are groomed for skate skiing?","acceptedAnswer":{"@type":"Answer","text":"Forbush Corner, Hanson Hills, Cross Country Ski Headquarters, the Vasa Pathway, Timber Ridge, Shanty Creek, Crystal Mountain, Big M, The Highlands, Nub's Nob, Black Mountain, and several volunteer systems groom skate lanes. Classic only and backcountry systems are labeled on each card."}},{"@type":"Question","name":"Do I need a pass to ski these trails?","acceptedAnswer":{"@type":"Answer","text":"It varies. Private and resort centers charge a day pass. Volunteer groomed systems like the Vasa, Big M, and Corsair run on donations, and the donation box genuinely funds the grooming. State parks require the Michigan Recreation Passport for parking, while most state forest pathways are free."}},{"@type":"Question","name":"Where is the most reliable snow?","acceptedAnswer":{"@type":"Answer","text":"The lake effect belts: Gaylord and the 45th parallel corridor, the hills from Boyne through Harbor Springs, the Udell Hills near Big M, and the eastern UP. The northeast Lower gets less lake effect but holds cold well, so Black Mountain and Corsair ski well in colder winters."}},{"@type":"Question","name":"How accurate is the live snow data?","acceptedAnswer":{"@type":"Answer","text":"Snow depth and new snowfall come from the Open-Meteo weather model analysis for each trailhead, refreshed on every page load. Model snow depth is a solid regional signal but it is not a grooming report, so check the operator's own report before a long drive."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Chris Izworski","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Northern Michigan XC Ski Trails","item":"https://xcski.chrisizworski.com/"}]}]}</script>
+<style>
+:root{--snow:#f0f4f8;--card:#ffffff;--ink:#142832;--muted:#4b6472;--line:#d7e2ea;--glacier:#20618e;--spruce:#1e6f5c;--field:#5b6b3a;--ember:#c2571f;--track:#0f3552}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--snow);color:var(--ink);font:16px/1.6 "Public Sans",system-ui,sans-serif}
+a{color:var(--glacier)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header.hero{background:
+ repeating-linear-gradient(-38deg, rgba(32,97,142,.06) 0 2px, transparent 2px 14px),
+ linear-gradient(180deg,#ffffff, var(--snow));border-bottom:1px solid var(--line);padding:52px 0 34px}
+.kicker{font:600 12px/1 "Public Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ember)}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.02;margin:12px 0 14px;letter-spacing:-.01em}
+.thesis{max-width:640px;color:var(--muted);font-size:17px;margin:0 0 18px}
+.status{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.status .dot{width:9px;height:9px;border-radius:50%;background:#9aa9b4;flex:none}
+nav.regions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+nav.regions a{font-size:13px;font-weight:600;text-decoration:none;color:var(--track);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+nav.regions a:hover{border-color:var(--glacier)}
+.bar{position:sticky;top:0;z-index:1002;background:rgba(240,244,248,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;gap:8px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.f{font:600 13px/1 "Public Sans",sans-serif;color:var(--track);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
+.f[aria-pressed="true"]{background:var(--track);border-color:var(--track);color:#fff}
+#map{height:520px;border-block:1px solid var(--line);background:#e6edf3}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);padding:12px 0 2px}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.region{padding:34px 0 6px}
+.region-head h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(23px,3.4vw,32px);margin:0 0 6px;letter-spacing:-.01em}
+.region-blurb{color:var(--muted);margin:0 0 18px;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px}
+.card.hidden{display:none}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.card h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:19px;margin:0;line-height:1.2}
+.town{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 11.5px/1 "Public Sans",sans-serif;border-radius:6px;padding:5px 8px;background:#eaf1f6;color:var(--track)}
+.chip-cat{color:#fff}
+[data-cat="groomed"] .chip-cat{background:var(--glacier)}
+[data-cat="volunteer"] .chip-cat{background:var(--spruce)}
+[data-cat="backcountry"] .chip-cat{background:var(--field)}
+.chip-lit{background:#fdf1e4;color:var(--ember)}
+.ledger{border:1px solid var(--line);border-left:4px solid #b9c9d5;border-radius:8px;padding:9px 12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;background:#f7fafc;color:var(--muted)}
+.ledger.on{color:var(--ink)}
+.ledger .figs{display:flex;gap:14px;flex-wrap:wrap;font-weight:600}
+.ledger .figs span b{font-weight:700}
+.ledger .read{margin-top:2px;display:block}
+.ledger.s-deep{border-left-color:var(--track)} .ledger.s-good{border-left-color:var(--glacier)}
+.ledger.s-fair{border-left-color:#5f8fb0} .ledger.s-thin{border-left-color:#c99b3f}
+.ledger.s-none{border-left-color:#a56458} .ledger.s-off{border-left-color:#b9c9d5}
+.desc{margin:0;font-size:14.5px;color:#33505f}
+.card-actions{display:flex;gap:14px;align-items:center;margin-top:auto;padding-top:2px}
+.map-btn{font:600 13px/1 "Public Sans",sans-serif;color:var(--track);background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+.map-btn:hover{border-color:var(--glacier);color:var(--glacier)}
+.ext{font-size:13px;font-weight:600}
+.method,.faqs{padding:40px 0 8px}
+.method h2,.faqs h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(22px,3vw,30px);margin:0 0 12px}
+.method p{max-width:720px;color:#33505f}
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:0 0 10px;max-width:820px}
+details.faq summary{font-weight:600;cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-size:16.5px}
+details.faq p{color:#33505f;margin:10px 0 2px}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:30px 0 44px;font-size:14px;color:var(--muted)}
+footer .net{display:flex;gap:6px 18px;flex-wrap:wrap;margin-top:10px}
+footer a{color:var(--track)}
+.marker-pin{border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(20,40,50,.4)}
+.leaflet-popup-content{font:13px/1.5 "Public Sans",sans-serif}
+.leaflet-popup-content b{font-family:"Bricolage Grotesque",sans-serif}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (max-width:640px){#map{height:400px}.card-top{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<p class="kicker">A Chris Izworski field tool</p>
+<h1>Northern Michigan<br>Cross Country Ski Trails</h1>
+<p class="thesis">Forty eight trail systems from the Vasa Pathway to Black Mountain on one map: groomed nordic centers, volunteer pathways, and backcountry loops, each with live snow depth, new snowfall, and temperature at the trailhead, plus a plain read on whether it is worth the drive.</p>
+<p class="status" id="region-status"><span class="dot"></span><span id="status-text">Checking regional snow...</span></p>
+<nav class="regions" aria-label="Regions"><a href="#grayling">Grayling and Roscommon</a><a href="#gaylord">Gaylord and Pigeon River Country</a><a href="#traverse">Traverse City, Leelanau and Antrim</a><a href="#cadillac">Cadillac, Benzie and Manistee</a><a href="#petoskey">Petoskey, Harbor Springs and Boyne</a><a href="#northeast">Northeast Lower</a><a href="#straits">Straits and Eastern UP</a></nav>
+</div></header>
+
+<div class="bar"><div class="wrap">
+<button class="f" data-filter="all" aria-pressed="true" type="button">All 48</button>
+<button class="f" data-filter="skate" aria-pressed="false" type="button">Skate groomed</button>
+<button class="f" data-filter="groomed" aria-pressed="false" type="button">Groomed</button>
+<button class="f" data-filter="volunteer" aria-pressed="false" type="button">Volunteer groomed</button>
+<button class="f" data-filter="backcountry" aria-pressed="false" type="button">Backcountry</button>
+<button class="f" data-filter="lit" aria-pressed="false" type="button">Night skiing</button>
+<button class="f" data-filter="rentals" aria-pressed="false" type="button">Rentals</button>
+</div></div>
+
+<div id="map" role="application" aria-label="Map of northern Michigan cross country ski trail systems"></div>
+<div class="wrap"><p class="legend">
+<span><b style="background:#20618e"></b>Groomed center</span>
+<span><b style="background:#1e6f5c"></b>Volunteer groomed</span>
+<span><b style="background:#5b6b3a"></b>Backcountry</span>
+<span>Trailhead locations are approximate. Confirm access with the operator.</span></p></div>
+
+<main class="wrap">
+<section class="region" id="grayling"><div class="region-head"><h2>Grayling and Roscommon</h2><p class="region-blurb">The AuSable country snowbelt: the best pro grooming in the Lower Peninsula plus quiet river backcountry.</p></div><div class="grid">
+<article class="card" id="t-forbush" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Forbush Corner Nordic</h3><span class="town">Frederic</span></div>
+<div class="chips"><span class="chip chip-km">30+ km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="forbush"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A nonprofit nordic center a quarter mile east of I-75 at exit 264, groomed with Pisten Bully cats and backed by a snowmaking loop that runs whenever it is cold enough. Widely considered the best corduroy in the Lower Peninsula, with a pro shop, rentals, and lessons.</p>
+<div class="card-actions"><button class="map-btn" data-id="forbush" type="button">Show on map</button><a class="ext" href="https://www.forbushcorner.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-hanson" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Hanson Hills Recreation Area</h3><span class="town">Grayling</span></div>
+<div class="chips"><span class="chip chip-km">35 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="hanson"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">About 35 km of daily groomed trails in loops from 2 to 12 km on mostly hilly terrain southwest of Grayling. A working recreation area with a lodge, rentals, and some of the most honest climbing in the northern Lower.</p>
+<div class="card-actions"><button class="map-btn" data-id="hanson" type="button">Show on map</button><a class="ext" href="https://www.hansonhills.org/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-hartwick" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Hartwick Pines State Park</h3><span class="town">Grayling</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Recreation Passport</span></div>
+<div class="ledger" data-id="hartwick"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Classic tracks set through and around the largest stand of old growth white pine left in the Lower Peninsula. Quiet, forgiving terrain and a visitor center trailhead.</p>
+<div class="card-actions"><button class="map-btn" data-id="hartwick" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-xchq" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Cross Country Ski Headquarters</h3><span class="town">Roscommon</span></div>
+<div class="chips"><span class="chip chip-km">18 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="xchq"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A full service nordic shop and trail system near the south end of Higgins Lake, groomed for skate and classic with snowmaking on part of the network. Rentals, lessons, and a cafe make it the easiest first stop for new skiers.</p>
+<div class="card-actions"><button class="map-btn" data-id="xchq" type="button">Show on map</button><a class="ext" href="https://www.cross-country-ski.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-tisdale" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Tisdale Triangle Pathway</h3><span class="town">Roscommon</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="tisdale"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A community maintained pathway on the edge of Roscommon village with gentle wooded loops along the AuSable South Branch corridor. Good after work skiing when the tracks are in.</p>
+<div class="card-actions"><button class="map-btn" data-id="tisdale" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-wakeley" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Wakeley Lake</h3><span class="town">Grayling</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span></div>
+<div class="ledger" data-id="wakeley"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A quiet Huron National Forest non-motorized area off M-72 east of Grayling. Skier tracked loops around the lake, flat to rolling, with a good chance of seeing nobody at all.</p>
+<div class="card-actions"><button class="map-btn" data-id="wakeley" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-mason" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Mason Tract Pathway</h3><span class="town">Roscommon</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="mason"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The pathway along the South Branch of the AuSable through the Mason Tract. Rolling river terrain any trout angler already knows, skied on whatever tracks the last party left.</p>
+<div class="card-actions"><button class="map-btn" data-id="mason" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="gaylord"><div class="region-head"><h2>Gaylord and Pigeon River Country</h2><p class="region-blurb">The 45th parallel snow machine. Town trails under lights, resort loops, and the wildest state forest in the Lower.</p></div><div class="grid">
+<article class="card" id="t-aspen" data-cat="groomed" data-lit="1" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Aspen Park</h3><span class="town">Gaylord</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-lit">Lit for night skiing</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="aspen"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A 100 acre city park tucked behind downtown Gaylord with a groomed 2 mile lighted loop for night skiing plus more challenging outer routes. The most convenient snow in the 45th parallel snowbelt.</p>
+<div class="card-actions"><button class="map-btn" data-id="aspen" type="button">Show on map</button><a class="ext" href="https://www.gaylordmichigan.net/pick-your-season/winter/outdoor-winter-activities-in-the-gaylord-area/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-pinebaron" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Pine Baron Pathway</h3><span class="town">Gaylord</span></div>
+<div class="chips"><span class="chip chip-km">12 km</span><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="pinebaron"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A 12 km state forest pathway six miles west of town, mostly flat, nicely wooded, wide enough for two sets of tracks and groomed weekly through the winter.</p>
+<div class="card-actions"><button class="map-btn" data-id="pinebaron" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-treetops" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Treetops Resort</h3><span class="town">Gaylord</span></div>
+<div class="chips"><span class="chip chip-km">9 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="treetops"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Three connected loops totaling about 9 km at the resort east of Gaylord, including a snowmaking stretch at the base of the downhill slopes for thin years. Rentals and lodging on site.</p>
+<div class="card-actions"><button class="map-btn" data-id="treetops" type="button">Show on map</button><a class="ext" href="https://www.treetops.com/activities/cross-country-skiing/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-groen" data-cat="volunteer" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Louis M. Groen Nature Preserve</h3><span class="town">Johannesburg</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="groen"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A 789 acre Otsego County preserve where staff groom a pair of 3 mile loops, one for classic and one for skate, at one of the highest points in the county. Snowshoe country everywhere else on the property.</p>
+<div class="card-actions"><button class="map-btn" data-id="groen" type="button">Show on map</button><a class="ext" href="https://www.michigan.org/property/louis-m-groen-nature-preserve" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-shinglemill" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Shingle Mill Pathway</h3><span class="town">Vanderbilt</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="shinglemill"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Ungroomed loops along the Pigeon River in the Pigeon River Country State Forest, the biggest wild block in the Lower Peninsula. Scenic, remote feeling, and often broken trail after storms.</p>
+<div class="card-actions"><button class="map-btn" data-id="shinglemill" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-warnercreek" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Warner Creek Pathway</h3><span class="town">Elmira</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="warnercreek"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A lightly used 3.8 mile pathway through the Hardwood Hills west of Gaylord. Mostly level, quiet, and a reliable bet for solitude on a busy Saturday.</p>
+<div class="card-actions"><button class="map-btn" data-id="warnercreek" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="traverse"><div class="region-head"><h2>Traverse City, Leelanau and Antrim</h2><p class="region-blurb">The Vasa corridor, conservancy grooming in Leelanau, and dune country skiing in the national lakeshore.</p></div><div class="grid">
+<article class="card" id="t-vasa" data-cat="groomed" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Vasa Pathway</h3><span class="town">Williamsburg</span></div>
+<div class="chips"><span class="chip chip-km">3 to 25 km loops</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="vasa"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The flagship of Traverse City skiing, groomed for skate and classic by TART Trails in loops of 3, 5, 10, and 25 km through state forest east of town. Home course of the North American Vasa and the busiest corduroy in the region.</p>
+<div class="card-actions"><button class="map-btn" data-id="vasa" type="button">Show on map</button><a class="ext" href="https://www.traversetrails.org/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-timberridge" data-cat="groomed" data-lit="1" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Timber Ridge Nordic Center</h3><span class="town">Traverse City</span></div>
+<div class="chips"><span class="chip chip-km">27 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-lit">Lit for night skiing</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="timberridge"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A nordic center bordering the Vasa corridor with about 27 km of groomed trails, lighted loops for night skiing, rentals, and a lodge with a fireplace.</p>
+<div class="card-actions"><button class="map-btn" data-id="timberridge" type="button">Show on map</button><a class="ext" href="https://www.timberridgeresort.net/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-hickory" data-cat="groomed" data-lit="1" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Hickory Hills</h3><span class="town">Traverse City</span></div>
+<div class="chips"><span class="chip chip-km">4 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-lit">Lit for night skiing</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="hickory"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The city owned ski area on the west side of Traverse City, with about 4 km of cross country trails including a 1 km lighted loop under the downhill slopes. A lodge and town proximity make it the easy weeknight option.</p>
+<div class="card-actions"><button class="map-btn" data-id="hickory" type="button">Show on map</button><a class="ext" href="https://www.traversecitymi.gov/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-muncie" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Muncie Lakes Pathway</h3><span class="town">Traverse City</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="muncie"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">State forest loops near Ranch Rudolf in the Boardman valley, skier tracked rather than machine groomed most winters. Rolling terrain, small lakes, and a classic Traverse backcountry feel.</p>
+<div class="card-actions"><button class="map-btn" data-id="muncie" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-palmer" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Palmer Woods Forest Reserve</h3><span class="town">Glen Arbor</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="palmer"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Leelanau Conservancy land near Glen Arbor with groomed skate and classic loops through big hardwoods, free to ski. One of the best conservancy skiing projects in the state.</p>
+<div class="card-actions"><button class="map-btn" data-id="palmer" type="button">Show on map</button><a class="ext" href="https://leelanauconservancy.org/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-sbht" data-cat="groomed" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Sleeping Bear Heritage Trail</h3><span class="town">Empire to Glen Arbor</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="sbht"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The paved Heritage Trail becomes a groomed winter corridor through the national lakeshore, with the Dune Climb stretch the most popular. Gentle grades and dune country scenery.</p>
+<div class="card-actions"><button class="map-btn" data-id="sbht" type="button">Show on map</button><a class="ext" href="https://sleepingbeartrail.org/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-alligator" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Alligator Hill</h3><span class="town">Glen Arbor</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span></div>
+<div class="ledger" data-id="alligator"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Sleeping Bear Dunes National Lakeshore loops climbing to Lake Michigan overlooks above Glen Arbor. Ungroomed, honest climbs, and the best summit view you can earn on skinny skis in the Lower Peninsula.</p>
+<div class="card-actions"><button class="map-btn" data-id="alligator" type="button">Show on map</button><a class="ext" href="https://www.nps.gov/slbe/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-oldindian" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Old Indian Trail</h3><span class="town">Frankfort</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span></div>
+<div class="ledger" data-id="oldindian"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A quiet national lakeshore loop at the south end of the park near Crystal Lake, rolling through pine and hardwood toward the Lake Michigan shore. Usually skier tracked within a day of new snow.</p>
+<div class="card-actions"><button class="map-btn" data-id="oldindian" type="button">Show on map</button><a class="ext" href="https://www.nps.gov/slbe/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-shanty" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Shanty Creek</h3><span class="town">Bellaire</span></div>
+<div class="chips"><span class="chip chip-km">30 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="shanty"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">About 30 km of groomed nordic trails at the Bellaire resort, including terrain used by the White Pine Stampede. Rentals, lessons, and lodging on site.</p>
+<div class="card-actions"><button class="map-btn" data-id="shanty" type="button">Show on map</button><a class="ext" href="https://www.shantycreek.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="cadillac"><div class="region-head"><h2>Cadillac, Benzie and Manistee</h2><p class="region-blurb">Lake effect hills: Big M and MacKenzie in the national forest, Crystal's nordic center, and volunteer pathways.</p></div><div class="grid">
+<article class="card" id="t-crystal" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>Crystal Mountain</h3><span class="town">Thompsonville</span></div>
+<div class="chips"><span class="chip chip-km">25 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="crystal"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A full nordic center at the Thompsonville resort with about 25 km of groomed skate and classic trails, rentals, lessons, and the Michigan Legacy Art Park skiable next door.</p>
+<div class="card-actions"><button class="map-btn" data-id="crystal" type="button">Show on map</button><a class="ext" href="https://www.crystalmountain.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-betsie" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Betsie Valley Pathway</h3><span class="town">Thompsonville</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="betsie"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A state forest pathway just east of Crystal Mountain with wooded classic loops along the Betsie River corridor. The free and quiet counterpart to the resort next door.</p>
+<div class="card-actions"><button class="map-btn" data-id="betsie" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-bigm" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Big M Recreation Area</h3><span class="town">Wellston</span></div>
+<div class="chips"><span class="chip chip-km">30 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="bigm"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Roughly 30 km of volunteer groomed skate and classic loops in the Udell Hills of the Manistee National Forest. Real climbs, a warming shelter at the trailhead, and some of the most consistent lake effect snow in the northwest Lower.</p>
+<div class="card-actions"><button class="map-btn" data-id="bigm" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-mackenzie" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>MacKenzie Trail</h3><span class="town">Caberfae</span></div>
+<div class="chips"><span class="chip chip-km">16 km</span><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="mackenzie"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">About 10 miles of marked national forest loops next to Caberfae Peaks, free to ski, with terrain from gentle to genuinely hilly. Grooming is intermittent, so expect set tracks some weeks and skier packing others.</p>
+<div class="card-actions"><button class="map-btn" data-id="mackenzie" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-cadillacpath" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Cadillac Pathway</h3><span class="town">Cadillac</span></div>
+<div class="chips"><span class="chip chip-km">18 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="cadillacpath"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A volunteer groomed state forest system northeast of Cadillac along the Clam River, with around 11 miles of loops from flat to rolling. A dependable local favorite.</p>
+<div class="card-actions"><button class="map-btn" data-id="cadillacpath" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="petoskey"><div class="region-head"><h2>Petoskey, Harbor Springs and Boyne</h2><p class="region-blurb">Little Traverse snowbelt terrain from resort centers to in-town preserves and rolling state forest.</p></div><div class="grid">
+<article class="card" id="t-highlands" data-cat="groomed" data-lit="0" data-rentals="1" data-skate="1">
+<div class="card-top"><h3>The Highlands Cross Country Center</h3><span class="town">Harbor Springs</span></div>
+<div class="chips"><span class="chip chip-km">35 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span><span class="chip chip-rentals">Rentals</span><span class="chip chip-fee">Day pass</span></div>
+<div class="ledger" data-id="highlands"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The nordic side of the Harbor Springs resort, with a dozen loops totaling about 35 km through hilly, scenic terrain. Lessons, rentals, and lift access to upper trails.</p>
+<div class="card-actions"><button class="map-btn" data-id="highlands" type="button">Show on map</button><a class="ext" href="https://www.highlandsharborsprings.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-nubs" data-cat="groomed" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Nub's Nob Cross Country Trails</h3><span class="town">Harbor Springs</span></div>
+<div class="chips"><span class="chip chip-km">20 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Groomed</span></div>
+<div class="ledger" data-id="nubs"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">About 20 km of wide loops groomed and tracked across the road from the alpine area, connecting toward Chestnut Valley. Eighteen feet wide, power tilled, and benefiting from the same lake effect belt that feeds the downhill slopes.</p>
+<div class="card-actions"><button class="map-btn" data-id="nubs" type="button">Show on map</button><a class="ext" href="https://www.nubsnob.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-avalanche" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Avalanche Preserve</h3><span class="town">Boyne City</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="avalanche"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Boyne City's in-town preserve with wooded ski loops below the overlook stairs, plus sledding and skating. Park at the corner of Lake and Ann and ski from downtown.</p>
+<div class="card-actions"><button class="map-btn" data-id="avalanche" type="button">Show on map</button><a class="ext" href="https://www.michigan.org/property/avalanche-mountain-preserve" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-wildwood" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Wildwood Hills Pathway</h3><span class="town">Indian River</span></div>
+<div class="chips"><span class="chip chip-km">15 km</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="wildwood"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Three loops totaling about 15 km of rolling state forest south of Burt Lake, with the first two double tracked for classic and the third groomed for skate skiing when volunteers can get out.</p>
+<div class="card-actions"><button class="map-btn" data-id="wildwood" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-losttamarack" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Lost Tamarack Pathway</h3><span class="town">Wolverine</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="losttamarack"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Quiet state forest loops from Weber Lake northwest of Wolverine. Ungroomed, gentle, and rarely crowded.</p>
+<div class="card-actions"><button class="map-btn" data-id="losttamarack" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-springbrook" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Spring Brook Pathway</h3><span class="town">Boyne Falls</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="springbrook"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A hilly pathway in the Chandler Hills northeast of Boyne Falls. The outer loop earns its difficult rating with a steep climb and a long curving descent, so bring skis you can turn.</p>
+<div class="card-actions"><button class="map-btn" data-id="springbrook" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-petoskeysp" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Petoskey State Park</h3><span class="town">Petoskey</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Recreation Passport</span></div>
+<div class="ledger" data-id="petoskeysp"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Ungroomed park trails behind the Lake Michigan dunes at the head of Little Traverse Bay. Short, scenic, and a good half day paired with town.</p>
+<div class="card-actions"><button class="map-btn" data-id="petoskeysp" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-ncmc" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>NCMC Natural Area</h3><span class="town">Petoskey</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="ncmc"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Four miles of packed but ungroomed trails over three flat loops bordering the Bear River at North Central Michigan College. Free and beginner friendly.</p>
+<div class="card-actions"><button class="map-btn" data-id="ncmc" type="button">Show on map</button><a class="ext" href="https://www.ncmich.edu/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="northeast"><div class="region-head"><h2>Northeast Lower</h2><p class="region-blurb">The quiet side: Black Mountain, Corsair, the AuSable bluffs, and pathways that rarely see a crowd.</p></div><div class="grid">
+<article class="card" id="t-blackmtn" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Black Mountain Recreation Area</h3><span class="town">Onaway</span></div>
+<div class="chips"><span class="chip chip-km">30+ mi network</span><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="blackmtn"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A big state forest trail complex southeast of Black Lake with groomed ski loops, a warming cabin, and mile after mile of hardwood ridge. The largest system in the northeast Lower and worth the drive from anywhere.</p>
+<div class="card-actions"><button class="map-btn" data-id="blackmtn" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-ocqueoc" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Ocqueoc Falls Pathway</h3><span class="town">Millersburg</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="ocqueoc"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Loops along the Ocqueoc River from the falls trailhead, the only publicly accessible waterfall in the Lower Peninsula. Ungroomed and prettiest right after a storm.</p>
+<div class="card-actions"><button class="map-btn" data-id="ocqueoc" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-clearlake" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Clear Lake and Sinkholes</h3><span class="town">Atlanta</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Recreation Passport</span></div>
+<div class="ledger" data-id="clearlake"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">State park and pathway skiing north of Atlanta, including the Sinkholes Pathway around dry karst craters in the Mackinaw State Forest. Deep snow country most winters.</p>
+<div class="card-actions"><button class="map-btn" data-id="clearlake" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-norway" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Norway Ridge Pathway</h3><span class="town">Alpena</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="norway"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Alpena's home pathway off Werth Road, with classic tracks set by local volunteers through red pine plantation and hardwoods. Gentle and dependable when the east side has snow.</p>
+<div class="card-actions"><button class="map-btn" data-id="norway" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-chippewa" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Chippewa Hills Pathway</h3><span class="town">Ossineke</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="chippewa"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Rolling state forest loops inland from Ossineke with more relief than most of the northeast. Ungroomed but regularly skied by locals.</p>
+<div class="card-actions"><button class="map-btn" data-id="chippewa" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-eaglerun" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Eagle Run Trail</h3><span class="town">Mio</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="eaglerun"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Gentle national forest loops along the south bank of the AuSable just below Mio. Flat riverside skiing, usually tracked in quickly after snow.</p>
+<div class="card-actions"><button class="map-btn" data-id="eaglerun" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-corsair" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Corsair Trail System</h3><span class="town">East Tawas</span></div>
+<div class="chips"><span class="chip chip-km">30+ mi network</span><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="corsair"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">One of the largest track set classic networks in the state, spread across three trailheads on Monument Road in the Huron National Forest above Tawas. Groomed by the Corsair Trail Council on donations, with Silver Creek valley terrain that skis bigger than the map suggests.</p>
+<div class="card-actions"><button class="map-btn" data-id="corsair" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-highbanks" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Highbanks Trail</h3><span class="town">Oscoda</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="highbanks"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A point to point ski along the bluffs above the AuSable between Iargo Springs and Lumberman's Monument. Ungroomed, mostly level, with the best river overlooks in the state as the payoff.</p>
+<div class="card-actions"><button class="map-btn" data-id="highbanks" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hmnf" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-rifleriver" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Rifle River Recreation Area</h3><span class="town">Lupton</span></div>
+<div class="chips"><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Recreation Passport</span></div>
+<div class="ledger" data-id="rifleriver"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Ungroomed trails through the lakes and cedar bottoms of the recreation area near Lupton. Quiet winter skiing over the same ground the trout crowd works in April.</p>
+<div class="card-actions"><button class="map-btn" data-id="rifleriver" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+<section class="region" id="straits"><div class="region-head"><h2>Straits and Eastern UP</h2><p class="region-blurb">Tip of the mitt and across the bridge, where the season starts earlier and holds later.</p></div><div class="grid">
+<article class="card" id="t-wilderness" data-cat="backcountry" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Wilderness State Park</h3><span class="town">Carp Lake</span></div>
+<div class="chips"><span class="chip chip-km">7+ mi designated</span><span class="chip chip-style">Ungroomed</span><span class="chip chip-cat">Backcountry</span><span class="chip chip-fee">Recreation Passport</span></div>
+<div class="ledger" data-id="wilderness"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">More than 7 miles of designated ski trail plus a larger multi-use network at the tip of the mitt west of Mackinaw City. Big shoreline forest, deep straits snow, varied terrain for novice and intermediate skiers.</p>
+<div class="card-actions"><button class="map-btn" data-id="wilderness" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-algonquin" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Algonquin Ski Trail</h3><span class="town">Sault Ste. Marie</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Donation</span></div>
+<div class="ledger" data-id="algonquin"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">The Soo's community trail system on the west side of town, groomed for skate and classic through flat to rolling pine country. Reliable early snow off Superior and Whitefish Bay.</p>
+<div class="card-actions"><button class="map-btn" data-id="algonquin" type="button">Show on map</button><a class="ext" href="https://www.saultstemarie.com/" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-pinebowl" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="0">
+<div class="card-top"><h3>Pine Bowl Pathway</h3><span class="town">Kinross</span></div>
+<div class="chips"><span class="chip chip-style">Classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="pinebowl"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">A state forest pathway southeast of Kinross with quiet classic loops through pine plantation and cedar. A dependable eastern UP option minutes off I-75.</p>
+<div class="card-actions"><button class="map-btn" data-id="pinebowl" type="button">Show on map</button><a class="ext" href="https://www.michigan.gov/dnr/things-to-do/cross-country-skiing" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+<article class="card" id="t-sanddunes" data-cat="volunteer" data-lit="0" data-rentals="0" data-skate="1">
+<div class="card-top"><h3>Sand Dunes Ski Trail</h3><span class="town">Brevort</span></div>
+<div class="chips"><span class="chip chip-style">Skate + classic</span><span class="chip chip-cat">Volunteer groomed</span><span class="chip chip-fee">Free</span></div>
+<div class="ledger" data-id="sanddunes"><span class="ledger-wait">Live snow loads in winter</span></div>
+<p class="desc">Hiawatha National Forest loops through wooded Lake Michigan dune country west of St. Ignace, groomed through the season. Rolling glacial terrain with loop options for every level.</p>
+<div class="card-actions"><button class="map-btn" data-id="sanddunes" type="button">Show on map</button><a class="ext" href="https://www.fs.usda.gov/hiawatha" target="_blank" rel="noopener">Trail info</a></div>
+</article>
+</div></section>
+
+<section class="method" id="method">
+<h2>How the snow read works</h2>
+<p>Every badge on this page is computed, not written. On each visit the page pulls the Open-Meteo model analysis for all 48 trailheads in a single request: snow depth on the ground, snowfall over the past three days, and current temperature. Simple thresholds turn those numbers into a read. Under about 2 inches of depth there is nothing to ski. From 2 to 5 inches, groomed corridors with smooth bases may be skiable on rock skis. From 5 to 10 the volunteer systems come alive, past 10 everything skis well, and past 18 the backcountry opens up too. Warm afternoons flag a thaw, hard cold gets a warning, and a big three day total flags a storm cycle where grooming may lag the snowfall.</p>
+<p>Model snow depth is a regional signal, not a grooming report. The centers that make snow, Forbush Corner and Cross Country Ski Headquarters, regularly ski when the model shows almost nothing on the ground. Check the operator's own report before a long drive, and put money in the donation box where volunteers groom.</p>
+</section>
+
+<section class="faqs" id="faq">
+<h2>Questions skiers actually ask</h2>
+<details class="faq"><summary>When is cross country ski season in northern Michigan?</summary><p>Most groomed systems run from late December through mid March in a normal winter. The Gaylord and Grayling snowbelt, the Little Traverse hills, and the eastern UP open earliest and hold latest, and Forbush Corner and Cross Country Ski Headquarters make snow, so they often ski when nothing else does.</p></details><details class="faq"><summary>Which trails are groomed for skate skiing?</summary><p>Forbush Corner, Hanson Hills, Cross Country Ski Headquarters, the Vasa Pathway, Timber Ridge, Shanty Creek, Crystal Mountain, Big M, The Highlands, Nub's Nob, Black Mountain, and several volunteer systems groom skate lanes. Classic only and backcountry systems are labeled on each card.</p></details><details class="faq"><summary>Do I need a pass to ski these trails?</summary><p>It varies. Private and resort centers charge a day pass. Volunteer groomed systems like the Vasa, Big M, and Corsair run on donations, and the donation box genuinely funds the grooming. State parks require the Michigan Recreation Passport for parking, while most state forest pathways are free.</p></details><details class="faq"><summary>Where is the most reliable snow?</summary><p>The lake effect belts: Gaylord and the 45th parallel corridor, the hills from Boyne through Harbor Springs, the Udell Hills near Big M, and the eastern UP. The northeast Lower gets less lake effect but holds cold well, so Black Mountain and Corsair ski well in colder winters.</p></details><details class="faq"><summary>How accurate is the live snow data?</summary><p>Snow depth and new snowfall come from the Open-Meteo weather model analysis for each trailhead, refreshed on every page load. Model snow depth is a solid regional signal but it is not a grooming report, so check the operator's own report before a long drive.</p></details>
+</section>
+</main>
+
+<footer><div class="wrap">
+<p><strong>Northern Michigan Cross Country Ski Trails</strong> is built and maintained by <a href="https://chrisizworski.com/">Chris Izworski</a> in Bay City, Michigan. Trail information is curated from land manager and operator sources and updated each season. Live weather data from Open-Meteo.</p>
+<p class="net">More Michigan field tools:
+<a href="https://michigantroutreport.com/">Michigan Trout Report</a>
+<a href="https://www.michiganbirdingreport.com/">Michigan Birding Report</a>
+<a href="https://phenology.chrisizworski.com/">Michigan Phenology</a>
+<a href="https://fallcolor.chrisizworski.com/">Fall Color</a>
+<a href="https://greatlakeslevels.org/">Great Lakes Levels</a>
+<a href="https://ausable.chrisizworski.com/">Au Sable Field Map</a>
+</p>
+</div></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const TRAILS = [{"id":"forbush","name":"Forbush Corner Nordic","town":"Frederic","lat":44.7857,"lon":-84.6975,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"hanson","name":"Hanson Hills Recreation Area","town":"Grayling","lat":44.651,"lon":-84.755,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"hartwick","name":"Hartwick Pines State Park","town":"Grayling","lat":44.7405,"lon":-84.66,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"xchq","name":"Cross Country Ski Headquarters","town":"Roscommon","lat":44.4345,"lon":-84.673,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"tisdale","name":"Tisdale Triangle Pathway","town":"Roscommon","lat":44.499,"lon":-84.58,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"wakeley","name":"Wakeley Lake","town":"Grayling","lat":44.641,"lon":-84.483,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"mason","name":"Mason Tract Pathway","town":"Roscommon","lat":44.633,"lon":-84.47,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"aspen","name":"Aspen Park","town":"Gaylord","lat":45.021,"lon":-84.68,"cat":"groomed","lit":true,"rentals":false,"skate":1},{"id":"pinebaron","name":"Pine Baron Pathway","town":"Gaylord","lat":45.014,"lon":-84.793,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"treetops","name":"Treetops Resort","town":"Gaylord","lat":45.033,"lon":-84.622,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"groen","name":"Louis M. Groen Nature Preserve","town":"Johannesburg","lat":44.993,"lon":-84.464,"cat":"volunteer","lit":false,"rentals":true,"skate":1},{"id":"shinglemill","name":"Shingle Mill Pathway","town":"Vanderbilt","lat":45.157,"lon":-84.534,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"warnercreek","name":"Warner Creek Pathway","town":"Elmira","lat":45.064,"lon":-84.908,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"vasa","name":"Vasa Pathway","town":"Williamsburg","lat":44.728,"lon":-85.47,"cat":"groomed","lit":false,"rentals":false,"skate":1},{"id":"timberridge","name":"Timber Ridge Nordic Center","town":"Traverse City","lat":44.7135,"lon":-85.523,"cat":"groomed","lit":true,"rentals":true,"skate":1},{"id":"hickory","name":"Hickory Hills","town":"Traverse City","lat":44.756,"lon":-85.664,"cat":"groomed","lit":true,"rentals":false,"skate":1},{"id":"muncie","name":"Muncie Lakes Pathway","town":"Traverse City","lat":44.657,"lon":-85.462,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"palmer","name":"Palmer Woods Forest Reserve","town":"Glen Arbor","lat":44.858,"lon":-85.92,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"sbht","name":"Sleeping Bear Heritage Trail","town":"Empire to Glen Arbor","lat":44.8814,"lon":-86.043,"cat":"groomed","lit":false,"rentals":false,"skate":1},{"id":"alligator","name":"Alligator Hill","town":"Glen Arbor","lat":44.888,"lon":-86.008,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"oldindian","name":"Old Indian Trail","town":"Frankfort","lat":44.708,"lon":-86.186,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"shanty","name":"Shanty Creek","town":"Bellaire","lat":44.937,"lon":-85.195,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"crystal","name":"Crystal Mountain","town":"Thompsonville","lat":44.518,"lon":-85.993,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"betsie","name":"Betsie Valley Pathway","town":"Thompsonville","lat":44.529,"lon":-85.937,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"bigm","name":"Big M Recreation Area","town":"Wellston","lat":44.24,"lon":-86.035,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"mackenzie","name":"MacKenzie Trail","town":"Caberfae","lat":44.245,"lon":-85.719,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"cadillacpath","name":"Cadillac Pathway","town":"Cadillac","lat":44.282,"lon":-85.36,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"highlands","name":"The Highlands Cross Country Center","town":"Harbor Springs","lat":45.468,"lon":-84.934,"cat":"groomed","lit":false,"rentals":true,"skate":1},{"id":"nubs","name":"Nub's Nob Cross Country Trails","town":"Harbor Springs","lat":45.47,"lon":-84.903,"cat":"groomed","lit":false,"rentals":false,"skate":1},{"id":"avalanche","name":"Avalanche Preserve","town":"Boyne City","lat":45.204,"lon":-85.014,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"wildwood","name":"Wildwood Hills Pathway","town":"Indian River","lat":45.362,"lon":-84.673,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"losttamarack","name":"Lost Tamarack Pathway","town":"Wolverine","lat":45.292,"lon":-84.67,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"springbrook","name":"Spring Brook Pathway","town":"Boyne Falls","lat":45.207,"lon":-84.828,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"petoskeysp","name":"Petoskey State Park","town":"Petoskey","lat":45.402,"lon":-84.903,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"ncmc","name":"NCMC Natural Area","town":"Petoskey","lat":45.36,"lon":-84.95,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"blackmtn","name":"Black Mountain Recreation Area","town":"Onaway","lat":45.448,"lon":-84.135,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"ocqueoc","name":"Ocqueoc Falls Pathway","town":"Millersburg","lat":45.396,"lon":-84.057,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"clearlake","name":"Clear Lake and Sinkholes","town":"Atlanta","lat":45.133,"lon":-84.173,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"norway","name":"Norway Ridge Pathway","town":"Alpena","lat":45.021,"lon":-83.524,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"chippewa","name":"Chippewa Hills Pathway","town":"Ossineke","lat":44.856,"lon":-83.728,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"eaglerun","name":"Eagle Run Trail","town":"Mio","lat":44.648,"lon":-84.133,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"corsair","name":"Corsair Trail System","town":"East Tawas","lat":44.34,"lon":-83.635,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"highbanks","name":"Highbanks Trail","town":"Oscoda","lat":44.436,"lon":-83.543,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"rifleriver","name":"Rifle River Recreation Area","town":"Lupton","lat":44.411,"lon":-84.025,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"wilderness","name":"Wilderness State Park","town":"Carp Lake","lat":45.742,"lon":-84.9,"cat":"backcountry","lit":false,"rentals":false,"skate":0},{"id":"algonquin","name":"Algonquin Ski Trail","town":"Sault Ste. Marie","lat":46.479,"lon":-84.39,"cat":"volunteer","lit":false,"rentals":false,"skate":1},{"id":"pinebowl","name":"Pine Bowl Pathway","town":"Kinross","lat":46.245,"lon":-84.43,"cat":"volunteer","lit":false,"rentals":false,"skate":0},{"id":"sanddunes","name":"Sand Dunes Ski Trail","town":"Brevort","lat":46.006,"lon":-85.026,"cat":"volunteer","lit":false,"rentals":false,"skate":1}];
+const COLORS = {groomed:"#20618e", volunteer:"#1e6f5c", backcountry:"#5b6b3a"};
+const map = L.map("map", {scrollWheelZoom:false}).setView([45.05, -84.95], 7);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>', maxZoom:18}).addTo(map);
+const markers = {};
+TRAILS.forEach(t => {
+  const icon = L.divIcon({className:"", html:'<div class="marker-pin" style="width:13px;height:13px;background:'+COLORS[t.cat]+'"></div>', iconSize:[13,13], iconAnchor:[7,7]});
+  const m = L.marker([t.lat, t.lon], {icon}).addTo(map);
+  m.bindPopup('<b>'+t.name+'</b><br>'+t.town+'<br><span id="pop-'+t.id+'">Snow: loading</span><br><a href="#t-'+t.id+'">Details below</a>');
+  markers[t.id] = m;
+});
+document.querySelectorAll(".map-btn").forEach(b => b.addEventListener("click", () => {
+  const t = TRAILS.find(x => x.id === b.dataset.id);
+  document.getElementById("map").scrollIntoView({behavior:"smooth"});
+  setTimeout(() => { map.flyTo([t.lat, t.lon], 11); markers[t.id].openPopup(); }, 350);
+}));
+// Filters
+const cards = [...document.querySelectorAll(".card")];
+document.querySelectorAll(".f").forEach(btn => btn.addEventListener("click", () => {
+  document.querySelectorAll(".f").forEach(b => b.setAttribute("aria-pressed", "false"));
+  btn.setAttribute("aria-pressed", "true");
+  const f = btn.dataset.filter;
+  cards.forEach(c => {
+    let show = f === "all" || c.dataset.cat === f || (f === "skate" && c.dataset.skate === "1") || (f === "lit" && c.dataset.lit === "1") || (f === "rentals" && c.dataset.rentals === "1");
+    c.classList.toggle("hidden", !show);
+  });
+  TRAILS.forEach(t => {
+    const show = f === "all" || t.cat === f || (f === "skate" && t.skate === 1) || (f === "lit" && t.lit) || (f === "rentals" && t.rentals);
+    if (show) markers[t.id].addTo(map); else map.removeLayer(markers[t.id]);
+  });
+}));
+// Live conditions
+const inch = m => m * 39.3701, f = c => c * 9/5 + 32;
+function read(depth, new3, temp, offMonth) {
+  if (offMonth && depth < 2) return ["off", "Off season. Live snow returns with winter."];
+  if (depth < 2) return ["none", "No base. Nothing to ski yet."];
+  let cls, txt;
+  if (depth < 5) { cls = "thin"; txt = "Thin cover. Rock skis on groomed corridors only."; }
+  else if (depth < 10) { cls = "fair"; txt = "Fair base. Groomed systems ski, backcountry is marginal."; }
+  else if (depth < 18) { cls = "good"; txt = "Good base. Most systems skiing well."; }
+  else { cls = "deep"; txt = "Deep base. Everything skis, backcountry included."; }
+  if (new3 >= 6) txt += " Storm cycle, grooming may lag.";
+  else if (new3 >= 3) txt += " Fresh snow on top.";
+  if (temp > 34) txt += " Above freezing, expect soft wet snow.";
+  else if (temp < 0) txt += " Dangerous cold, cover up.";
+  return [cls, txt];
+}
+(async () => {
+  const now = new Date();
+  const offMonth = now.getMonth() >= 4 && now.getMonth() <= 9;
+  try {
+    const lats = TRAILS.map(t => t.lat).join(","), lons = TRAILS.map(t => t.lon).join(",");
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=" + lats + "&longitude=" + lons +
+      "&current=temperature_2m&hourly=snow_depth&daily=snowfall_sum&past_days=3&forecast_days=1&timezone=America%2FNew_York";
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(r.status);
+    let data = await r.json();
+    if (!Array.isArray(data)) data = [data];
+    let depths = [];
+    data.forEach((d, i) => {
+      const t = TRAILS[i]; if (!t) return;
+      const hi = Math.min(d.hourly.time.length - 1, Math.max(0, d.hourly.time.findIndex(x => new Date(x) > now) - 1));
+      const depth = inch(d.hourly.snow_depth[hi] || 0);
+      const new3 = (d.daily.snowfall_sum || []).reduce((a, b) => a + (b || 0), 0) / 2.54;
+      const temp = f(d.current.temperature_2m);
+      depths.push(depth);
+      const [cls, txt] = read(depth, new3, temp, offMonth);
+      const el = document.querySelector('.ledger[data-id="' + t.id + '"]');
+      if (el) {
+        el.className = "ledger on s-" + cls;
+        el.innerHTML = '<span class="figs"><span>Base <b>' + depth.toFixed(1) + '"</b></span><span>72h new <b>' + new3.toFixed(1) + '"</b></span><span>Now <b>' + Math.round(temp) + '&deg;F</b></span></span><span class="read">' + txt + '</span>';
+      }
+      const pop = document.getElementById("pop-" + t.id);
+      if (pop) pop.textContent = 'Base ' + depth.toFixed(1) + '", ' + Math.round(temp) + 'F';
+    });
+    depths.sort((a, b) => a - b);
+    const med = depths.length ? depths[Math.floor(depths.length / 2)] : 0;
+    const [cls, txt] = read(med, 0, 32, offMonth);
+    const st = document.getElementById("status-text");
+    st.textContent = "Region: " + (cls === "off" ? "off season, season typically runs late December to mid March" : txt.toLowerCase() + " Median trailhead base " + med.toFixed(1) + '".');
+    const dotColors = {off:"#9aa9b4", none:"#a56458", thin:"#c99b3f", fair:"#5f8fb0", good:"#20618e", deep:"#0f3552"};
+    document.querySelector("#region-status .dot").style.background = dotColors[cls];
+  } catch (e) {
+    document.getElementById("status-text").textContent = "Live snow data is unavailable right now.";
+    document.querySelectorAll(".ledger-wait").forEach(x => x.textContent = "Live snow data unavailable");
+  }
+})();
+</script>
+</body>
+</html>

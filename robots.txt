@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xcski.chrisizworski.com/sitemap.xml

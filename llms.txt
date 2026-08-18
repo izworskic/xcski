@@ -1,0 +1,19 @@
+# Northern Michigan Cross Country Ski Trails
+
+> An interactive map and curated guide to 48 cross country ski trail systems in northern Michigan, built by Chris Izworski. Covers groomed nordic centers, volunteer groomed pathways, and ungroomed backcountry loops from the Grayling and Gaylord snowbelt to Traverse City, Petoskey, the northeast Lower Peninsula, and the eastern Upper Peninsula. Each trailhead shows live snow depth, three day snowfall, and temperature computed from the Open-Meteo model analysis, with a plain language skiability read derived from fixed thresholds rather than generated text.
+
+## Key facts
+- 48 trail systems across 7 regions of northern Michigan
+- Categories: groomed centers, volunteer groomed pathways, backcountry
+- Live data: snow depth, 72 hour snowfall, temperature per trailhead
+- Author: Chris Izworski, Bay City, Michigan (https://chrisizworski.com/)
+
+## Pages
+- [Home](https://xcski.chrisizworski.com/): full trail directory, map, live conditions, FAQ
+
+## Related tools by the same author
+- [Michigan Trout Report](https://michigantroutreport.com/)
+- [Michigan Phenology](https://phenology.chrisizworski.com/)
+- [Fall Color](https://fallcolor.chrisizworski.com/)
+- [Great Lakes Levels](https://greatlakeslevels.org/)
+- [Au Sable Field Map](https://ausable.chrisizworski.com/)
