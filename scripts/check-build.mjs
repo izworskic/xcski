@@ -19,5 +19,16 @@ for (const phrase of ['Groomed systems ski', 'Most systems skiing well', 'Everyt
 }
 if (!robots.includes('Sitemap: https://xcski.chrisizworski.com/sitemap.xml')) fail('robots sitemap owner changed');
 if (!sitemap.includes('<loc>https://xcski.chrisizworski.com/</loc>')) fail('sitemap owner changed');
+const runtimeMarker = 'const TRAILS = [';
+const runtimeMarkerIndex = html.indexOf(runtimeMarker);
+const runtimeStart = html.lastIndexOf('<script>', runtimeMarkerIndex);
+const runtimeEnd = html.indexOf('</script>', runtimeMarkerIndex);
+if (runtimeMarkerIndex < 0 || runtimeStart < 0 || runtimeEnd < 0) fail('generated XC runtime script missing');
+const runtimeJs = html.slice(runtimeStart + '<script>'.length, runtimeEnd);
+try {
+  new Function(runtimeJs);
+} catch (error) {
+  fail('generated inline JavaScript invalid: ' + error.message);
+}
 if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html)) fail('unexpected personal/browser-state collection detected');
 console.log('XC 2026-27 readiness: PASS — 48 trails, canonical intact, trust boundary explicit, verification handoff preserved.');
