@@ -8,6 +8,10 @@ const fail = (m) => { throw new Error(m); };
 
 if (!html.includes('<link rel="canonical" href="https://xcski.chrisizworski.com/">')) fail('canonical owner changed');
 if (!html.includes('<h1>Northern Michigan<br>Cross Country Ski Trails</h1>')) fail('H1 owner changed');
+if (!html.includes('<link rel="author" href="https://chrisizworski.com/chris-izworski/">')) fail('canonical creator profile link missing');
+if (!html.includes('"@id":"https://chrisizworski.com/#person"')) fail('canonical Person ID missing');
+if (html.includes('https://xcski.chrisizworski.com/#person')) fail('local duplicate Person ID detected');
+
 if ((html.match(/class="card"/g) || []).length !== 48) fail('expected 48 trail cards');
 if ((html.match(/>Verify trail status<\/a>/g) || []).length !== 48) fail('every trail must retain an operator/land-manager verification path');
 if (!html.includes('Live snow is a screening signal.')) fail('visible trust boundary missing');
