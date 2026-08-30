@@ -19,5 +19,15 @@ for (const phrase of ['Groomed systems ski', 'Most systems skiing well', 'Everyt
 }
 if (!robots.includes('Sitemap: https://xcski.chrisizworski.com/sitemap.xml')) fail('robots sitemap owner changed');
 if (!sitemap.includes('<loc>https://xcski.chrisizworski.com/</loc>')) fail('sitemap owner changed');
+for (const match of html.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)) {
+  const attrs = match[1] || '';
+  const body = (match[2] || '').trim();
+  if (!body || /application\\/ld\\+json/i.test(attrs)) continue;
+  try {
+    new Function(body);
+  } catch (error) {
+    fail('generated inline JavaScript invalid: ' + error.message);
+  }
+}
 if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html)) fail('unexpected personal/browser-state collection detected');
 console.log('XC 2026-27 readiness: PASS — 48 trails, canonical intact, trust boundary explicit, verification handoff preserved.');
