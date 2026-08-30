@@ -14,6 +14,8 @@ if (!html.includes('Live snow is a screening signal.')) fail('visible trust boun
 if (!html.includes('ET via Open-Meteo')) fail('live signal freshness timestamp missing');
 if (!html.includes('role="region" aria-label="Map of northern Michigan cross country ski trail systems"')) fail('map accessibility role missing');
 if (!html.includes('Compare flagship Michigan XC trails and planning sources')) fail('main-domain planning handoff missing');
+if (!html.includes('https://tile.openstreetmap.org/{z}/{x}/{y}.png')) fail('no-key OpenStreetMap basemap missing');
+if (/basemaps\.cartocdn\.com|api\.mapbox\.com|api\.maptiler\.com|tiles\.stadiamaps\.com/i.test(html)) fail('keyed or provider-specific basemap dependency detected');
 for (const phrase of ['Groomed systems ski', 'Most systems skiing well', 'Everything skis, backcountry included', 'No base. Nothing to ski yet.', 'plain language skiability read']) {
   if ((html + llms).toLowerCase().includes(phrase.toLowerCase())) fail(`unsupported model-derived skiability claim remains: ${phrase}`);
 }
