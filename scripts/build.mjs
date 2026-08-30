@@ -22,7 +22,7 @@ const replacements = [
   ['else { cls = "deep"; txt = "Deep base. Everything skis, backcountry included."; }', 'else { cls = "deep"; txt = "Deep modeled snow cover. Groomed status and backcountry conditions still require local verification."; }'],
   ['if (new3 >= 6) txt += " Storm cycle, grooming may lag.";', 'if (new3 >= 6) txt += " Recent snowfall may change grooming timing.";'],
   ['else if (new3 >= 3) txt += " Fresh snow on top.";', 'else if (new3 >= 3) txt += " Recent modeled snowfall.";'],
-  ['st.textContent = "Region: " + (cls === "off" ? "off season, season typically runs late December to mid March" : txt.toLowerCase() + " Median trailhead base " + med.toFixed(1) + \'".\');', 'st.textContent = cls === "off" ? "Region: off season; live snow returns with winter." : "Region modeled median snow depth: " + med.toFixed(1) + \'". Use this to screen options, then verify the operator or groomer report. Updated " + now.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit", timeZone:"America/Detroit"}) + " ET via Open-Meteo.";'],
+  ['st.textContent = "Region: " + (cls === "off" ? "off season, season typically runs late December to mid March" : txt.toLowerCase() + " Median trailhead base " + med.toFixed(1) + \'".\');', 'st.textContent = cls === "off" ? "Region: off season; live snow returns with winter." : "Region modeled median snow depth: " + med.toFixed(1) + " in. Use this to screen options, then verify the operator or groomer report. Updated " + now.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit", timeZone:"America/Detroit"}) + " ET via Open-Meteo.";'],
   ['"dateModified":"2026-07-05"', '"dateModified":"2026-08-18"']
 ];
 
