@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "updated": "2026-09-13",
+  "providers": {
+    "travel-wisconsin": {
+      "wisconsin": {
+        "birkie": ["Birkie Trail", "American Birkebeiner Trail System"],
+        "ariens": ["Ariens Nordic Center"],
+        "ashwabay": ["Mt. Ashwabay Nordic Trails", "Bayfield County"],
+        "brule": ["Brule River State Forest - Cross Country", "Brule River State Forest"],
+        "copperfalls": ["Copper Falls State Park"],
+        "winman": ["WinMan Trails"],
+        "threeeagle": ["Three Eagle Trail - Three Lakes Area", "Three Eagle Trail"],
+        "bluemound": ["Blue Mound State Park"],
+        "blackriver": ["Black River State Forest"],
+        "flambeau": ["Flambeau Hills-Flambeau River State Forest", "Flambeau River State Forest"],
+        "whitefishdunes": ["Whitefish Dunes State Park"],
+        "wildcat": ["Wildcat Mountain State Park"],
+        "willowriver": ["Willow River State Park"],
+        "pointbeach": ["Point Beach State Forest"],
+        "standingrocks": ["Standing Rocks", "Standing Rocks Park"],
+        "ninemile": ["Nine Mile Recreation Area", "Marathon County"],
+        "levis": ["Levis / Trow Mound", "Clark County"],
+        "lakewissota": ["Lake Wissota State Park"],
+        "kettlenorth": ["Kettle Moraine Northern Unit"],
+        "kettlesouth": ["Kettle Moraine Southern Unit", "Kettle Moraine Southern Unit - McMiller"]
+      }
+    },
+    "three-rivers": {
+      "minnesota": {
+        "baker": ["Baker Park Reserve", "Baker"],
+        "carver": ["Carver Park Reserve", "Carver"],
+        "cleary": ["Cleary Lake Regional Park", "Cleary"],
+        "crowhassan": ["Crow-Hassan Park Reserve", "Crow-Hassan"],
+        "eaglelake": ["Eagle Lake Winter Trailhead", "Eagle Lake"],
+        "elmcreek": ["Elm Creek Park Reserve", "Elm Creek"],
+        "french": ["French Regional Park", "French"],
+        "glenlake": ["Glen Lake Golf Center", "Glen Lake Winter Trailhead", "Glen Lake"],
+        "hyland": ["Hyland Lake Park Reserve", "Hyland"],
+        "lakerebecca": ["Lake Rebecca Park Reserve", "Lake Rebecca"],
+        "mississippigateway": ["Mississippi Gateway Regional Park", "Mississippi Gateway"],
+        "murphyhanrehan": ["Murphy-Hanrehan Park Reserve", "Murphy-Hanrehan"]
+      }
+    },
+    "cook-county": {
+      "minnesota": {
+        "pincushion": ["Pincushion Mountain Ski Trails", "Pincushion Mountain Trails"],
+        "ballycreek": ["Bally Creek Ski Trails", "Bally Creek"],
+        "georgewashington": ["George Washington Pines"],
+        "centralgunflint": ["Central Gunflint Trail Ski System", "Central Gunflint"],
+        "uppergunflint": ["Upper Gunflint Ski Trails", "Upper Gunflint"],
+        "banadad": ["Banadad Ski Trail", "Banadad"],
+        "sugarbush": ["Sugarbush Ski Trails", "Sugarbush"],
+        "norpine": ["Norpine Ski Trails", "Norpine"],
+        "cascade": ["Cascade River State Park"]
+      }
+    },
+    "nordic-pulse": {
+      "michigan": {
+        "forbush": ["Forbush Corner Nordic"],
+        "noque": ["Forestville and Noque Trail", "Noquemanon Trail Network"],
+        "swedetown": ["Swedetown Trails"]
+      },
+      "minnesota": {
+        "vasaloppet": ["Vasaloppet Nordic Center"]
+      }
+    }
+  }
+}
