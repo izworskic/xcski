@@ -120,6 +120,8 @@
   function renderOffSeason(rows) {
     const list = document.getElementById("ski-board-list");
     if (!list) return;
+    const filters = document.querySelector(".ski-board-filters");
+    if (filters) filters.hidden = true;
     const forecast = rows
       .filter(r => (r.snowTomorrow || 0) >= 0.5)
       .sort((a, b) => (b.snowTomorrow || 0) - (a.snowTomorrow || 0))
@@ -233,11 +235,13 @@
       const freshness = document.getElementById("ski-board-freshness");
       if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · grooming/open status remains operator-verified`;
 
+      wireInteractions(rows);
       if (offSeason) renderOffSeason(rows);
       else {
+        const filters = document.querySelector(".ski-board-filters");
+        if (filters) filters.hidden = false;
         setState("Live winter board");
         render(rows, "all");
-        wireInteractions(rows);
       }
     } catch (error) {
       console.warn("Michigan Nordic Board unavailable:", error);
