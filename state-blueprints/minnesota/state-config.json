@@ -1,0 +1,30 @@
+{
+  "state": "Minnesota",
+  "abbr": "MN",
+  "productName": "Minnesota XC Ski Conditions",
+  "boardName": "Minnesota Ski Pass Nordic Board",
+  "canonicalHost": "minnesotaxc.chrisizworski.com",
+  "primaryQuestion": "Where should I cross-country ski in Minnesota today, and when?",
+  "searchIntent": [
+    "minnesota cross country ski conditions",
+    "minnesota xc ski trail conditions",
+    "great minnesota ski pass trail conditions",
+    "best cross country skiing minnesota today"
+  ],
+  "distinctiveSignals": [
+    "Great Minnesota Ski Pass network",
+    "Minnesota DNR snow depth and groomed trail conditions",
+    "North Shore and Arrowhead snow reliability",
+    "Twin Cities marginal-snow and thaw windows",
+    "state park and grant-in-aid trail status"
+  ],
+  "regions": [
+    "Arrowhead / Ely",
+    "North Shore",
+    "Duluth",
+    "Bemidji / Itasca",
+    "Brainerd / Central",
+    "Twin Cities / St. Croix",
+    "Southern Minnesota"
+  ]
+}
