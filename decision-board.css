@@ -1,0 +1,48 @@
+/* Michigan Nordic Board — decision layer added at build time. */
+.ski-board-shell{background:#fff;border-bottom:1px solid var(--line);padding:34px 0 28px}
+.ski-board{max-width:1180px;margin:0 auto;padding:0 22px}
+.ski-board-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;margin-bottom:18px}
+.ski-board-kicker{margin:0 0 4px;font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--spruce)}
+.ski-board h2{font:800 clamp(1.7rem,4vw,2.7rem)/1.05 "Bricolage Grotesque",system-ui,sans-serif;margin:0;color:var(--track)}
+.ski-board-intro{max-width:760px;margin:10px 0 0;color:var(--muted);font-size:.98rem}
+.ski-board-state{justify-self:end;border:1px solid var(--line);background:var(--snow);border-radius:999px;padding:8px 12px;font-size:.82rem;font-weight:700;color:var(--track);white-space:nowrap}
+.ski-board-filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.ski-board-filters button{appearance:none;border:1px solid #bdccd6;background:#fff;color:var(--track);border-radius:999px;padding:8px 12px;font:700 .82rem/1 "Public Sans",system-ui,sans-serif;cursor:pointer}
+.ski-board-filters button[aria-pressed="true"]{background:var(--track);color:#fff;border-color:var(--track)}
+.ski-board-filter-label,.ski-board-freshness{margin:0;color:var(--muted);font-size:.82rem}
+.ski-board-freshness{margin-top:5px}
+.ski-board-list{display:grid;gap:10px;margin-top:18px}
+.ski-pick{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;background:var(--snow);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 5px 16px rgba(15,53,82,.04)}
+.ski-pick-rank{width:42px;height:42px;border-radius:12px;background:var(--track);color:#fff;display:grid;place-items:center;font:800 1.05rem "Bricolage Grotesque",system-ui,sans-serif}
+.ski-pick-title{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.ski-pick-title h3{margin:0;color:var(--track);font:800 1.08rem/1.15 "Bricolage Grotesque",system-ui,sans-serif}
+.ski-pick-title p{margin:3px 0 0;color:var(--muted);font-size:.82rem}
+.ski-score{min-width:74px;text-align:right}
+.ski-score b{display:block;font:800 1.55rem/.95 "Bricolage Grotesque",system-ui,sans-serif;color:var(--glacier)}
+.ski-score span{display:block;margin-top:4px;font-size:.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ski-pick-metrics{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.ski-pick-metrics>span{min-width:92px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.ski-pick-metrics b{display:block;color:var(--track);font-size:.98rem}
+.ski-pick-metrics small{display:block;color:var(--muted);font-size:.68rem;line-height:1.2}
+.ski-pick-note{margin:0;color:#304b5a;font-size:.86rem}
+.ski-pick-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.ski-pick-actions button,.ski-pick-actions a,.ski-preseason a{display:inline-flex;align-items:center;text-decoration:none;border-radius:9px;padding:8px 10px;font:700 .78rem/1 "Public Sans",system-ui,sans-serif}
+.ski-pick-actions button{border:1px solid #b7c9d4;background:#fff;color:var(--track);cursor:pointer}
+.ski-pick-actions a,.ski-preseason a{background:var(--glacier);color:#fff;border:1px solid var(--glacier)}
+.ski-board-note{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+.ski-board-note strong{color:var(--ink)}
+.ski-preseason{background:var(--snow);border:1px solid var(--line);border-radius:16px;padding:20px}
+.ski-preseason strong{font:800 1.1rem "Bricolage Grotesque",system-ui,sans-serif;color:var(--track)}
+.ski-preseason p{max-width:760px;margin:6px 0 14px;color:var(--muted)}
+.card.ski-highlight{outline:3px solid rgba(32,97,142,.35);outline-offset:4px;transition:outline-color .2s ease}
+@media (max-width:720px){
+  .ski-board-shell{padding:26px 0 22px}
+  .ski-board{padding:0 16px}
+  .ski-board-head{grid-template-columns:1fr;gap:10px}
+  .ski-board-state{justify-self:start}
+  .ski-pick{grid-template-columns:38px minmax(0,1fr);padding:12px;gap:10px}
+  .ski-pick-rank{width:36px;height:36px;border-radius:10px}
+  .ski-pick-title{gap:10px}
+  .ski-score{min-width:56px}
+  .ski-pick-metrics>span{min-width:calc(50% - 4px);flex:1}
+}
