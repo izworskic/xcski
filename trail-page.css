@@ -21,8 +21,13 @@ a{color:var(--glacier)}
 .trail-score-label{display:block;color:var(--muted);font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .trail-score-value{font:800 2.5rem/1 "Bricolage Grotesque",system-ui,sans-serif;color:var(--glacier);margin-top:4px}
 .trail-score-value small{display:block;margin-top:5px;font:700 .74rem "Public Sans",system-ui,sans-serif;color:var(--muted)}
-.trail-live-metrics{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 8px}
-.trail-live-metrics span{min-width:120px;flex:1;background:var(--snow);border:1px solid var(--line);border-radius:11px;padding:10px}
+.trail-decision-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 10px}
+.trail-decision-grid>div{background:var(--snow);border:1px solid var(--line);border-radius:11px;padding:10px}
+.trail-decision-grid small{display:block;color:var(--muted);font-size:.67rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.trail-decision-grid strong{display:block;margin-top:2px;color:var(--track);font:800 .9rem "Bricolage Grotesque",system-ui,sans-serif}
+.trail-decision-grid span{display:block;margin-top:4px;color:var(--muted);font-size:.7rem;line-height:1.35}
+.trail-live-metrics{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.trail-live-metrics span{min-width:110px;flex:1;background:var(--snow);border:1px solid var(--line);border-radius:11px;padding:10px}
 .trail-live-metrics b{display:block;color:var(--track)}
 .trail-live-metrics small{display:block;color:var(--muted);font-size:.7rem}
 .trail-live-source{font-size:.76rem!important;color:var(--muted)!important;margin-top:11px!important}
@@ -34,5 +39,6 @@ a{color:var(--glacier)}
   .trail-layout{grid-template-columns:1fr}
   .trail-live-head{display:block}
   .trail-live-head p{margin-top:12px}
+  .trail-decision-grid{grid-template-columns:1fr}
   .trail-live-metrics span{min-width:calc(50% - 4px)}
 }
