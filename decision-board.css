@@ -11,6 +11,11 @@
 .ski-board-filters button[aria-pressed="true"]{background:var(--track);color:#fff;border-color:var(--track)}
 .ski-board-filter-label,.ski-board-freshness{margin:0;color:var(--muted);font-size:.82rem}
 .ski-board-freshness{margin-top:5px}
+.ski-board-outlook{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.ski-outlook-card{background:#f8fbfd;border:1px solid var(--line);border-radius:14px;padding:14px}
+.ski-outlook-card>small{display:block;font-size:.68rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ski-outlook-card>strong{display:block;margin:2px 0 8px;color:var(--track);font:800 1rem "Bricolage Grotesque",system-ui,sans-serif}
+.ski-outlook-card>div{display:grid;gap:6px}.ski-outlook-card a{display:block;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 9px}.ski-outlook-card a b{display:block;color:var(--track);font-size:.8rem}.ski-outlook-card a span,.ski-outlook-card>div>span{display:block;color:var(--muted);font-size:.72rem;line-height:1.35}.ski-outlook-card p{margin:9px 0 0;color:var(--muted);font-size:.7rem;line-height:1.35}
 .ski-board-list{display:grid;gap:10px;margin-top:18px}
 .ski-pick{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;background:var(--snow);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 5px 16px rgba(15,53,82,.04)}
 .ski-pick-rank{width:42px;height:42px;border-radius:12px;background:var(--track);color:#fff;display:grid;place-items:center;font:800 1.05rem "Bricolage Grotesque",system-ui,sans-serif}
@@ -58,6 +63,7 @@
   .ski-board{padding:0 16px}
   .ski-board-head{grid-template-columns:1fr;gap:10px}
   .ski-board-state{justify-self:start}
+  .ski-board-outlook{grid-template-columns:1fr}
   .ski-pick{grid-template-columns:38px minmax(0,1fr);padding:12px;gap:10px}
   .ski-pick-rank{width:36px;height:36px;border-radius:10px}
   .ski-pick-title{gap:10px}
