@@ -11,7 +11,7 @@ const heroPhrase = 'plus a fast snow-cover screen before you verify the operator
 if (!html.includes(heroPhrase)) throw new Error('XC decision-board hero phrase anchor missing');
 html = html.replace(
   heroPhrase,
-  'plus a live Michigan Nordic Board that compares the strongest modeled natural-snow signals and shows the best available grooming-status source before you make the drive.'
+  'plus a live Michigan Nordic Board that compares snow, surface timing, and source confidence before you verify the operator or groomer report.'
 );
 
 const heroEnd = '</div></header>';
@@ -21,23 +21,36 @@ const boardMarkup = `
     <div class="ski-board-head">
       <div>
         <p class="ski-board-kicker">Michigan Nordic Board</p>
-        <h2 id="ski-board-title">Where does the snow look best?</h2>
-        <p class="ski-board-intro">A decision layer across all 48 trailheads. It ranks modeled natural-snow and weather signals, then shows the strongest grooming/status source we have registered for each trail. The snow score and the grooming source stay separate on purpose.</p>
+        <h2 id="ski-board-title">Where should I ski, and when?</h2>
+        <p class="ski-board-intro">A decision layer across all 48 trailheads. Snow score, modeled surface state, best time-of-day window, and source confidence stay separate so you can see what the engine knows and what still needs operator verification.</p>
       </div>
       <div class="ski-board-state" id="ski-board-state" role="status">Loading snow intelligence…</div>
     </div>
     <div class="ski-board-filters" aria-label="Nordic Board filters">
-      <button type="button" data-board-filter="all" aria-pressed="true">Best snow signal</button>
-      <button type="button" data-board-filter="groomed" aria-pressed="false">Groomed centers</button>
+      <button type="button" data-board-filter="all" aria-pressed="true">Best today</button>
+      <button type="button" data-board-filter="groomed" aria-pressed="false">Groomed</button>
+      <button type="button" data-board-filter="classic" aria-pressed="false">Classic</button>
       <button type="button" data-board-filter="skate" aria-pressed="false">Skate</button>
       <button type="button" data-board-filter="rentals" aria-pressed="false">Rentals</button>
+      <button type="button" data-board-filter="lighted" aria-pressed="false">Lighted</button>
+      <button type="button" data-board-filter="backcountry" aria-pressed="false">Backcountry</button>
     </div>
     <p class="ski-board-filter-label" id="ski-board-filter-label">Comparing all 48 trailheads.</p>
-    <p class="ski-board-freshness" id="ski-board-freshness">Loading current weather, snow signals, and grooming-source coverage…</p>
+    <p class="ski-board-freshness" id="ski-board-freshness">Loading current weather, surface timing, and source confidence…</p>
     <div class="ski-board-list" id="ski-board-list" aria-live="polite">
-      <div class="ski-preseason"><strong>Building the board…</strong><p>Checking snow depth, the last 72 hours of snowfall, temperature, thaw risk, rain, tomorrow's snow signal, and available grooming/status sources.</p></div>
+      <div class="ski-preseason"><strong>Building the board…</strong><p>Checking modeled base, fresh snow, rain, freeze/thaw, hourly temperature, wind, and today’s best surface window.</p></div>
     </div>
-    <p class="ski-board-note"><strong>What the score means:</strong> 0–100 is a comparative modeled natural-snow signal, not a grooming or skiability score. Grooming sources are displayed separately and never boost the score unless an authorized live-data integration is actually supplying current values.</p>
+    <div class="ski-region-links" aria-label="Regional Nordic boards">
+      <strong>Regional boards</strong>
+      <a href="/regions/grayling-roscommon/">Grayling + Roscommon</a>
+      <a href="/regions/gaylord-pigeon-river/">Gaylord + Pigeon River</a>
+      <a href="/regions/traverse-leelanau-antrim/">Traverse + Leelanau</a>
+      <a href="/regions/cadillac-benzie-manistee/">Cadillac + Benzie</a>
+      <a href="/regions/petoskey-harbor-springs-boyne/">Petoskey + Harbor Springs</a>
+      <a href="/regions/northeast-lower/">Northeast Lower</a>
+      <a href="/regions/straits-eastern-up/">Straits + Eastern UP</a>
+    </div>
+    <p class="ski-board-note"><strong>How to read this:</strong> the 0–100 number remains a modeled natural-snow score. Surface state and best time are hourly weather-derived. Confidence measures source quality, not trail quality. Grooming/open status still comes from the operator or land manager unless an authorized live feed is explicitly connected.</p>
   </div>
 </section>`;
 if (!html.includes(heroEnd)) throw new Error('XC decision-board hero end anchor missing');
@@ -45,8 +58,7 @@ html = html.replace(heroEnd, `${heroEnd}\n${boardMarkup}`);
 
 const methodAnchor = '<section class="method" id="method">\n<h2>How the snow read works</h2>';
 const methodIntro = `${methodAnchor}
-<p><strong>The Michigan Nordic Board is comparative, not authoritative.</strong> It combines modeled snow depth, snowfall during the previous 72 hours, current temperature, today's high and low, rain, and tomorrow's snow signal across all 48 trailheads. Its 0–100 number is a modeled natural-snow signal only. It does not claim a trail is open, groomed, safe, or skiable.</p>
-<p><strong>Grooming data has a separate provenance layer.</strong> The tool keeps a registry of known operator and live grooming sources. When a provider requires approved API access, we link to the provider rather than scrape or republish its data. The source registry can accept authorized machine-readable feeds later without changing the snow model.</p>`;
+<p><strong>The Michigan Nordic Board now uses four independent layers.</strong> Snow score compares modeled base and recent snow. Surface intelligence looks at rain, overnight freeze, daytime thaw, hourly temperature and wind. Best-time modeling compares morning, midday and afternoon. Source confidence reports whether the trail has a live grooming platform, a direct operator page, a land-manager reference, or no current machine-readable feed. None of those layers silently substitutes for another.</p>`;
 if (!html.includes(methodAnchor)) throw new Error('XC method anchor missing');
 html = html.replace(methodAnchor, methodIntro);
 
@@ -54,13 +66,13 @@ if (!html.includes('</head>')) throw new Error('XC head end missing');
 html = html.replace('</head>', '<link rel="stylesheet" href="/decision-board.css">\n</head>');
 
 if (!html.includes('</body>')) throw new Error('XC body end missing');
-html = html.replace('</body>', '<script src="/decision-board.js" defer></script>\n</body>');
+html = html.replace('</body>', '<script src="/xc-intelligence.js" defer></script>\n<script src="/decision-board.js" defer></script>\n</body>');
 
 html = html.replaceAll('"dateModified":"2026-08-18"', '"dateModified":"2026-09-13"');
 
 await writeFile(indexPath, html);
+await cp(path.join(root, 'xc-intelligence.js'), path.join(out, 'xc-intelligence.js'));
 await cp(path.join(root, 'decision-board.js'), path.join(out, 'decision-board.js'));
 await cp(path.join(root, 'decision-board.css'), path.join(out, 'decision-board.css'));
-await cp(path.join(root, 'grooming-sources.json'), path.join(out, 'grooming-sources.json'));
 
-console.log('Added Michigan Nordic Board decision and grooming-source layers.');
+console.log('Added Michigan Nordic Board with reusable snow, surface, timing, and source-confidence engine.');
