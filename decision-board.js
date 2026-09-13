@@ -64,6 +64,12 @@
     };
   }
 
+  function deltaMetric(row) {
+    if (!Number.isFinite(row.scoreDelta)) return "";
+    const sign = row.scoreDelta > 0 ? "+" : "";
+    return `<span><b>${sign}${row.scoreDelta}</b><small>vs yesterday</small></span>`;
+  }
+
   function formatRow(row, rank) {
     const source = sourcePresentation(row);
     const official = officialLink(row.id);
@@ -95,6 +101,7 @@
             <span><b>${Math.round(row.temp)}°</b><small>now</small></span>
             <span><b>${Math.round(row.maxToday)}°</b><small>today high</small></span>
             <span><b>${row.snowTomorrow.toFixed(1)}"</b><small>tomorrow snow</small></span>
+            ${deltaMetric(row)}
           </div>
 
           <div class="ski-source ski-source-${source.className}">
@@ -123,7 +130,7 @@
       skate: "skate-capable systems", rentals: "trails with rentals", lighted: "lighted systems", backcountry: "backcountry / skier-tracked systems"
     };
     const label = document.getElementById("ski-board-filter-label");
-    if (label) label.textContent = `Ranking ${names[filterName] || names.all} by modeled snow signal, with surface timing and source confidence shown separately.`;
+    if (label) label.textContent = `Ranking ${names[filterName] || names.all} by modeled snow signal, with surface timing, source confidence, and same-hour change since yesterday shown separately.`;
   }
 
   function renderOffSeason(rows, registry) {
@@ -142,7 +149,7 @@
     list.innerHTML = `
       <div class="ski-preseason">
         <strong>Winter rankings are paused.</strong>
-        <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, and time-of-day rankings switch on when the season returns.</p>
+        <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, time-of-day, and day-over-day rankings switch on when the season returns.</p>
         <a href="#map">Explore all ${TRAILS.length} trails</a>
       </div>`;
     setState("Preseason mode");
@@ -180,7 +187,7 @@
       const lats = TRAILS.map(t => t.lat).join(",");
       const lons = TRAILS.map(t => t.lon).join(",");
       const [weatherResponse, registry] = await Promise.all([
-        fetch(XC_INTEL.forecastQuery(lats, lons, true)),
+        fetch(XC_INTEL.forecastQuery(lats, lons, true, "America/Detroit")),
         loadSourceRegistry()
       ]);
       if (!weatherResponse.ok) throw new Error(`weather ${weatherResponse.status}`);
@@ -190,11 +197,15 @@
       const rows = TRAILS.map((trail, index) => {
         const d = weather[index];
         if (!d) return null;
-        const intelligence = XC_INTEL.analyzeWeather(d);
+        const comparison = XC_INTEL.compareYesterday(d);
+        const intelligence = comparison.current;
         const source = registry.sources?.[trail.id] || null;
         return {
           ...trail,
           ...intelligence,
+          scoreDelta: comparison.delta,
+          previousSurface: comparison.previous?.surface?.label || null,
+          previousBestWindow: comparison.previous?.bestWindow?.label || null,
           profile: trailProfile(trail),
           source,
           confidence: XC_INTEL.confidence(source, trail)
@@ -205,7 +216,7 @@
       const updated = new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", hour: "numeric", minute: "2-digit" }).format(now);
       const liveSources = rows.filter(r => r.source?.kind === "live-grooming-platform").length;
       const freshness = document.getElementById("ski-board-freshness");
-      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${rows.length}/${TRAILS.length} trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
+      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · day-over-day compares the same local hour · ${rows.length}/${TRAILS.length} trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
 
       wireInteractions(rows);
       if (offSeason) renderOffSeason(rows, registry);
