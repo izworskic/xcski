@@ -8,11 +8,14 @@ const indexPath = path.join(out, 'index.html');
 let html = await readFile(indexPath, 'utf8');
 
 const heroPhrase = 'plus a fast snow-cover screen before you verify the operator or groomer report.';
-if (!html.includes(heroPhrase)) throw new Error('XC decision-board hero phrase anchor missing');
-html = html.replace(
-  heroPhrase,
-  'plus a live statewide Michigan Nordic Board that compares snow, surface timing, and source confidence before you verify the operator or groomer report.'
-);
+if (html.includes(heroPhrase)) {
+  html = html.replace(
+    heroPhrase,
+    'plus a live statewide Michigan Nordic Board that compares snow, surface timing, and source confidence before you verify the operator or groomer report.'
+  );
+} else if (!html.includes('Sixty-one cross-country ski systems across Michigan')) {
+  throw new Error('XC statewide hero copy missing before decision-board injection');
+}
 
 const heroEnd = '</div></header>';
 const boardMarkup = `
