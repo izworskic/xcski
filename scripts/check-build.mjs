@@ -9,6 +9,8 @@ const boardJs = readFileSync('dist/decision-board.js', 'utf8');
 const boardCss = readFileSync('dist/decision-board.css', 'utf8');
 const trailJs = readFileSync('dist/trail-page.js', 'utf8');
 const trailCss = readFileSync('dist/trail-page.css', 'utf8');
+const groomingRegistryText = readFileSync('dist/grooming-sources.json', 'utf8');
+const groomingRegistry = JSON.parse(groomingRegistryText);
 const fail = (m) => { throw new Error(m); };
 
 if (!html.includes('<link rel="canonical" href="https://xcski.chrisizworski.com/">')) fail('canonical owner changed');
@@ -29,6 +31,7 @@ if (/basemaps\.cartocdn\.com|api\.mapbox\.com|api\.maptiler\.com|tiles\.stadiama
 if (!html.includes('id="ski-board"')) fail('Michigan Nordic Board missing');
 if (!html.includes('Where does the snow look best?')) fail('decision-first board headline missing');
 if (!html.includes('modeled natural-snow signal')) fail('board trust language missing');
+if (!html.includes('Grooming data has a separate provenance layer.')) fail('grooming provenance explanation missing');
 if (!html.includes('/decision-board.css')) fail('decision board stylesheet missing from page');
 if (!html.includes('/decision-board.js')) fail('decision board runtime missing from page');
 if (!boardJs.includes('scoreSignal')) fail('snow signal scoring engine missing');
@@ -37,7 +40,18 @@ if (!boardJs.includes('rainToday')) fail('rain risk not included in score');
 if (!boardJs.includes('minToday < 31 && row.maxToday > 35')) fail('freeze/thaw risk not included');
 if (!boardJs.includes('Preseason mode')) fail('off-season decision state missing');
 if (!boardJs.includes('Verify official status')) fail('operator verification handoff missing from board');
+if (!boardJs.includes('loadGroomingRegistry')) fail('grooming source registry loader missing');
+if (!boardJs.includes('current values are not ingested without authorized API access')) fail('provider authorization boundary missing from board');
 if (!boardCss.includes('.ski-pick')) fail('decision board styles missing');
+if (!boardCss.includes('.ski-source-live')) fail('grooming provenance styles missing');
+
+if (!groomingRegistry || groomingRegistry.version !== 1 || !groomingRegistry.sources) fail('grooming source registry malformed');
+const forbushSource = groomingRegistry.sources.forbush;
+if (!forbushSource) fail('Forbush live grooming source missing from registry');
+if (forbushSource.provider !== 'Nordic Pulse') fail('Forbush provider changed unexpectedly');
+if (forbushSource.integration !== 'link-only-until-authorized-api') fail('Forbush API authorization boundary missing');
+if (!/^https:\/\/www\.nordic-pulse\.com\//.test(forbushSource.url || '')) fail('Forbush Nordic Pulse link missing');
+if (!String(groomingRegistry.policy || '').includes('not ingested unless the provider explicitly authorizes API access')) fail('registry provider policy missing');
 
 const trailDirs = readdirSync('dist/trails', { withFileTypes: true }).filter(entry => entry.isDirectory());
 if (trailDirs.length !== 48) fail(`expected 48 generated trail pages, found ${trailDirs.length}`);
@@ -47,9 +61,13 @@ for (const entry of trailDirs) {
   if (!trailHtml.includes(`<link rel="canonical" href="${canonical}">`)) fail(`trail canonical missing for ${entry.name}`);
   if (!trailHtml.includes('id="trail-live"')) fail(`live trail signal missing for ${entry.name}`);
   if (!trailHtml.includes('Verify official trail status')) fail(`official trail handoff missing for ${entry.name}`);
+  if (!trailHtml.includes('Grooming &amp; status sources')) fail(`grooming source panel missing for ${entry.name}`);
   if (!trailHtml.includes('/trail-page.js')) fail(`trail runtime missing for ${entry.name}`);
   if ((trailHtml.match(/class="trail-related"/g) || []).length !== 1) fail(`nearby-trail links missing for ${entry.name}`);
 }
+const forbushHtml = readFileSync(path.join('dist', 'trails', 'forbush', 'index.html'), 'utf8');
+if (!forbushHtml.includes('Nordic Pulse source linked')) fail('Forbush live-source badge missing from trail page');
+if (!forbushHtml.includes('Provider-authorized API access is required')) fail('Forbush provider authorization note missing');
 if (!trailJs.includes('scoreSignal')) fail('trail-page snow scoring missing');
 if (!trailJs.includes('Preseason mode')) fail('trail-page off-season state missing');
 if (!trailCss.includes('.trail-live-metrics')) fail('trail page styles missing');
@@ -79,4 +97,4 @@ try {
 
 if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html + boardJs + trailJs)) fail('unexpected personal/browser-state collection detected');
 
-console.log('XC 2026-27 readiness: PASS — 48 trail cards, Nordic Board, 48 indexable trail pages, expanded sitemap, and verification handoffs preserved.');
+console.log('XC 2026-27 readiness: PASS — 48 trail cards, Nordic Board, grooming-source registry/provenance, 48 trail pages, expanded sitemap, and verification handoffs preserved.');
