@@ -1,0 +1,28 @@
+{
+  "state": "Wisconsin",
+  "abbr": "WI",
+  "productName": "Wisconsin XC Ski Conditions",
+  "boardName": "Wisconsin Nordic Board",
+  "canonicalHost": "wisconsinxc.chrisizworski.com",
+  "primaryQuestion": "Where should I cross-country ski in Wisconsin today, and when?",
+  "searchIntent": [
+    "wisconsin cross country ski conditions",
+    "wisconsin xc ski trail conditions",
+    "wisconsin groomed ski trails today",
+    "best cross country skiing wisconsin today"
+  ],
+  "distinctiveSignals": [
+    "Travel Wisconsin volunteer snow reports",
+    "Wisconsin DNR state-park trail status",
+    "Birkie and Northwoods Nordic systems",
+    "southern Wisconsin marginal-snow decision windows"
+  ],
+  "regions": [
+    "Northwest / Birkie Country",
+    "Northwoods",
+    "Northeast / Green Bay",
+    "Central Wisconsin",
+    "Madison / Driftless",
+    "Southeast / Kettle Moraine"
+  ]
+}
