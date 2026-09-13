@@ -1,115 +1,27 @@
 {
-  "version": 1,
+  "version": 2,
   "updated": "2026-09-13",
-  "policy": "Candidates are not added to the live trail engine until coordinates, trail profile, operator/status source, and winter access details are verified. Presence here is not a live-status claim.",
-  "candidates": [
-    {
-      "name": "Huron Meadows Metropark",
-      "region": "Southeast Michigan",
-      "town": "Brighton",
-      "source": "Huron-Clinton Metroparks",
-      "sourceUrl": "https://www.metroparks.com/huron-meadows-metropark/",
-      "why": "Daily winter grooming/condition updates, classic and skate grooming, rentals, lit snowmaking loop at Bucks Run.",
-      "priority": 1,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Stony Creek Metropark",
-      "region": "Southeast Michigan",
-      "source": "Huron-Clinton Metroparks",
-      "sourceUrl": "https://www.metroparks.com/stony-creek-metropark/",
-      "why": "Large groomed traditional XC network with official winter condition handoff and rentals.",
-      "priority": 2,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Kensington Metropark",
-      "region": "Southeast Michigan",
-      "source": "Huron-Clinton Metroparks",
-      "sourceUrl": "https://www.metroparks.com/kensington-metropark/",
-      "why": "More than 12 miles of groomed trails with official winter closure/condition updates.",
-      "priority": 3,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Swedetown Trails",
-      "region": "Keweenaw",
-      "town": "Calumet",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Live grooming and trackset reporting on Nordic Pulse; major Upper Peninsula Nordic system.",
-      "priority": 1,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Forestville and Noque Trail",
-      "region": "Central Upper Peninsula",
-      "town": "Marquette",
-      "source": "Nordic Pulse / Noquemanon Trail Network",
-      "sourceUrl": "https://www.nordic-pulse.com/ski-areas/US/MI/region/Noquemanon-Trail-Network",
-      "why": "Large groomed system with live grooming and trackset reporting.",
-      "priority": 1,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Fit Strip",
-      "region": "Central Upper Peninsula",
-      "town": "Marquette",
-      "source": "Nordic Pulse / NTN Trails",
-      "sourceUrl": "https://nordic-pulse.com/centres/US/MI/Fit-Strip",
-      "why": "Dedicated Nordic Pulse grooming report with classic and skate loop detail.",
-      "priority": 2,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Ishpeming Ski Club",
-      "region": "Central Upper Peninsula",
-      "town": "Ishpeming",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Live grooming platform coverage and an established local Nordic network.",
-      "priority": 2,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Saux Head Ski Trails",
-      "region": "Central Upper Peninsula",
-      "town": "Marquette area",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Nordic Pulse grooming coverage; fills a current central-UP geographic gap.",
-      "priority": 3,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "North Trails",
-      "region": "Central Upper Peninsula",
-      "town": "Marquette",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Live grooming coverage on Nordic Pulse; part of the Marquette trail ecosystem.",
-      "priority": 3,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "South Trails",
-      "region": "Central Upper Peninsula",
-      "town": "Marquette",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Live grooming coverage on Nordic Pulse and significant groomed mileage.",
-      "priority": 3,
-      "state": "verified-source-candidate"
-    },
-    {
-      "name": "Big Bay Pathway",
-      "region": "Central Upper Peninsula",
-      "town": "Big Bay",
-      "source": "Nordic Pulse Michigan",
-      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
-      "why": "Live grooming and trackset reporting; expands coverage north of Marquette.",
-      "priority": 3,
-      "state": "verified-source-candidate"
-    }
+  "note": "Vetted major-system expansion from 48 northern Michigan trails to 61 statewide trail systems. Coordinates are trailhead or park reference points used for weather screening and remain approximate where an operator does not publish a trailhead coordinate.",
+  "regions": [
+    {"id":"southeast","slug":"southeast-michigan","title":"Southeast Michigan","blurb":"The strongest groomed options around metro Detroit and Brighton, including snowmaking, rentals and official winter status reporting."},
+    {"id":"west","slug":"west-michigan","title":"West Michigan","blurb":"Lake Michigan snowbelt skiing from Ottawa County to Muskegon, with groomed, lighted systems and staffed winter facilities."},
+    {"id":"centralup","slug":"central-upper-peninsula","title":"Central Upper Peninsula","blurb":"Deep-snow Nordic country around Munising, Marquette and Ishpeming, anchored by major groomed trail networks."},
+    {"id":"keweenaw","slug":"keweenaw-houghton-calumet","title":"Keweenaw, Houghton and Calumet","blurb":"World-class snow and race-caliber grooming around Houghton and Calumet, with long seasons and extensive skate/classic networks."},
+    {"id":"westernup","slug":"western-upper-peninsula","title":"Western Upper Peninsula","blurb":"Ironwood and the Porkies: some of Michigan's deepest, most dependable snow with destination-scale groomed Nordic systems."}
+  ],
+  "trails": [
+    {"id":"huronmeadows","region":"southeast","name":"Huron Meadows Metropark","town":"Brighton","lat":42.48102,"lon":-83.77325,"cat":"groomed","lit":true,"rentals":true,"skate":1,"km":"24+ mi combined","style":"Skate + classic","fee":"Park pass + Bucks Run fee","official":"https://www.metroparks.com/huron-meadows-metropark/","desc":"Southeast Michigan's most resilient Nordic center: more than 15 miles of classic-groomed terrain, more than 11 miles of skate grooming, rentals, and the lighted 1.5-mile Bucks Run snowmaking loop for lean winters."},
+    {"id":"kensington","region":"southeast","name":"Kensington Metropark","town":"Milford","lat":42.55508,"lon":-83.63753,"cat":"groomed","lit":false,"rentals":true,"skate":0,"km":"12+ mi","style":"Classic groomed","fee":"Park pass","official":"https://www.metroparks.com/kensington-metropark/","desc":"More than 12 miles of groomed beginner and intermediate cross-country trails through the golf course, woods and fields around Kent Lake, with ski rentals when conditions permit."},
+    {"id":"stonycreek","region":"southeast","name":"Stony Creek Metropark","town":"Shelby Township","lat":42.72948,"lon":-83.09049,"cat":"groomed","lit":false,"rentals":true,"skate":0,"km":"13 mi","style":"Classic groomed","fee":"Park pass","official":"https://www.metroparks.com/stony-creek-metropark/","desc":"Thirteen miles of marked, groomed traditional cross-country trails across golf-course and wooded terrain north of Detroit, with rentals available through the ski center when winter conditions support operations."},
+    {"id":"pigeoncreek","region":"west","name":"Pigeon Creek Park","town":"West Olive","lat":42.935857,"lon":-86.095099,"cat":"groomed","lit":true,"rentals":true,"skate":1,"km":"10+ mi","style":"Skate + classic","fee":"County park","official":"https://miottawa.org/locations/pigeon-creek-park/","desc":"Ottawa County's destination ski park with more than ten miles of groomed classic and skate terrain, three miles of lighted trails, rentals, a warming lodge and active grooming during satisfactory snow conditions."},
+    {"id":"muskegonluge","region":"west","name":"Muskegon Luge Adventure Sports Park","town":"Muskegon","lat":43.2627,"lon":-86.35403,"cat":"groomed","lit":true,"rentals":true,"skate":0,"km":"15 km","style":"Groomed Nordic","fee":"Day pass","official":"https://msports.org/conditions/","desc":"A staffed winter sports complex in Muskegon State Park with roughly 15 kilometers of groomed and lighted cross-country trails, rentals, condition reporting and a long winter-day operating window."},
+    {"id":"valleyspur","region":"centralup","name":"Valley Spur","town":"Munising","lat":46.36306,"lon":-86.69944,"cat":"volunteer","lit":false,"rentals":false,"skate":1,"km":"45 km","style":"Skate + classic","fee":"Day pass / membership","official":"https://valleyspur.org/","desc":"A 45-kilometer Hiawatha National Forest system west of Munising, groomed for both skate and classic skiing daily or as conditions require through the heart of the Lake Superior snowbelt."},
+    {"id":"noque","region":"centralup","name":"Forestville and Noque Trail","town":"Marquette","lat":46.58252,"lon":-87.47896,"cat":"groomed","lit":false,"rentals":false,"skate":1,"km":"50 km","style":"Skate + classic","fee":"Trail pass / membership","official":"https://noquetrails.org/","desc":"The primary Noquemanon Trail Network Nordic system from Forestville outside Marquette, with about 50 kilometers of race-caliber skate and classic terrain and frequent grooming through a deep-snow Lake Superior climate."},
+    {"id":"alqua","region":"centralup","name":"Al Quaal Recreation Area","town":"Ishpeming","lat":46.511944,"lon":-87.662222,"cat":"groomed","lit":true,"rentals":false,"skate":1,"km":"18 km","style":"Groomed Nordic","fee":"Daily / season pass","official":"https://ishpemingcity.org/departments/parks-and-recreation/","desc":"Ishpeming's historic winter sports area with roughly 18 kilometers of cross-country trails, race infrastructure, a lit Teal Lake route and terrain used for regional and championship Nordic events."},
+    {"id":"michigantech","region":"keweenaw","name":"Michigan Tech Trails","town":"Houghton","lat":47.107689,"lon":-88.552457,"cat":"groomed","lit":true,"rentals":false,"skate":1,"km":"35 km","style":"Skate + classic","fee":"Trail access pass","official":"https://michigantechrecreation.com/sports/2024/9/11/tech-trails-maps-conditions-and-trail-etiquette.aspx","desc":"A nationally recognized university Nordic facility in Houghton with roughly 35 kilometers of varied terrain, race courses, winter condition reporting and multiple lighted loops for early and evening skiing."},
+    {"id":"swedetown","region":"keweenaw","name":"Swedetown Trails","town":"Calumet","lat":47.23818,"lon":-88.46487,"cat":"volunteer","lit":false,"rentals":false,"skate":1,"km":"44 km","style":"Skate + classic","fee":"Trail pass / membership","official":"https://swedetowntrails.org/","desc":"Calumet's extensive community Nordic network with more than 40 kilometers of groomed trail, a chalet and dependable Keweenaw lake-effect snow, with current grooming reports published through Nordic Pulse."},
+    {"id":"abr","region":"westernup","name":"ABR Trails","town":"Ironwood","lat":46.447,"lon":-90.122,"cat":"groomed","lit":false,"rentals":true,"skate":1,"km":"90 km","style":"Skate + classic","fee":"Day pass","official":"https://abrtrails.com/","desc":"A destination-scale nonprofit Nordic center near Ironwood with about 90 kilometers of groomed skate and classic terrain, rentals, a ski shop, warming facilities, webcams and frequent operator trail reports."},
+    {"id":"wolverine","region":"westernup","name":"Wolverine Nordic Ski Trails","town":"Ironwood","lat":46.49032,"lon":-90.11478,"cat":"volunteer","lit":false,"rentals":false,"skate":1,"km":"25 km","style":"Skate + classic","fee":"Donation / club support","official":"https://wolverinenordic.com/","desc":"A volunteer-maintained 25-kilometer skate and classic network just east of Ironwood, with rolling terrain, a warming chalet and direct club trail-condition reporting in one of the Midwest's deepest snow belts."},
+    {"id":"porkies","region":"westernup","name":"Porcupine Mountains Wilderness State Park","town":"Ontonagon","lat":46.7811,"lon":-89.6807,"cat":"groomed","lit":false,"rentals":false,"skate":1,"km":"20+ mi","style":"Groomed multi-use Nordic","fee":"Recreation Passport","official":"https://www.michigan.gov/skitheporkies/activities/xc-ski-snowshoe-bike","desc":"More than 20 miles of groomed winter trails through the Porcupine Mountains, with Lake Superior views, state-park grooming updates and a long, snowy season in the western Upper Peninsula."}
   ]
 }
