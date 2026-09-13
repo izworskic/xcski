@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "updated": "2026-09-13",
+  "policy": "Live provider data may influence XC decision confidence only when the provider is explicitly enabled for machine ingestion. Modeled snow score remains independent. Fresh official closed status may suppress a trail from Best Today; stale provider status never silently overrides the weather model.",
+  "freshness": {
+    "freshHours": 12,
+    "usableHours": 36,
+    "staleHours": 72
+  },
+  "providers": {
+    "nordic-pulse": {
+      "label": "Nordic Pulse",
+      "states": ["michigan", "minnesota"],
+      "adapter": "authorized-json",
+      "rights": "permission-pending",
+      "enabled": false,
+      "envFlag": "XC_ENABLE_NORDIC_PULSE",
+      "endpointEnv": "NORDIC_PULSE_API_URL",
+      "tokenEnv": "NORDIC_PULSE_API_TOKEN",
+      "fields": ["openState", "updatedAt", "lastGroomedAt", "classic", "skate", "groomedPercent"],
+      "note": "Enable only after provider-authorized API access is granted. Public Nordic Pulse pages are not scraped."
+    },
+    "travel-wisconsin": {
+      "label": "Travel Wisconsin Snow Report",
+      "states": ["wisconsin"],
+      "adapter": "travel-wisconsin-html",
+      "rights": "permission-pending-commercial-reuse",
+      "enabled": false,
+      "envFlag": "XC_ENABLE_TRAVEL_WISCONSIN",
+      "sourceUrl": "https://www.travelwisconsin.com/snow-report?type=crosscountry",
+      "fields": ["openState", "updatedAt", "baseMinIn", "baseMaxIn", "classic", "skate"],
+      "note": "Terms limit site material to noncommercial public use and request permission for broader reuse. Parser remains disabled until written permission is received."
+    },
+    "three-rivers": {
+      "label": "Three Rivers Park District",
+      "states": ["minnesota"],
+      "adapter": "three-rivers-html",
+      "rights": "permission-pending-republication",
+      "enabled": false,
+      "envFlag": "XC_ENABLE_THREE_RIVERS",
+      "sourceUrl": "https://www.threeriversparks.org/page/trail-conditions-cross-country-skiing",
+      "fields": ["openState", "updatedAt", "classic", "skate", "groomingState"],
+      "note": "Three Rivers terms prohibit reuse or republication without prior consent. Parser remains disabled until written permission is received."
+    },
+    "cook-county": {
+      "label": "Visit Cook County Winter Trail Conditions",
+      "states": ["minnesota"],
+      "adapter": "cook-county-html",
+      "rights": "permission-pending",
+      "enabled": false,
+      "envFlag": "XC_ENABLE_COOK_COUNTY",
+      "sourceUrl": "https://www.visitcookcounty.com/outdoors/winter-activities/winter-trail-conditions/",
+      "fields": ["openState", "updatedAt", "newSnow24In", "baseMinIn", "baseMaxIn", "surfaceCode", "lastGroomedAt", "classic", "skate"],
+      "note": "Rich public conditions exist, but redistribution permission is being requested before machine ingestion is enabled."
+    },
+    "minnesota-dnr": {
+      "label": "Minnesota DNR",
+      "states": ["minnesota"],
+      "adapter": "authorized-json",
+      "rights": "permission-pending-commercial-reuse",
+      "enabled": false,
+      "envFlag": "XC_ENABLE_MN_DNR",
+      "endpointEnv": "MN_DNR_XC_STATUS_URL",
+      "tokenEnv": "MN_DNR_XC_STATUS_TOKEN",
+      "fields": ["openState", "updatedAt", "baseMinIn", "baseMaxIn", "groomingState", "classic", "skate"],
+      "note": "DNR public data access is broad, but its copyright policy requires permission for commercial website reproduction. Enable only for a DNR-authorized feed or license."
+    }
+  }
+}
