@@ -16,15 +16,18 @@ for (const id of ['nordic-pulse','travel-wisconsin','three-rivers','cook-county'
   if (!String(provider.rights).includes('permission-pending')) fail(`permission boundary missing: ${id}`);
   if (!provider.envFlag) fail(`authorization env flag missing: ${id}`);
 }
+if (providers.providers['travel-wisconsin'].envFlag !== 'XC_ENABLE_TRAVEL_WISCONSIN') fail('Travel Wisconsin env gate changed');
+if (providers.providers['three-rivers'].envFlag !== 'XC_ENABLE_THREE_RIVERS') fail('Three Rivers env gate changed');
+if (providers.providers['nordic-pulse'].tokenEnv !== 'NORDIC_PULSE_API_TOKEN') fail('Nordic Pulse token path missing');
+if (providers.providers['nordic-pulse'].endpointEnv !== 'NORDIC_PULSE_API_URL') fail('Nordic Pulse endpoint path missing');
 if (!mappings.providers?.['travel-wisconsin']?.wisconsin?.birkie) fail('Travel Wisconsin mapping missing');
 if (!mappings.providers?.['three-rivers']?.minnesota?.elmcreek) fail('Three Rivers mapping missing');
 if (!mappings.providers?.['cook-county']?.minnesota?.pincushion) fail('Cook County mapping missing');
 if (!api.includes('affectsSnowScore: false')) fail('live provider records can affect snow score');
 if (!api.includes('decisionEligible')) fail('freshness eligibility missing');
 if (!api.includes("config.enabled !== true")) fail('provider authorization hard gate missing');
-if (!api.includes('XC_ENABLE_TRAVEL_WISCONSIN')) fail('Travel Wisconsin runtime gate missing');
-if (!api.includes('XC_ENABLE_THREE_RIVERS')) fail('Three Rivers runtime gate missing');
-if (!api.includes('NORDIC_PULSE_API_TOKEN')) fail('Nordic Pulse authorized token path missing');
+if (!api.includes('config.envFlag')) fail('generic environment authorization gate missing');
+if (!api.includes('config.tokenEnv')) fail('authorized token adapter missing');
 if (!runtime.includes('/api/xc-live?state=')) fail('state boards are not connected to live ingestion API');
 if (!runtime.includes("r.live.openState === 'closed'")) fail('fresh closed status suppression missing');
 if (!runtime.includes("integration: 'authorized-api'")) fail('live confidence upgrade missing');
