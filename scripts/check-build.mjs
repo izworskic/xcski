@@ -34,15 +34,17 @@ if (!html.includes('Where should I ski, and when?')) fail('decision-first board 
 if (!html.includes('statewide decision layer across all 61 trailheads')) fail('statewide board copy missing');
 for (const filter of ['classic','skate','rentals','lighted','backcountry']) if (!html.includes(`data-board-filter="${filter}"`)) fail(`best-by-use filter missing: ${filter}`);
 if (!html.includes('/xc-intelligence.js')) fail('shared intelligence runtime missing from homepage');
-if (!boardJs.includes('XC_INTEL.analyzeWeather')) fail('homepage not using shared intelligence engine');
+if (!boardJs.includes('XC_INTEL.compareYesterday')) fail('homepage not using shared day-over-day intelligence engine');
 if (!boardJs.includes('TRAILS.length')) fail('homepage trail count is not runtime-driven');
 if (!boardJs.includes('surface.label')) fail('surface state missing from board');
 if (!boardJs.includes('bestWindow.label')) fail('time-of-day window missing from board');
 if (!boardJs.includes('confidence.label')) fail('source confidence missing from board');
+if (!boardJs.includes('scoreDelta')) fail('day-over-day score delta missing from board');
 if (!boardCss.includes('.ski-decision-strip')) fail('decision strip styles missing');
 
 if (!intelJs.includes('function surfaceState')) fail('surface-state engine missing');
 if (!intelJs.includes('function bestWindow')) fail('best-window engine missing');
+if (!intelJs.includes('function compareYesterday')) fail('day-over-day comparison engine missing');
 if (!intelJs.includes('row.freezeThaw')) fail('freeze/thaw engine missing');
 if (!intelJs.includes('rain24')) fail('24-hour rain intelligence missing');
 if (!intelJs.includes('snow24')) fail('24-hour snowfall intelligence missing');
@@ -108,4 +110,4 @@ if (runtimeMarkerIndex < 0 || runtimeStart < 0 || runtimeEnd < 0) fail('generate
 const runtimeJs = html.slice(runtimeStart + '<script>'.length, runtimeEnd);
 try { new Function(runtimeJs); new Function(intelJs); new Function(boardJs); new Function(trailJs); new Function(regionJs); } catch (error) { fail('generated JavaScript invalid: ' + error.message); }
 if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html + boardJs + trailJs + regionJs + intelJs)) fail('unexpected personal/browser-state collection detected');
-console.log('XC statewide readiness: PASS — 61 audited trails, shared intelligence engine, 61 trail pages, 12 regional boards, and 74 sitemap URLs.');
+console.log('XC statewide readiness: PASS — 61 audited trails, shared intelligence engine with day-over-day change, 61 trail pages, 12 regional boards, and 74 sitemap URLs.');
