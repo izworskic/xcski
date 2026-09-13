@@ -2,7 +2,7 @@
   'use strict';
 
   const ctx = window.STATE_XC_PAGE;
-  if (!ctx || !window.XC_INTEL) return;
+  if (!ctx || !window.XC_INTEL || !window.XC_FORECAST) return;
   const root = document.getElementById('state-live-board');
   const trailRoot = document.getElementById('state-trail-live');
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -60,6 +60,41 @@
     return `<span class="${cls}"><b>${sign}${row.scoreDelta}</b><small>vs yesterday</small></span>`;
   }
 
+  function ensureOutlookMount() {
+    let mount = document.getElementById('state-forecast-outlook');
+    if (mount || !root?.parentElement) return mount;
+    mount = document.createElement('div');
+    mount.id = 'state-forecast-outlook';
+    mount.className = 'state-forecast-outlook';
+    root.parentElement.insertBefore(mount, root);
+    return mount;
+  }
+
+  function renderForecastOutlook(rows) {
+    const mount = ensureOutlookMount();
+    if (!mount) return;
+    const weekend = rows.filter(r => r.weekend?.available)
+      .sort((a,b) => Math.max(b.weekend.saturday.snowScore,b.weekend.sunday.snowScore) - Math.max(a.weekend.saturday.snowScore,a.weekend.sunday.snowScore))
+      .slice(0,3);
+    const stormWindows = rows.filter(r => r.storm?.signal === 'storm-window')
+      .sort((a,b) => b.storm.eventSnowIn - a.storm.eventSnowIn).slice(0,3);
+    const snowEvents = stormWindows.length ? stormWindows : rows.filter(r => r.storm?.signal === 'snow-event')
+      .sort((a,b) => b.storm.eventSnowIn - a.storm.eventSnowIn).slice(0,3);
+
+    const weekendHtml = weekend.length ? weekend.map((r,i) => {
+      const w = r.weekend;
+      return `<a href="/${ctx.slug}/trails/${r.id}/"><b>${i+1}. ${esc(r.name)}</b><span>${esc(w.betterDay === 'Tie' ? 'Weekend nearly even' : `${w.betterDay} better`)} · Sat ${w.saturday.snowScore} / Sun ${w.sunday.snowScore}</span></a>`;
+    }).join('') : '<span>No complete weekend forecast is available yet.</span>';
+
+    const stormHtml = snowEvents.length ? snowEvents.map(r => {
+      const s = r.storm;
+      const open = s.windowStart ? ` · opens ~${XC_FORECAST.localHourLabel(s.windowStart)}` : '';
+      return `<a href="/${ctx.slug}/trails/${r.id}/"><b>${esc(r.name)}</b><span>${s.eventSnowIn.toFixed(1)}&quot; modeled${esc(open)} · ${esc(s.confidence || 'forecast')} confidence</span></a>`;
+    }).join('') : '<span>No ≥1.5&quot; modeled 24-hour snow burst in the next 7 days.</span>';
+
+    mount.innerHTML = `<div class="state-forecast-card"><small>Weekend outlook</small><strong>Saturday vs Sunday</strong><div>${weekendHtml}</div><p>Modeled snow/weather signal only; current grooming cannot be projected this far out.</p></div><div class="state-forecast-card"><small>Storm / ski-window watch</small><strong>Next 7 days</strong><div>${stormHtml}</div><p>Potential windows require forecast snow plus cold/dry hours and are not trail-opening forecasts.</p></div>`;
+  }
+
   function renderRows(rows, filter='all') {
     if (!root) return;
     let candidates = rows.filter(r => filterTrail(r, filter));
@@ -99,7 +134,7 @@
       const lats = ctx.trails.map(t=>t.lat).join(',');
       const lons = ctx.trails.map(t=>t.lon).join(',');
       const [weatherResponse, liveLayer] = await Promise.all([
-        fetch(XC_INTEL.forecastQuery(lats,lons,true,timezone)),
+        fetch(XC_FORECAST.forecastQuery(lats,lons,true,timezone)),
         loadLiveStatus()
       ]);
       if (!weatherResponse.ok) throw new Error(`weather ${weatherResponse.status}`);
@@ -111,16 +146,17 @@
         const intel = comparison.current;
         const live = liveLayer.byTrail.get(trail.id) || null;
         const source = sourceFor(trail, live);
-        return {...trail,...intel,scoreDelta:comparison.delta,previousSurface:comparison.previous?.surface?.label || null,previousBestWindow:comparison.previous?.bestWindow?.label || null,live,confidence:XC_INTEL.confidence(source,trail)};
+        return {...trail,...intel,scoreDelta:comparison.delta,previousSurface:comparison.previous?.surface?.label || null,previousBestWindow:comparison.previous?.bestWindow?.label || null,weekend:XC_FORECAST.weekendOutlook(weather[index]),storm:XC_FORECAST.stormWindow(weather[index]),live,confidence:XC_INTEL.confidence(source,trail)};
       }).filter(Boolean);
+      renderForecastOutlook(rows);
       const month = Number(new Intl.DateTimeFormat('en-US',{timeZone:timezone,month:'numeric'}).format(new Date()));
       if (month >= 5 && month <= 10) {
-        const snowWatch = rows.filter(r=>r.snowTomorrow>=0.5).sort((a,b)=>b.snowTomorrow-a.snowTomorrow);
+        const snowWatch = rows.filter(r=>r.storm?.signal !== 'none' || r.snowTomorrow>=0.5).sort((a,b)=>(b.storm?.eventSnowIn||b.snowTomorrow)-(a.storm?.eventSnowIn||a.snowTomorrow));
         if (!snowWatch.length) {
           root.innerHTML = `<div class="state-empty"><strong>Preseason mode.</strong><p>${esc(ctx.preseason)}</p></div>`;
           if (status) status.textContent='Preseason';
           const pending = (liveLayer.payload.providers || []).filter(p=>p.status==='permission-pending').length;
-          if (fresh) fresh.textContent=`Weather checked · Open-Meteo · live-ingestion engine ready · ${pending} provider permission${pending===1?'':'s'} pending.`;
+          if (fresh) fresh.textContent=`Weather checked · Open-Meteo 8-day forecast · live-ingestion engine ready · ${pending} provider permission${pending===1?'':'s'} pending.`;
           return;
         }
       }
@@ -128,7 +164,7 @@
       const updated = new Intl.DateTimeFormat('en-US',{timeZone:timezone,hour:'numeric',minute:'2-digit'}).format(new Date());
       const liveCount = (liveLayer.payload.records || []).filter(r=>r.decisionEligible).length;
       const pending = (liveLayer.payload.providers || []).filter(p=>p.status==='permission-pending').length;
-      if (fresh) fresh.textContent=`Weather updated ${updated} ${zoneLabel} · Open-Meteo · day-over-day compares the same local hour · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending`;
+      if (fresh) fresh.textContent=`Weather updated ${updated} ${zoneLabel} · Open-Meteo 8-day forecast · day-over-day compares the same local hour · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending`;
       renderRows(rows,'all');
       document.querySelectorAll('[data-state-filter]').forEach(btn => btn.addEventListener('click',()=>{
         document.querySelectorAll('[data-state-filter]').forEach(b=>b.setAttribute('aria-pressed','false'));
@@ -142,17 +178,34 @@
     }
   }
 
+  function trailForecast(intel) {
+    const w = intel.weekend;
+    const s = intel.storm;
+    const weekend = w?.available
+      ? `<div><small>Weekend</small><strong>${esc(w.betterDay === 'Tie' ? 'Saturday ≈ Sunday' : `${w.betterDay} stronger`)}</strong><span>Sat ${w.saturday.snowScore} / Sun ${w.sunday.snowScore}. ${esc(w.summary)}</span></div>`
+      : `<div><small>Weekend</small><strong>Forecast incomplete</strong><span>${esc(w?.reason || 'Weekend data unavailable.')}</span></div>`;
+    const storm = s?.signal === 'storm-window'
+      ? `<div><small>Storm window</small><strong>${s.eventSnowIn.toFixed(1)}&quot; modeled</strong><span>Potential window ~${esc(XC_FORECAST.localHourLabel(s.windowStart))}${s.windowEnd ? ` to ${esc(XC_FORECAST.localHourLabel(s.windowEnd))}` : ' through forecast'} · ${esc(s.confidence)} confidence.</span></div>`
+      : s?.signal === 'snow-event'
+        ? `<div><small>Snow watch</small><strong>${s.eventSnowIn.toFixed(1)}&quot; modeled</strong><span>${esc(s.reason)}</span></div>`
+        : `<div><small>Storm watch</small><strong>No meaningful burst</strong><span>${esc(s?.reason || 'No storm signal available.')}</span></div>`;
+    return `<div class="state-forecast-mini">${weekend}${storm}</div>`;
+  }
+
   async function loadTrail() {
     if (!trailRoot || !ctx.trail) return;
     try {
       const t=ctx.trail;
       const [weatherResponse, liveLayer] = await Promise.all([
-        fetch(XC_INTEL.forecastQuery(t.lat,t.lon,false,timezone)),
+        fetch(XC_FORECAST.forecastQuery(t.lat,t.lon,false,timezone)),
         loadLiveStatus()
       ]);
       if (!weatherResponse.ok) throw new Error(`weather ${weatherResponse.status}`);
-      const comparison=XC_INTEL.compareYesterday(await weatherResponse.json());
+      const weather = await weatherResponse.json();
+      const comparison=XC_INTEL.compareYesterday(weather);
       const intel=comparison.current;
+      const weekend=XC_FORECAST.weekendOutlook(weather);
+      const storm=XC_FORECAST.stormWindow(weather);
       const live = liveLayer.byTrail.get(t.id) || null;
       const confidence=XC_INTEL.confidence(sourceFor(t,live),t);
       const delta = Number.isFinite(comparison.delta) ? `${comparison.delta>0?'+':''}${comparison.delta}` : '—';
@@ -160,6 +213,7 @@
         ${liveLabel(live)}
         <div class="state-trail-score"><div><small>Modeled natural-snow score</small><b>${intel.snowScore}<span>/100 · ${XC_INTEL.scoreWord(intel.snowScore)}</span></b></div><p>${esc(intel.surface.detail)}</p></div>
         <div class="state-decision-grid"><div><small>Surface</small><strong>${esc(intel.surface.label)}</strong><span>${esc(intel.surface.detail)}</span></div><div><small>Best window</small><strong>${esc(intel.bestWindow.label)}</strong><span>${esc(intel.bestWindow.detail)}</span></div><div><small>Confidence</small><strong>${esc(confidence.label)}</strong><span>${esc(confidence.detail)}</span></div></div>
+        ${trailForecast({weekend,storm})}
         <div class="state-metrics"><span><b>${intel.depth.toFixed(1)}&quot;</b><small>modeled base</small></span><span><b>${intel.snow24.toFixed(1)}&quot;</b><small>24h snow</small></span><span><b>${intel.snow72.toFixed(1)}&quot;</b><small>72h snow</small></span><span><b>${Math.round(intel.temp)}°F</b><small>now</small></span><span><b>${Math.round(intel.maxToday)}°F</b><small>today high</small></span><span><b>${intel.snowTomorrow.toFixed(1)}&quot;</b><small>tomorrow snow</small></span><span><b>${delta}</b><small>vs yesterday</small></span>${live?.baseMinIn != null ? `<span><b>${live.baseMinIn}${live.baseMaxIn != null && live.baseMaxIn !== live.baseMinIn ? `–${live.baseMaxIn}` : ''}&quot;</b><small>official reported base</small></span>` : ''}</div>`;
     } catch (error) {
       console.warn('State trail intelligence unavailable',error);
