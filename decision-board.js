@@ -24,7 +24,7 @@
     const card = document.getElementById(`t-${trail.id}`);
     const text = card?.textContent?.toLowerCase() || "";
     return {
-      classic: text.includes("classic"),
+      classic: text.includes("classic") || trail.cat !== "backcountry",
       free: text.includes("free") || text.includes("donation"),
       lighted: Boolean(trail.lit),
       skate: Boolean(trail.skate),
@@ -119,7 +119,7 @@
     const shown = rows.filter(filter).sort((a, b) => (b.snowScore - a.snowScore) || ((b.bestWindow.score || 0) - (a.bestWindow.score || 0))).slice(0, 5);
     list.innerHTML = shown.length ? shown.map((row, i) => formatRow(row, i + 1)).join("") : '<div class="ski-preseason"><strong>No matching trails.</strong><p>Try another use filter.</p></div>';
     const names = {
-      all: "all 48 trails", groomed: "groomed centers", classic: "classic-capable systems",
+      all: `all ${TRAILS.length} trails`, groomed: "groomed centers", classic: "classic-capable systems",
       skate: "skate-capable systems", rentals: "trails with rentals", lighted: "lighted systems", backcountry: "backcountry / skier-tracked systems"
     };
     const label = document.getElementById("ski-board-filter-label");
@@ -143,7 +143,7 @@
       <div class="ski-preseason">
         <strong>Winter rankings are paused.</strong>
         <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, and time-of-day rankings switch on when the season returns.</p>
-        <a href="#map">Explore all 48 trails</a>
+        <a href="#map">Explore all ${TRAILS.length} trails</a>
       </div>`;
     setState("Preseason mode");
   }
@@ -176,7 +176,7 @@
     const offSeason = month >= 5 && month <= 10;
 
     try {
-      setState("Updating 48 trailheads…");
+      setState(`Updating ${TRAILS.length} trailheads…`);
       const lats = TRAILS.map(t => t.lat).join(",");
       const lons = TRAILS.map(t => t.lon).join(",");
       const [weatherResponse, registry] = await Promise.all([
@@ -205,14 +205,14 @@
       const updated = new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", hour: "numeric", minute: "2-digit" }).format(now);
       const liveSources = rows.filter(r => r.source?.kind === "live-grooming-platform").length;
       const freshness = document.getElementById("ski-board-freshness");
-      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${rows.length}/48 trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
+      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${rows.length}/${TRAILS.length} trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
 
       wireInteractions(rows);
       if (offSeason) renderOffSeason(rows, registry);
       else {
         const filters = document.querySelector(".ski-board-filters");
         if (filters) filters.hidden = false;
-        setState("Live winter board");
+        setState("Live statewide winter board");
         render(rows, "all");
       }
     } catch (error) {
