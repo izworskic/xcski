@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "updated": "2026-09-13",
+  "policy": "The registry records known status/grooming sources. External live values are not ingested unless the provider explicitly authorizes API access. A source link never changes the modeled snow score by itself.",
+  "sources": {
+    "forbush": {
+      "provider": "Nordic Pulse",
+      "kind": "live-grooming-platform",
+      "url": "https://www.nordic-pulse.com/centres/US/MI/Forbush-Corner-Nordic",
+      "integration": "link-only-until-authorized-api",
+      "coverage": ["grooming-report", "last-groomed", "trail-level-grooming"],
+      "label": "Live grooming source available",
+      "note": "Nordic Pulse publishes current grooming reports for Forbush Corner. This site links to that source but does not scrape or redistribute Nordic Pulse data. API ingestion can be enabled only with approved access."
+    }
+  }
+}
