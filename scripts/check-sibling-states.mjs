@@ -24,7 +24,9 @@ if(!wi.includes('51 launch systems')) fail('Wisconsin deep coverage count missin
 if(!mn.includes('60 launch systems')) fail('Minnesota deep coverage count missing');
 if(!wi.includes('/xc-intelligence.js')||!mn.includes('/xc-intelligence.js')) fail('shared XC intelligence engine missing from sibling state home');
 if(!wi.includes('/state-xc.js')||!mn.includes('/state-xc.js')) fail('sibling-state runtime missing');
-if(!runtime.includes('XC_INTEL.analyzeWeather')||!runtime.includes('XC_INTEL.confidence')) fail('shared intelligence functions not used by sibling runtime');
+if(!runtime.includes('XC_INTEL.compareYesterday')||!runtime.includes('XC_INTEL.confidence')) fail('shared day-over-day intelligence functions not used by sibling runtime');
+if(!runtime.includes("'America/Chicago'")) fail('Central Time state weather context missing');
+if(!runtime.includes('scoreDelta')) fail('day-over-day score delta missing from sibling runtime');
 if(!runtime.includes("filter === 'northwoods'")||!runtime.includes("filter === 'ski-pass'")) fail('state-specific intent filters missing');
 if(!css.includes('body.state-wisconsin')||!css.includes('body.state-minnesota')) fail('state-specific visual identities missing');
 
@@ -87,4 +89,4 @@ const wiDesc=wi.match(/<meta name="description" content="([^"]+)"/)?.[1];
 const mnDesc=mn.match(/<meta name="description" content="([^"]+)"/)?.[1];
 if(!wiDesc||!mnDesc||wiDesc===mnDesc) fail('state meta descriptions are missing or duplicated');
 
-console.log(`Sibling XC readiness: PASS — Wisconsin 51 trails/9 regions/61 URLs; Minnesota 60 trails/9 regions/70 URLs; shared engine with distinct state content (similarity ${similarity.toFixed(2)}).`);
+console.log(`Sibling XC readiness: PASS — Wisconsin 51 trails/9 regions/61 URLs; Minnesota 60 trails/9 regions/70 URLs; shared day-over-day engine with distinct state content (similarity ${similarity.toFixed(2)}).`);
