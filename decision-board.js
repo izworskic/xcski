@@ -70,6 +70,33 @@
     return `<span><b>${sign}${row.scoreDelta}</b><small>vs yesterday</small></span>`;
   }
 
+  function forecastOutlook(rows) {
+    const mount = document.getElementById('ski-board-outlook');
+    if (!mount) return;
+    const weekend = rows.filter(r => r.weekend?.available)
+      .sort((a,b) => Math.max(b.weekend.saturday.snowScore,b.weekend.sunday.snowScore) - Math.max(a.weekend.saturday.snowScore,a.weekend.sunday.snowScore))
+      .slice(0,3);
+    const storms = rows.filter(r => r.storm?.signal === 'storm-window')
+      .sort((a,b) => b.storm.eventSnowIn - a.storm.eventSnowIn)
+      .slice(0,3);
+    const snowEvents = storms.length ? storms : rows.filter(r => r.storm?.signal === 'snow-event')
+      .sort((a,b) => b.storm.eventSnowIn - a.storm.eventSnowIn)
+      .slice(0,3);
+
+    const weekendHtml = weekend.length ? weekend.map((r,i) => {
+      const w = r.weekend;
+      return `<a href="/trails/${r.id}/"><b>${i+1}. ${r.name}</b><span>${w.betterDay === 'Tie' ? 'Weekend nearly even' : `${w.betterDay} better`} · Sat ${w.saturday.snowScore} / Sun ${w.sunday.snowScore}</span></a>`;
+    }).join('') : '<span>No complete Saturday/Sunday forecast is available yet.</span>';
+
+    const stormHtml = snowEvents.length ? snowEvents.map(r => {
+      const s = r.storm;
+      const timing = s.windowStart ? ` · opens ~${XC_FORECAST.localHourLabel(s.windowStart)}` : '';
+      return `<a href="/trails/${r.id}/"><b>${r.name}</b><span>${s.eventSnowIn.toFixed(1)}&quot; modeled${timing} · ${s.confidence || 'forecast'} confidence</span></a>`;
+    }).join('') : '<span>No ≥1.5&quot; modeled 24-hour snow burst in the next 7 days.</span>';
+
+    mount.innerHTML = `<div class="ski-outlook-card"><small>Weekend outlook</small><strong>Saturday vs Sunday</strong><div>${weekendHtml}</div><p>Modeled weather/snow comparison only. Verify grooming before travel.</p></div><div class="ski-outlook-card"><small>Storm / ski-window watch</small><strong>Next 7 days</strong><div>${stormHtml}</div><p>A window requires forecast snow plus cold/dry modeled hours; it is not an opening or grooming forecast.</p></div>`;
+  }
+
   function formatRow(row, rank) {
     const source = sourcePresentation(row);
     const official = officialLink(row.id);
@@ -138,18 +165,19 @@
     if (!list) return;
     const filters = document.querySelector(".ski-board-filters");
     if (filters) filters.hidden = true;
-    const forecast = rows.filter(r => r.snowTomorrow >= 0.5).sort((a, b) => b.snowTomorrow - a.snowTomorrow).slice(0, 3);
+    const forecast = rows.filter(r => r.storm?.signal === 'storm-window' || r.storm?.signal === 'snow-event' || r.snowTomorrow >= 0.5)
+      .sort((a,b) => (b.storm?.eventSnowIn || b.snowTomorrow) - (a.storm?.eventSnowIn || a.snowTomorrow)).slice(0,3);
     if (forecast.length) {
       list.innerHTML = forecast.map((row, i) => formatRow(row, i + 1)).join("");
       setState("Preseason snow watch");
       const label = document.getElementById("ski-board-filter-label");
-      if (label) label.textContent = "Off-season mode: showing locations with a meaningful modeled near-term snow signal.";
+      if (label) label.textContent = "Off-season mode: showing locations with a meaningful modeled near-term snow or storm-window signal.";
       return;
     }
     list.innerHTML = `
       <div class="ski-preseason">
         <strong>Winter rankings are paused.</strong>
-        <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, time-of-day, and day-over-day rankings switch on when the season returns.</p>
+        <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, time-of-day, weekend, storm-window, and day-over-day rankings switch on when meaningful snow returns.</p>
         <a href="#map">Explore all ${TRAILS.length} trails</a>
       </div>`;
     setState("Preseason mode");
@@ -177,7 +205,7 @@
 
   async function load() {
     const root = board();
-    if (!root || typeof TRAILS === "undefined" || !Array.isArray(TRAILS) || !window.XC_INTEL) return;
+    if (!root || typeof TRAILS === "undefined" || !Array.isArray(TRAILS) || !window.XC_INTEL || !window.XC_FORECAST) return;
     const now = new Date();
     const month = Number(new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", month: "numeric" }).format(now));
     const offSeason = month >= 5 && month <= 10;
@@ -187,7 +215,7 @@
       const lats = TRAILS.map(t => t.lat).join(",");
       const lons = TRAILS.map(t => t.lon).join(",");
       const [weatherResponse, registry] = await Promise.all([
-        fetch(XC_INTEL.forecastQuery(lats, lons, true, "America/Detroit")),
+        fetch(XC_FORECAST.forecastQuery(lats, lons, true, "America/Detroit")),
         loadSourceRegistry()
       ]);
       if (!weatherResponse.ok) throw new Error(`weather ${weatherResponse.status}`);
@@ -206,6 +234,8 @@
           scoreDelta: comparison.delta,
           previousSurface: comparison.previous?.surface?.label || null,
           previousBestWindow: comparison.previous?.bestWindow?.label || null,
+          weekend: XC_FORECAST.weekendOutlook(d),
+          storm: XC_FORECAST.stormWindow(d),
           profile: trailProfile(trail),
           source,
           confidence: XC_INTEL.confidence(source, trail)
@@ -216,8 +246,9 @@
       const updated = new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", hour: "numeric", minute: "2-digit" }).format(now);
       const liveSources = rows.filter(r => r.source?.kind === "live-grooming-platform").length;
       const freshness = document.getElementById("ski-board-freshness");
-      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · day-over-day compares the same local hour · ${rows.length}/${TRAILS.length} trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
+      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo 8-day forecast · day-over-day compares the same local hour · ${rows.length}/${TRAILS.length} trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
 
+      forecastOutlook(rows);
       wireInteractions(rows);
       if (offSeason) renderOffSeason(rows, registry);
       else {
