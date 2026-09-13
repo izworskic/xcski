@@ -9,18 +9,19 @@
 
   function nearestHourIndex(times, currentTime) {
     if (!Array.isArray(times) || !times.length) return 0;
-    const target = Date.parse(currentTime);
+    const target = Date.parse(String(currentTime || "").endsWith("Z") ? currentTime : `${currentTime}:00Z`);
     let best = 0;
     let gap = Infinity;
     times.forEach((time, index) => {
-      const d = Math.abs(Date.parse(time) - target);
+      const parsed = Date.parse(String(time).endsWith("Z") ? time : `${time}:00Z`);
+      const d = Math.abs(parsed - target);
       if (d < gap) { gap = d; best = index; }
     });
     return best;
   }
 
-  function todayIndices(times, currentTime) {
-    const day = String(currentTime || "").slice(0, 10);
+  function dayIndices(times, referenceTime) {
+    const day = String(referenceTime || "").slice(0, 10);
     return (times || []).map((time, index) => String(time).startsWith(day) ? index : -1).filter(index => index >= 0);
   }
 
@@ -139,27 +140,30 @@
     return { label: "Limited", score: 38, detail: "Weather intelligence is available, but no current machine-readable grooming source is registered." };
   }
 
-  function analyzeWeather(d) {
+  function analyzeWeatherAt(d, referenceTime) {
     if (!d?.hourly || !d?.daily || !d?.current) throw new Error("weather payload incomplete");
-    const hi = nearestHourIndex(d.hourly.time, d.current.time);
+    const hi = nearestHourIndex(d.hourly.time, referenceTime || d.current.time);
+    const actualTime = d.hourly.time?.[hi] || referenceTime || d.current.time;
     const start72 = Math.max(0, hi - 71);
     const start24 = Math.max(0, hi - 23);
     const depth = inchFromMeters(d.hourly.snow_depth?.[hi] || 0);
     const snow72 = (d.hourly.snowfall || []).slice(start72, hi + 1).reduce((sum, v) => sum + Number(v || 0), 0) / 2.54;
     const snow24 = (d.hourly.snowfall || []).slice(start24, hi + 1).reduce((sum, v) => sum + Number(v || 0), 0) / 2.54;
     const rain24 = inchFromMm((d.hourly.rain || []).slice(start24, hi + 1).reduce((sum, v) => sum + Number(v || 0), 0));
-    const today = String(d.current.time || "").slice(0, 10);
-    let di = (d.daily.time || []).indexOf(today);
+    const day = String(actualTime || "").slice(0, 10);
+    let di = (d.daily.time || []).indexOf(day);
     if (di < 0) di = Math.max(0, (d.daily.time || []).length - 3);
-    const indices = todayIndices(d.hourly.time, d.current.time);
+    const indices = dayIndices(d.hourly.time, actualTime);
+    const tempC = d.hourly.temperature_2m?.[hi] ?? d.current.temperature_2m;
     const row = {
+      referenceTime: actualTime,
       depth,
       snow72,
       snow24,
       rain24,
-      temp: f(d.current.temperature_2m),
-      maxToday: f(d.daily.temperature_2m_max?.[di] ?? d.current.temperature_2m),
-      minToday: f(d.daily.temperature_2m_min?.[di] ?? d.current.temperature_2m),
+      temp: f(tempC),
+      maxToday: f(d.daily.temperature_2m_max?.[di] ?? tempC),
+      minToday: f(d.daily.temperature_2m_min?.[di] ?? tempC),
       rainToday: inchFromMm(d.daily.rain_sum?.[di] || 0),
       snowTomorrow: inchFromCm(d.daily.snowfall_sum?.[di + 1] || 0),
       morning: windowStats(d, indices, 7, 10),
@@ -173,7 +177,27 @@
     return row;
   }
 
-  function forecastQuery(latitude, longitude, multi = false) {
+  function analyzeWeather(d) {
+    return analyzeWeatherAt(d, d?.current?.time);
+  }
+
+  function compareYesterday(d) {
+    const current = analyzeWeather(d);
+    const currentIndex = nearestHourIndex(d.hourly?.time, d.current?.time);
+    if (currentIndex < 24 || !d.hourly?.time?.[currentIndex - 24]) {
+      return { current, previous: null, delta: null, surfaceChanged: false, bestWindowChanged: false };
+    }
+    const previous = analyzeWeatherAt(d, d.hourly.time[currentIndex - 24]);
+    return {
+      current,
+      previous,
+      delta: current.snowScore - previous.snowScore,
+      surfaceChanged: current.surface.label !== previous.surface.label,
+      bestWindowChanged: current.bestWindow.label !== previous.bestWindow.label
+    };
+  }
+
+  function forecastQuery(latitude, longitude, multi = false, timezone = "America/Detroit") {
     const lat = multi ? latitude : encodeURIComponent(latitude);
     const lon = multi ? longitude : encodeURIComponent(longitude);
     return "https://api.open-meteo.com/v1/forecast?latitude=" + lat +
@@ -181,11 +205,13 @@
       "&current=temperature_2m" +
       "&hourly=temperature_2m,snow_depth,snowfall,rain,wind_speed_10m,cloud_cover" +
       "&daily=temperature_2m_max,temperature_2m_min,rain_sum,snowfall_sum" +
-      "&past_days=3&forecast_days=3&wind_speed_unit=mph&timezone=America%2FDetroit";
+      "&past_days=3&forecast_days=3&wind_speed_unit=mph&timezone=" + encodeURIComponent(timezone);
   }
 
   window.XC_INTEL = {
     analyzeWeather,
+    analyzeWeatherAt,
+    compareYesterday,
     confidence,
     forecastQuery,
     scoreSnow,
