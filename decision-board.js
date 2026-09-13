@@ -4,131 +4,70 @@
   const BOARD_ID = "ski-board";
   const FILTERS = {
     all: () => true,
-    groomed: t => t.cat === "groomed",
-    skate: t => Boolean(t.skate),
-    rentals: t => Boolean(t.rentals)
+    groomed: r => r.cat === "groomed",
+    classic: r => r.profile.classic,
+    skate: r => Boolean(r.skate),
+    rentals: r => Boolean(r.rentals),
+    lighted: r => Boolean(r.lit),
+    backcountry: r => r.cat === "backcountry"
   };
 
-  const f = c => c * 9 / 5 + 32;
-  const inchFromMeters = m => Number(m || 0) * 39.3701;
-  const inchFromCm = cm => Number(cm || 0) / 2.54;
-  const inchFromMm = mm => Number(mm || 0) / 25.4;
-  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
-
-  function board() {
-    return document.getElementById(BOARD_ID);
-  }
-
-  function setState(text) {
-    const el = document.getElementById("ski-board-state");
-    if (el) el.textContent = text;
-  }
-
-  function classify(score) {
-    if (score >= 82) return "Strong";
-    if (score >= 68) return "Promising";
-    if (score >= 52) return "Mixed";
-    if (score >= 35) return "Thin";
-    return "Weak";
-  }
-
-  function scoreSignal(row) {
-    let score = 0;
-    score += clamp(row.depth / 10, 0, 1) * 50;
-    score += clamp(row.snow72 / 5, 0, 1) * 20;
-
-    if (row.temp >= 10 && row.temp <= 30) score += 20;
-    else if (row.temp > 30 && row.temp <= 32) score += 16;
-    else if (row.temp >= 0 && row.temp < 10) score += 14;
-    else if (row.temp > 32 && row.temp <= 35) score += 10;
-    else if (row.temp < 0) score += 8;
-    else score += 3;
-
-    score += row.rainToday < 0.02 ? 10 : row.rainToday < 0.10 ? 5 : 0;
-
-    if (row.minToday < 31 && row.maxToday > 35) score -= 8;
-    if (row.maxToday > 39) score -= 8;
-    if (row.rainToday >= 0.10) score -= 10;
-
-    return Math.round(clamp(score, 0, 100));
-  }
-
-  function conditionNote(row) {
-    if (row.rainToday >= 0.10) return "Rain is the biggest surface risk today.";
-    if (row.minToday < 31 && row.maxToday > 35) return "Freeze/thaw cycle possible; verify the surface before driving.";
-    if (row.maxToday > 38) return "Warmth can soften or damage tracks later today.";
-    if (row.snow72 >= 4) return "Strong fresh-snow signal; grooming may lag the snowfall.";
-    if (row.snow72 >= 2) return "Recent snow improves the natural-snow signal.";
-    if (row.depth >= 8 && row.maxToday <= 32) return "Cold weather should help preserve the modeled natural base.";
-    if (row.depth < 2) return "Natural snow looks thin here; snowmaking or packed base may differ.";
-    return "Natural-snow signal is usable, but grooming still needs local verification.";
-  }
+  const board = () => document.getElementById(BOARD_ID);
+  const setState = text => { const el = document.getElementById("ski-board-state"); if (el) el.textContent = text; };
 
   function officialLink(id) {
     const link = document.querySelector(`#t-${CSS.escape(id)} a.ext`);
     return link ? link.href : "";
   }
 
-  async function loadGroomingRegistry() {
+  function trailProfile(trail) {
+    const card = document.getElementById(`t-${trail.id}`);
+    const text = card?.textContent?.toLowerCase() || "";
+    return {
+      classic: text.includes("classic"),
+      free: text.includes("free") || text.includes("donation"),
+      lighted: Boolean(trail.lit),
+      skate: Boolean(trail.skate),
+      rentals: Boolean(trail.rentals)
+    };
+  }
+
+  async function loadSourceRegistry() {
     try {
       const response = await fetch("/grooming-sources.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`source registry ${response.status}`);
       const registry = await response.json();
-      if (!registry || typeof registry !== "object" || !registry.sources) throw new Error("source registry malformed");
+      if (!registry?.sources) throw new Error("source registry malformed");
       return registry;
     } catch (error) {
-      console.warn("Grooming source registry unavailable:", error);
-      return { version: 0, sources: {} };
+      console.warn("XC source registry unavailable:", error);
+      return { version: 0, counts: {}, sources: {} };
     }
   }
 
-  function sourceFor(row, registry) {
-    const registered = registry?.sources?.[row.id];
-    if (registered) {
-      return {
-        kind: "live",
-        label: registered.label || "Live grooming source available",
-        provider: registered.provider || "External grooming source",
-        url: registered.url || "",
-        note: registered.integration === "link-only-until-authorized-api"
-          ? "Live source found; current values are not ingested without authorized API access."
-          : (registered.note || "Registered grooming source."),
-        liveValues: false
-      };
-    }
-
-    const href = officialLink(row.id);
-    if (row.cat === "groomed" || row.cat === "volunteer") {
-      return {
-        kind: "operator",
-        label: "Official status handoff",
-        provider: row.cat === "groomed" ? "Trail operator" : "Operator / land manager",
-        url: href,
-        note: "No machine-readable live grooming feed is registered here yet.",
-        liveValues: false
-      };
-    }
-
+  function sourcePresentation(row) {
+    const source = row.source || {};
+    const live = source.kind === "live-grooming-platform";
+    const href = source.url || source.officialUrl || officialLink(row.id);
     return {
-      kind: "backcountry",
-      label: "Local status check",
-      provider: "Land manager",
-      url: href,
-      note: "Backcountry or skier-tracked system; grooming may not apply.",
-      liveValues: false
+      href,
+      className: live ? "live" : source.sourceClass === "operator-direct" ? "operator" : source.sourceClass === "land-manager-reference" ? "manager" : "reference",
+      label: live ? "Live grooming source linked" : (source.label || "Status source"),
+      provider: source.provider || "Operator / land manager",
+      note: live && !source.currentIngested
+        ? "Current provider values are not ingested until authorized API access is active."
+        : source.sourceClass === "operator-direct"
+          ? "Direct operator source; current grooming still requires verification."
+          : source.sourceClass === "land-manager-reference"
+            ? "Land-manager reference; grooming freshness may vary."
+            : "Use this source to verify access and current trail status."
     };
   }
 
-  function formatRow(row, rank, registry) {
-    const href = officialLink(row.id);
-    const source = sourceFor(row, registry);
-    const scoreLabel = classify(row.score);
-    const tomorrow = Number.isFinite(row.snowTomorrow)
-      ? `<span><b>${row.snowTomorrow.toFixed(1)}"</b><small>tomorrow snow</small></span>`
-      : "";
-    const sourceAction = source.url && source.url !== href
-      ? `<a class="ski-source-link" href="${source.url}" target="_blank" rel="noopener">Open ${source.provider}</a>`
-      : "";
+  function formatRow(row, rank) {
+    const source = sourcePresentation(row);
+    const official = officialLink(row.id);
+    const separateSource = source.href && source.href !== official;
     return `
       <article class="ski-pick">
         <div class="ski-pick-rank" aria-label="Rank ${rank}">${rank}</div>
@@ -138,43 +77,53 @@
               <h3>${row.name}</h3>
               <p>${row.town} · ${row.cat === "groomed" ? "groomed system" : row.cat === "volunteer" ? "volunteer-groomed / managed" : "backcountry / skier-tracked"}</p>
             </div>
-            <div class="ski-score" aria-label="Modeled snow signal ${row.score} out of 100">
-              <b>${row.score}</b><span>${scoreLabel}</span>
+            <div class="ski-score" aria-label="Modeled natural-snow score ${row.snowScore} out of 100">
+              <b>${row.snowScore}</b><span>${XC_INTEL.scoreWord(row.snowScore)}</span>
             </div>
           </div>
+
+          <div class="ski-decision-strip">
+            <div><small>Surface</small><strong>${row.surface.label}</strong><span>${row.surface.detail}</span></div>
+            <div><small>Best window</small><strong>${row.bestWindow.label}</strong><span>${row.bestWindow.detail}</span></div>
+            <div><small>Confidence</small><strong>${row.confidence.label}</strong><span>${row.confidence.detail}</span></div>
+          </div>
+
           <div class="ski-pick-metrics">
             <span><b>${row.depth.toFixed(1)}"</b><small>modeled base</small></span>
+            <span><b>${row.snow24.toFixed(1)}"</b><small>24h snow</small></span>
             <span><b>${row.snow72.toFixed(1)}"</b><small>72h snow</small></span>
             <span><b>${Math.round(row.temp)}°</b><small>now</small></span>
             <span><b>${Math.round(row.maxToday)}°</b><small>today high</small></span>
-            ${tomorrow}
+            <span><b>${row.snowTomorrow.toFixed(1)}"</b><small>tomorrow snow</small></span>
           </div>
-          <p class="ski-pick-note">${conditionNote(row)}</p>
-          <div class="ski-source ski-source-${source.kind}">
+
+          <div class="ski-source ski-source-${source.className}">
             <span>${source.label}</span>
             <strong>${source.provider}</strong>
             <small>${source.note}</small>
           </div>
           <div class="ski-pick-actions">
-            <button type="button" data-jump-trail="${row.id}">See trail details</button>
-            ${sourceAction}
-            ${href ? `<a href="${href}" target="_blank" rel="noopener">Verify official status</a>` : ""}
+            <a href="/trails/${row.id}/">Full trail intelligence</a>
+            <button type="button" data-jump-trail="${row.id}">Find in directory</button>
+            ${separateSource ? `<a class="ski-source-link" href="${source.href}" target="_blank" rel="noopener">Open ${source.provider}</a>` : ""}
+            ${official ? `<a href="${official}" target="_blank" rel="noopener">Verify official status</a>` : ""}
           </div>
         </div>
       </article>`;
   }
 
-  function render(rows, filterName = "all", registry = { sources: {} }) {
+  function render(rows, filterName = "all") {
     const list = document.getElementById("ski-board-list");
     if (!list) return;
     const filter = FILTERS[filterName] || FILTERS.all;
-    const shown = rows.filter(filter).sort((a, b) => b.score - a.score).slice(0, 5);
-    list.innerHTML = shown.map((row, i) => formatRow(row, i + 1, registry)).join("");
+    const shown = rows.filter(filter).sort((a, b) => (b.snowScore - a.snowScore) || ((b.bestWindow.score || 0) - (a.bestWindow.score || 0))).slice(0, 5);
+    list.innerHTML = shown.length ? shown.map((row, i) => formatRow(row, i + 1)).join("") : '<div class="ski-preseason"><strong>No matching trails.</strong><p>Try another use filter.</p></div>';
+    const names = {
+      all: "all 48 trails", groomed: "groomed centers", classic: "classic-capable systems",
+      skate: "skate-capable systems", rentals: "trails with rentals", lighted: "lighted systems", backcountry: "backcountry / skier-tracked systems"
+    };
     const label = document.getElementById("ski-board-filter-label");
-    if (label) {
-      const names = { all: "all 48 trails", groomed: "groomed centers", skate: "skate-capable systems", rentals: "trails with rentals" };
-      label.textContent = `Showing the strongest modeled natural-snow signals among ${names[filterName] || names.all}. Grooming-source coverage is shown separately.`;
-    }
+    if (label) label.textContent = `Ranking ${names[filterName] || names.all} by modeled snow signal, with surface timing and source confidence shown separately.`;
   }
 
   function renderOffSeason(rows, registry) {
@@ -182,40 +131,31 @@
     if (!list) return;
     const filters = document.querySelector(".ski-board-filters");
     if (filters) filters.hidden = true;
-    const forecast = rows
-      .filter(r => (r.snowTomorrow || 0) >= 0.5)
-      .sort((a, b) => (b.snowTomorrow || 0) - (a.snowTomorrow || 0))
-      .slice(0, 3);
-
+    const forecast = rows.filter(r => r.snowTomorrow >= 0.5).sort((a, b) => b.snowTomorrow - a.snowTomorrow).slice(0, 3);
     if (forecast.length) {
-      list.innerHTML = forecast.map((row, i) => formatRow(row, i + 1, registry)).join("");
+      list.innerHTML = forecast.map((row, i) => formatRow(row, i + 1)).join("");
       setState("Preseason snow watch");
       const label = document.getElementById("ski-board-filter-label");
       if (label) label.textContent = "Off-season mode: showing locations with a meaningful modeled near-term snow signal.";
       return;
     }
-
-    const linkedSources = Object.keys(registry?.sources || {}).length;
     list.innerHTML = `
       <div class="ski-preseason">
         <strong>Winter rankings are paused.</strong>
-        <p>The Michigan Nordic Board activates when winter returns. Until then, use the 48-trail map to plan trips and bookmark operator status pages. ${linkedSources ? `${linkedSources} live grooming platform source${linkedSources === 1 ? " is" : "s are"} already registered for winter handoff.` : "No external live grooming platform sources are registered yet."}</p>
+        <p>The engine has audited status-source coverage for ${Object.keys(registry.sources || {}).length} trails. Winter snow, surface, and time-of-day rankings switch on when the season returns.</p>
         <a href="#map">Explore all 48 trails</a>
       </div>`;
     setState("Preseason mode");
-    const label = document.getElementById("ski-board-filter-label");
-    if (label) label.textContent = "Live rankings return with the winter snow season.";
   }
 
-  function wireInteractions(rows, registry) {
+  function wireInteractions(rows) {
     document.querySelectorAll("[data-board-filter]").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("[data-board-filter]").forEach(b => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
-        render(rows, btn.dataset.boardFilter, registry);
+        render(rows, btn.dataset.boardFilter);
       });
     });
-
     document.addEventListener("click", event => {
       const btn = event.target.closest("[data-jump-trail]");
       if (!btn) return;
@@ -228,22 +168,9 @@
     });
   }
 
-  function nearestHourIndex(hourlyTimes, currentTime) {
-    if (!Array.isArray(hourlyTimes) || !hourlyTimes.length) return 0;
-    const target = Date.parse(currentTime);
-    let best = 0;
-    let gap = Infinity;
-    hourlyTimes.forEach((time, index) => {
-      const d = Math.abs(Date.parse(time) - target);
-      if (d < gap) { gap = d; best = index; }
-    });
-    return best;
-  }
-
   async function load() {
     const root = board();
-    if (!root || typeof TRAILS === "undefined" || !Array.isArray(TRAILS)) return;
-
+    if (!root || typeof TRAILS === "undefined" || !Array.isArray(TRAILS) || !window.XC_INTEL) return;
     const now = new Date();
     const month = Number(new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", month: "numeric" }).format(now));
     const offSeason = month >= 5 && month <= 10;
@@ -252,74 +179,47 @@
       setState("Updating 48 trailheads…");
       const lats = TRAILS.map(t => t.lat).join(",");
       const lons = TRAILS.map(t => t.lon).join(",");
-      const url = "https://api.open-meteo.com/v1/forecast?latitude=" + encodeURIComponent(lats) +
-        "&longitude=" + encodeURIComponent(lons) +
-        "&current=temperature_2m&hourly=snow_depth,snowfall" +
-        "&daily=temperature_2m_max,temperature_2m_min,rain_sum,snowfall_sum" +
-        "&past_days=3&forecast_days=3&timezone=America%2FDetroit";
-
-      const [response, registry] = await Promise.all([
-        fetch(url),
-        loadGroomingRegistry()
+      const [weatherResponse, registry] = await Promise.all([
+        fetch(XC_INTEL.forecastQuery(lats, lons, true)),
+        loadSourceRegistry()
       ]);
-      if (!response.ok) throw new Error(`weather ${response.status}`);
-      let data = await response.json();
-      if (!Array.isArray(data)) data = [data];
+      if (!weatherResponse.ok) throw new Error(`weather ${weatherResponse.status}`);
+      let weather = await weatherResponse.json();
+      if (!Array.isArray(weather)) weather = [weather];
 
       const rows = TRAILS.map((trail, index) => {
-        const d = data[index];
-        if (!d || !d.hourly || !d.daily || !d.current) return null;
-        const hi = nearestHourIndex(d.hourly.time, d.current.time);
-        const start = Math.max(0, hi - 71);
-        const depth = inchFromMeters(d.hourly.snow_depth?.[hi] || 0);
-        const snow72 = (d.hourly.snowfall || []).slice(start, hi + 1).reduce((sum, v) => sum + Number(v || 0), 0) / 2.54;
-        const today = String(d.current.time || "").slice(0, 10);
-        let di = (d.daily.time || []).indexOf(today);
-        if (di < 0) di = Math.max(0, (d.daily.time || []).length - 3);
-        const row = {
+        const d = weather[index];
+        if (!d) return null;
+        const intelligence = XC_INTEL.analyzeWeather(d);
+        const source = registry.sources?.[trail.id] || null;
+        return {
           ...trail,
-          depth,
-          snow72,
-          temp: f(d.current.temperature_2m),
-          maxToday: f(d.daily.temperature_2m_max?.[di] ?? d.current.temperature_2m),
-          minToday: f(d.daily.temperature_2m_min?.[di] ?? d.current.temperature_2m),
-          rainToday: inchFromMm(d.daily.rain_sum?.[di] || 0),
-          snowTomorrow: inchFromCm(d.daily.snowfall_sum?.[di + 1] || 0)
+          ...intelligence,
+          profile: trailProfile(trail),
+          source,
+          confidence: XC_INTEL.confidence(source, trail)
         };
-        row.score = scoreSignal(row);
-        return row;
       }).filter(Boolean);
-
       if (!rows.length) throw new Error("no trail weather returned");
 
-      const updated = new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/Detroit", hour: "numeric", minute: "2-digit"
-      }).format(now);
-      const sourceCount = Object.keys(registry?.sources || {}).length;
-
+      const updated = new Intl.DateTimeFormat("en-US", { timeZone: "America/Detroit", hour: "numeric", minute: "2-digit" }).format(now);
+      const liveSources = rows.filter(r => r.source?.kind === "live-grooming-platform").length;
       const freshness = document.getElementById("ski-board-freshness");
-      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${sourceCount} linked live grooming source${sourceCount === 1 ? "" : "s"} · current grooming values remain provider/operator verified`;
+      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${rows.length}/48 trail status sources audited · ${liveSources} live-platform handoff${liveSources === 1 ? "" : "s"}`;
 
-      wireInteractions(rows, registry);
+      wireInteractions(rows);
       if (offSeason) renderOffSeason(rows, registry);
       else {
         const filters = document.querySelector(".ski-board-filters");
         if (filters) filters.hidden = false;
         setState("Live winter board");
-        render(rows, "all", registry);
+        render(rows, "all");
       }
     } catch (error) {
       console.warn("Michigan Nordic Board unavailable:", error);
       setState("Live board temporarily unavailable");
       const list = document.getElementById("ski-board-list");
-      if (list) {
-        list.innerHTML = `
-          <div class="ski-preseason">
-            <strong>The live ranking could not load.</strong>
-            <p>The trail directory and official status links are still available below. This board never substitutes stale values when the weather feed fails.</p>
-            <a href="#map">Use the trail map</a>
-          </div>`;
-      }
+      if (list) list.innerHTML = '<div class="ski-preseason"><strong>The live intelligence layer could not load.</strong><p>The trail directory and official status links remain available below. The engine does not substitute stale values.</p><a href="#map">Use the trail map</a></div>';
     }
   }
 
