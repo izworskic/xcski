@@ -5,6 +5,8 @@ const root = process.cwd();
 const out = path.join(root, 'dist');
 const indexPath = path.join(out, 'index.html');
 const html = await readFile(indexPath, 'utf8');
+const groomingRegistry = JSON.parse(await readFile(path.join(root, 'grooming-sources.json'), 'utf8'));
+const groomingSources = groomingRegistry.sources || {};
 
 const trailsMatch = html.match(/const TRAILS = (\[[\s\S]*?\]);\nconst COLORS/);
 if (!trailsMatch) throw new Error('TRAILS dataset missing from built XC page');
@@ -42,15 +44,36 @@ function cardData(trail) {
   return { desc, official, chips };
 }
 
-function pageFor(trail, details, nearby) {
+function sourcePanel(source, official) {
+  if (source) {
+    return `<section class="trail-panel" style="margin-top:18px">
+<h2>Grooming &amp; status sources</h2>
+<p><strong>${esc(source.label || 'Live grooming source available')}</strong><br>${esc(source.provider || 'External grooming platform')}</p>
+${source.url ? `<a class="trail-verify" href="${esc(source.url)}" target="_blank" rel="noopener">Open ${esc(source.provider || 'grooming source')}</a>` : ''}
+<p style="margin-top:14px;font-size:.82rem;color:var(--muted)">This source is linked for verification, but its current values are not scraped or republished. Provider-authorized API access is required before live grooming values can enter the ranking engine.</p>
+${official && source.url !== official ? `<p style="margin-top:10px"><a href="${esc(official)}" target="_blank" rel="noopener">Operator / land-manager page →</a></p>` : ''}
+</section>`;
+  }
+
+  return `<section class="trail-panel" style="margin-top:18px">
+<h2>Grooming &amp; status sources</h2>
+<p><strong>Official status handoff</strong></p>
+<p style="font-size:.86rem;color:var(--muted)">No machine-readable live grooming feed is currently registered for this trail. The weather score stays separate from grooming status.</p>
+${official ? `<a class="trail-verify" href="${esc(official)}" target="_blank" rel="noopener">Check operator / land manager</a>` : ''}
+</section>`;
+}
+
+function pageFor(trail, details, nearby, source) {
   const url = `https://xcski.chrisizworski.com/trails/${trail.id}/`;
   const title = `${trail.name} XC Ski Conditions | ${trail.town}, Michigan`;
-  const rawDescription = `${trail.name} cross-country ski conditions near ${trail.town}, Michigan: live modeled snow depth, 72-hour snowfall, temperature, tomorrow's snow signal, trail details, and official status link.`;
+  const rawDescription = `${trail.name} cross-country ski conditions near ${trail.town}, Michigan: live modeled snow depth, 72-hour snowfall, temperature, grooming-source provenance, and official status links.`;
   const description = rawDescription.slice(0, 158);
   const category = trail.cat === 'groomed' ? 'Groomed center' : trail.cat === 'volunteer' ? 'Volunteer groomed / managed' : 'Backcountry / skier-tracked';
   const chips = [...details.chips];
   if (!chips.includes(category)) chips.push(category);
+  if (source?.provider) chips.push(`${source.provider} source linked`);
 
+  const sameAs = [details.official, source?.url].filter(Boolean).filter((value, index, list) => list.indexOf(value) === index);
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -62,7 +85,7 @@ function pageFor(trail, details, nearby) {
         description: details.desc,
         address: { '@type': 'PostalAddress', addressLocality: trail.town, addressRegion: 'MI', addressCountry: 'US' },
         geo: { '@type': 'GeoCoordinates', latitude: trail.lat, longitude: trail.lon },
-        sameAs: details.official ? [details.official] : undefined
+        sameAs: sameAs.length ? sameAs : undefined
       },
       {
         '@type': 'WebPage',
@@ -138,7 +161,10 @@ ${details.official ? `<a class="trail-verify" href="${esc(details.official)}" ta
 <p><strong>Skate:</strong> ${trail.skate ? 'Yes / supported by the system profile' : 'Not listed as a skate system'}</p>
 <p><strong>Rentals:</strong> ${trail.rentals ? 'Available / listed' : 'Not listed'}</p>
 <p><strong>Lighted:</strong> ${trail.lit ? 'Yes' : 'No / not listed'}</p>
+<p><strong>Grooming feed:</strong> ${source ? `${esc(source.provider)} source linked; live values not ingested` : 'No machine-readable feed registered'}</p>
 </section>
+
+${sourcePanel(source, details.official)}
 
 <section class="trail-panel" style="margin-top:18px">
 <h2>Nearby XC options</h2>
@@ -150,7 +176,7 @@ ${nearby.map(n => `<a href="/trails/${n.id}/">${esc(n.name)} <small>· ${n.dista
 </div>
 </main>
 
-<footer class="trail-footer"><div class="trail-wrap">Part of the <a href="/">Michigan XC Ski Trails</a> field tool by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>. Live weather from Open-Meteo.</div></footer>
+<footer class="trail-footer"><div class="trail-wrap">Part of the <a href="/">Michigan XC Ski Trails</a> field tool by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>. Live weather from Open-Meteo. Grooming-source links retain provider ownership and provenance.</div></footer>
 <script src="/trail-page.js" defer></script>
 </body>
 </html>`;
@@ -166,7 +192,7 @@ for (const trail of trails) {
 
   const dir = path.join(out, 'trails', trail.id);
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, 'index.html'), pageFor(trail, details, nearby));
+  await writeFile(path.join(dir, 'index.html'), pageFor(trail, details, nearby, groomingSources[trail.id] || null));
 }
 
 await cp(path.join(root, 'trail-page.js'), path.join(out, 'trail-page.js'));
@@ -183,4 +209,4 @@ ${sitemapUrls.join('\n')}
 `;
 await writeFile(path.join(out, 'sitemap.xml'), sitemap);
 
-console.log(`Generated ${trails.length} indexable XC trail pages and expanded sitemap.`);
+console.log(`Generated ${trails.length} indexable XC trail pages with grooming-source provenance and expanded sitemap.`);
