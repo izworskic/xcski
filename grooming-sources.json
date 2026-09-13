@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "updated": "2026-09-13",
   "policy": "The registry records known status/grooming sources. External live values are not ingested unless the provider explicitly authorizes API access. A source link never changes the modeled snow score by itself.",
   "sources": {
@@ -11,6 +11,24 @@
       "coverage": ["grooming-report", "last-groomed", "trail-level-grooming"],
       "label": "Live grooming source available",
       "note": "Nordic Pulse publishes current grooming reports for Forbush Corner. This site links to that source but does not scrape or redistribute Nordic Pulse data. API ingestion can be enabled only with approved access."
+    },
+    "noque": {
+      "provider": "Nordic Pulse",
+      "kind": "live-grooming-platform",
+      "url": "https://nordic-pulse.com/centres/US/MI/Forestville-Noque-Trails",
+      "integration": "link-only-until-authorized-api",
+      "coverage": ["grooming-report", "last-groomed", "last-trackset", "trail-level-grooming", "percent-groomed"],
+      "label": "Live grooming source available",
+      "note": "Nordic Pulse publishes current grooming and trackset reports for Forestville and Noque Trail. This site links to that source but does not ingest current values until provider-authorized API access is active."
+    },
+    "swedetown": {
+      "provider": "Nordic Pulse",
+      "kind": "live-grooming-platform",
+      "url": "https://nordic-pulse.com/centres/US/MI/Swedetown-Ski-Trails",
+      "integration": "link-only-until-authorized-api",
+      "coverage": ["grooming-report", "last-groomed", "last-trackset", "trail-level-grooming", "percent-groomed"],
+      "label": "Live grooming source available",
+      "note": "Nordic Pulse publishes current grooming and trackset reports for Swedetown Trails. This site links to that source but does not ingest current values until provider-authorized API access is active."
     }
   }
 }
