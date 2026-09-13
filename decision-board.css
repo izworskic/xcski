@@ -4,7 +4,7 @@
 .ski-board-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;margin-bottom:18px}
 .ski-board-kicker{margin:0 0 4px;font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--spruce)}
 .ski-board h2{font:800 clamp(1.7rem,4vw,2.7rem)/1.05 "Bricolage Grotesque",system-ui,sans-serif;margin:0;color:var(--track)}
-.ski-board-intro{max-width:760px;margin:10px 0 0;color:var(--muted);font-size:.98rem}
+.ski-board-intro{max-width:800px;margin:10px 0 0;color:var(--muted);font-size:.98rem}
 .ski-board-state{justify-self:end;border:1px solid var(--line);background:var(--snow);border-radius:999px;padding:8px 12px;font-size:.82rem;font-weight:700;color:var(--track);white-space:nowrap}
 .ski-board-filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
 .ski-board-filters button{appearance:none;border:1px solid #bdccd6;background:#fff;color:var(--track);border-radius:999px;padding:8px 12px;font:700 .82rem/1 "Public Sans",system-ui,sans-serif;cursor:pointer}
@@ -20,11 +20,15 @@
 .ski-score{min-width:74px;text-align:right}
 .ski-score b{display:block;font:800 1.55rem/.95 "Bricolage Grotesque",system-ui,sans-serif;color:var(--glacier)}
 .ski-score span{display:block;margin-top:4px;font-size:.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.ski-pick-metrics{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.ski-decision-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.ski-decision-strip>div{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px}
+.ski-decision-strip small{display:block;font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ski-decision-strip strong{display:block;margin-top:2px;color:var(--track);font:800 .92rem "Bricolage Grotesque",system-ui,sans-serif}
+.ski-decision-strip span{display:block;margin-top:4px;color:var(--muted);font-size:.7rem;line-height:1.35}
+.ski-pick-metrics{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
 .ski-pick-metrics>span{min-width:92px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .ski-pick-metrics b{display:block;color:var(--track);font-size:.98rem}
 .ski-pick-metrics small{display:block;color:var(--muted);font-size:.68rem;line-height:1.2}
-.ski-pick-note{margin:0;color:#304b5a;font-size:.86rem}
 .ski-source{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline;margin-top:10px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .ski-source>span{font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .ski-source>strong{font-size:.82rem;color:var(--track)}
@@ -32,13 +36,18 @@
 .ski-source-live{border-color:#9bc5b6;background:#f5fbf8}
 .ski-source-live>span{color:var(--spruce)}
 .ski-source-operator{background:#f8fbfd}
-.ski-source-backcountry{background:#fbfbf5}
+.ski-source-manager{background:#fbfbf7}
+.ski-source-reference{background:#fcfaf7}
 .ski-pick-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
 .ski-pick-actions button,.ski-pick-actions a,.ski-preseason a{display:inline-flex;align-items:center;text-decoration:none;border-radius:9px;padding:8px 10px;font:700 .78rem/1 "Public Sans",system-ui,sans-serif}
 .ski-pick-actions button{border:1px solid #b7c9d4;background:#fff;color:var(--track);cursor:pointer}
 .ski-pick-actions a,.ski-preseason a{background:var(--glacier);color:#fff;border:1px solid var(--glacier)}
 .ski-pick-actions .ski-source-link{background:var(--spruce);border-color:var(--spruce)}
-.ski-board-note{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+.ski-region-links{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.ski-region-links strong{font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:4px}
+.ski-region-links a{font-size:.78rem;font-weight:700;color:var(--glacier);text-decoration:none}
+.ski-region-links a:hover{text-decoration:underline}
+.ski-board-note{margin:14px 0 0;font-size:.78rem;color:var(--muted)}
 .ski-board-note strong{color:var(--ink)}
 .ski-preseason{background:var(--snow);border:1px solid var(--line);border-radius:16px;padding:20px}
 .ski-preseason strong{font:800 1.1rem "Bricolage Grotesque",system-ui,sans-serif;color:var(--track)}
@@ -53,7 +62,10 @@
   .ski-pick-rank{width:36px;height:36px;border-radius:10px}
   .ski-pick-title{gap:10px}
   .ski-score{min-width:56px}
+  .ski-decision-strip{grid-template-columns:1fr}
   .ski-pick-metrics>span{min-width:calc(50% - 4px);flex:1}
   .ski-source{grid-template-columns:1fr}
   .ski-source>small{grid-column:1}
+  .ski-region-links{align-items:flex-start}
+  .ski-region-links strong{width:100%}
 }
