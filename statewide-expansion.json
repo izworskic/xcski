@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "updated": "2026-09-13",
+  "policy": "Candidates are not added to the live trail engine until coordinates, trail profile, operator/status source, and winter access details are verified. Presence here is not a live-status claim.",
+  "candidates": [
+    {
+      "name": "Huron Meadows Metropark",
+      "region": "Southeast Michigan",
+      "town": "Brighton",
+      "source": "Huron-Clinton Metroparks",
+      "sourceUrl": "https://www.metroparks.com/huron-meadows-metropark/",
+      "why": "Daily winter grooming/condition updates, classic and skate grooming, rentals, lit snowmaking loop at Bucks Run.",
+      "priority": 1,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Stony Creek Metropark",
+      "region": "Southeast Michigan",
+      "source": "Huron-Clinton Metroparks",
+      "sourceUrl": "https://www.metroparks.com/stony-creek-metropark/",
+      "why": "Large groomed traditional XC network with official winter condition handoff and rentals.",
+      "priority": 2,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Kensington Metropark",
+      "region": "Southeast Michigan",
+      "source": "Huron-Clinton Metroparks",
+      "sourceUrl": "https://www.metroparks.com/kensington-metropark/",
+      "why": "More than 12 miles of groomed trails with official winter closure/condition updates.",
+      "priority": 3,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Swedetown Trails",
+      "region": "Keweenaw",
+      "town": "Calumet",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Live grooming and trackset reporting on Nordic Pulse; major Upper Peninsula Nordic system.",
+      "priority": 1,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Forestville and Noque Trail",
+      "region": "Central Upper Peninsula",
+      "town": "Marquette",
+      "source": "Nordic Pulse / Noquemanon Trail Network",
+      "sourceUrl": "https://www.nordic-pulse.com/ski-areas/US/MI/region/Noquemanon-Trail-Network",
+      "why": "Large groomed system with live grooming and trackset reporting.",
+      "priority": 1,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Fit Strip",
+      "region": "Central Upper Peninsula",
+      "town": "Marquette",
+      "source": "Nordic Pulse / NTN Trails",
+      "sourceUrl": "https://nordic-pulse.com/centres/US/MI/Fit-Strip",
+      "why": "Dedicated Nordic Pulse grooming report with classic and skate loop detail.",
+      "priority": 2,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Ishpeming Ski Club",
+      "region": "Central Upper Peninsula",
+      "town": "Ishpeming",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Live grooming platform coverage and an established local Nordic network.",
+      "priority": 2,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Saux Head Ski Trails",
+      "region": "Central Upper Peninsula",
+      "town": "Marquette area",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Nordic Pulse grooming coverage; fills a current central-UP geographic gap.",
+      "priority": 3,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "North Trails",
+      "region": "Central Upper Peninsula",
+      "town": "Marquette",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Live grooming coverage on Nordic Pulse; part of the Marquette trail ecosystem.",
+      "priority": 3,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "South Trails",
+      "region": "Central Upper Peninsula",
+      "town": "Marquette",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Live grooming coverage on Nordic Pulse and significant groomed mileage.",
+      "priority": 3,
+      "state": "verified-source-candidate"
+    },
+    {
+      "name": "Big Bay Pathway",
+      "region": "Central Upper Peninsula",
+      "town": "Big Bay",
+      "source": "Nordic Pulse Michigan",
+      "sourceUrl": "https://nordic-pulse.com/ski-areas/US/MI",
+      "why": "Live grooming and trackset reporting; expands coverage north of Marquette.",
+      "priority": 3,
+      "state": "verified-source-candidate"
+    }
+  ]
+}
