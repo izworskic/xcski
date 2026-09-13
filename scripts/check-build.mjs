@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
 
 const html = readFileSync('dist/index.html', 'utf8');
 const llms = readFileSync('dist/llms.txt', 'utf8');
@@ -6,6 +7,8 @@ const robots = readFileSync('dist/robots.txt', 'utf8');
 const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
 const boardJs = readFileSync('dist/decision-board.js', 'utf8');
 const boardCss = readFileSync('dist/decision-board.css', 'utf8');
+const trailJs = readFileSync('dist/trail-page.js', 'utf8');
+const trailCss = readFileSync('dist/trail-page.css', 'utf8');
 const fail = (m) => { throw new Error(m); };
 
 if (!html.includes('<link rel="canonical" href="https://xcski.chrisizworski.com/">')) fail('canonical owner changed');
@@ -36,8 +39,25 @@ if (!boardJs.includes('Preseason mode')) fail('off-season decision state missing
 if (!boardJs.includes('Verify official status')) fail('operator verification handoff missing from board');
 if (!boardCss.includes('.ski-pick')) fail('decision board styles missing');
 
+const trailDirs = readdirSync('dist/trails', { withFileTypes: true }).filter(entry => entry.isDirectory());
+if (trailDirs.length !== 48) fail(`expected 48 generated trail pages, found ${trailDirs.length}`);
+for (const entry of trailDirs) {
+  const trailHtml = readFileSync(path.join('dist', 'trails', entry.name, 'index.html'), 'utf8');
+  const canonical = `https://xcski.chrisizworski.com/trails/${entry.name}/`;
+  if (!trailHtml.includes(`<link rel="canonical" href="${canonical}">`)) fail(`trail canonical missing for ${entry.name}`);
+  if (!trailHtml.includes('id="trail-live"')) fail(`live trail signal missing for ${entry.name}`);
+  if (!trailHtml.includes('Verify official trail status')) fail(`official trail handoff missing for ${entry.name}`);
+  if (!trailHtml.includes('/trail-page.js')) fail(`trail runtime missing for ${entry.name}`);
+  if ((trailHtml.match(/class="trail-related"/g) || []).length !== 1) fail(`nearby-trail links missing for ${entry.name}`);
+}
+if (!trailJs.includes('scoreSignal')) fail('trail-page snow scoring missing');
+if (!trailJs.includes('Preseason mode')) fail('trail-page off-season state missing');
+if (!trailCss.includes('.trail-live-metrics')) fail('trail page styles missing');
+const trailSitemapUrls = (sitemap.match(/<loc>https:\/\/xcski\.chrisizworski\.com\/trails\//g) || []).length;
+if (trailSitemapUrls !== 48) fail(`expected 48 trail URLs in sitemap, found ${trailSitemapUrls}`);
+
 for (const phrase of ['Groomed systems ski', 'Most systems skiing well', 'Everything skis, backcountry included', 'No base. Nothing to ski yet.', 'plain language skiability read']) {
-  if ((html + llms + boardJs).toLowerCase().includes(phrase.toLowerCase())) fail(`unsupported model-derived skiability claim remains: ${phrase}`);
+  if ((html + llms + boardJs + trailJs).toLowerCase().includes(phrase.toLowerCase())) fail(`unsupported model-derived skiability claim remains: ${phrase}`);
 }
 
 if (!robots.includes('Sitemap: https://xcski.chrisizworski.com/sitemap.xml')) fail('robots sitemap owner changed');
@@ -52,10 +72,11 @@ const runtimeJs = html.slice(runtimeStart + '<script>'.length, runtimeEnd);
 try {
   new Function(runtimeJs);
   new Function(boardJs);
+  new Function(trailJs);
 } catch (error) {
   fail('generated JavaScript invalid: ' + error.message);
 }
 
-if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html + boardJs)) fail('unexpected personal/browser-state collection detected');
+if (/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition|fingerprint/i.test(html + boardJs + trailJs)) fail('unexpected personal/browser-state collection detected');
 
-console.log('XC 2026-27 readiness: PASS — 48 trails, Nordic Board present, model-vs-grooming boundary explicit, verification handoff preserved.');
+console.log('XC 2026-27 readiness: PASS — 48 trail cards, Nordic Board, 48 indexable trail pages, expanded sitemap, and verification handoffs preserved.');
