@@ -5,6 +5,9 @@
   "functions": {
     "api/xc-live.js": {
       "maxDuration": 10
+    },
+    "api/xc-model.js": {
+      "maxDuration": 15
     }
   }
 }
