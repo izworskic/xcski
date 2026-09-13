@@ -37,12 +37,13 @@ await writeFile(path.join(apiDir, '_xc-registry.cjs'), `module.exports = ${JSON.
 const intel = await readFile(path.join(root, 'xc-intelligence.js'), 'utf8');
 const forecast = await readFile(path.join(root, 'xc-forecast.js'), 'utf8');
 const sharedEngine = `const vm = require('node:vm');\n` +
-`const sandbox = { window:{}, console, Intl, Date, Math, Number, String, Array, Object, JSON, URL, Map, Set, parseInt, parseFloat, isFinite };\n` +
+`const sandbox = { console, Intl, Date, Math, Number, String, Array, Object, JSON, URL, Map, Set, parseInt, parseFloat, isFinite };\n` +
+`sandbox.window = sandbox;\n` +
 `vm.createContext(sandbox);\n` +
 `vm.runInContext(${JSON.stringify(intel)}, sandbox, { filename:'xc-intelligence.js' });\n` +
 `vm.runInContext(${JSON.stringify(forecast)}, sandbox, { filename:'xc-forecast.js' });\n` +
-`if (!sandbox.window.XC_INTEL || !sandbox.window.XC_FORECAST) throw new Error('Shared XC engine failed to initialize');\n` +
-`module.exports = { XC_INTEL:sandbox.window.XC_INTEL, XC_FORECAST:sandbox.window.XC_FORECAST };\n`;
+`if (!sandbox.XC_INTEL || !sandbox.XC_FORECAST) throw new Error('Shared XC engine failed to initialize');\n` +
+`module.exports = { XC_INTEL:sandbox.XC_INTEL, XC_FORECAST:sandbox.XC_FORECAST };\n`;
 await writeFile(path.join(apiDir, '_xc-shared-engine.cjs'), sharedEngine);
 
 console.log('Generated server XC cache registry: MI 61, WI 51, MN 60 using the shared browser intelligence/forecast engines.');
