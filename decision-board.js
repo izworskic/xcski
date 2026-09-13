@@ -69,11 +69,65 @@
     return link ? link.href : "";
   }
 
-  function formatRow(row, rank) {
+  async function loadGroomingRegistry() {
+    try {
+      const response = await fetch("/grooming-sources.json", { cache: "no-store" });
+      if (!response.ok) throw new Error(`source registry ${response.status}`);
+      const registry = await response.json();
+      if (!registry || typeof registry !== "object" || !registry.sources) throw new Error("source registry malformed");
+      return registry;
+    } catch (error) {
+      console.warn("Grooming source registry unavailable:", error);
+      return { version: 0, sources: {} };
+    }
+  }
+
+  function sourceFor(row, registry) {
+    const registered = registry?.sources?.[row.id];
+    if (registered) {
+      return {
+        kind: "live",
+        label: registered.label || "Live grooming source available",
+        provider: registered.provider || "External grooming source",
+        url: registered.url || "",
+        note: registered.integration === "link-only-until-authorized-api"
+          ? "Live source found; current values are not ingested without authorized API access."
+          : (registered.note || "Registered grooming source."),
+        liveValues: false
+      };
+    }
+
     const href = officialLink(row.id);
+    if (row.cat === "groomed" || row.cat === "volunteer") {
+      return {
+        kind: "operator",
+        label: "Official status handoff",
+        provider: row.cat === "groomed" ? "Trail operator" : "Operator / land manager",
+        url: href,
+        note: "No machine-readable live grooming feed is registered here yet.",
+        liveValues: false
+      };
+    }
+
+    return {
+      kind: "backcountry",
+      label: "Local status check",
+      provider: "Land manager",
+      url: href,
+      note: "Backcountry or skier-tracked system; grooming may not apply.",
+      liveValues: false
+    };
+  }
+
+  function formatRow(row, rank, registry) {
+    const href = officialLink(row.id);
+    const source = sourceFor(row, registry);
     const scoreLabel = classify(row.score);
     const tomorrow = Number.isFinite(row.snowTomorrow)
       ? `<span><b>${row.snowTomorrow.toFixed(1)}"</b><small>tomorrow snow</small></span>`
+      : "";
+    const sourceAction = source.url && source.url !== href
+      ? `<a class="ski-source-link" href="${source.url}" target="_blank" rel="noopener">Open ${source.provider}</a>`
       : "";
     return `
       <article class="ski-pick">
@@ -96,28 +150,34 @@
             ${tomorrow}
           </div>
           <p class="ski-pick-note">${conditionNote(row)}</p>
+          <div class="ski-source ski-source-${source.kind}">
+            <span>${source.label}</span>
+            <strong>${source.provider}</strong>
+            <small>${source.note}</small>
+          </div>
           <div class="ski-pick-actions">
             <button type="button" data-jump-trail="${row.id}">See trail details</button>
+            ${sourceAction}
             ${href ? `<a href="${href}" target="_blank" rel="noopener">Verify official status</a>` : ""}
           </div>
         </div>
       </article>`;
   }
 
-  function render(rows, filterName = "all") {
+  function render(rows, filterName = "all", registry = { sources: {} }) {
     const list = document.getElementById("ski-board-list");
     if (!list) return;
     const filter = FILTERS[filterName] || FILTERS.all;
     const shown = rows.filter(filter).sort((a, b) => b.score - a.score).slice(0, 5);
-    list.innerHTML = shown.map((row, i) => formatRow(row, i + 1)).join("");
+    list.innerHTML = shown.map((row, i) => formatRow(row, i + 1, registry)).join("");
     const label = document.getElementById("ski-board-filter-label");
     if (label) {
       const names = { all: "all 48 trails", groomed: "groomed centers", skate: "skate-capable systems", rentals: "trails with rentals" };
-      label.textContent = `Showing the strongest modeled natural-snow signals among ${names[filterName] || names.all}.`;
+      label.textContent = `Showing the strongest modeled natural-snow signals among ${names[filterName] || names.all}. Grooming-source coverage is shown separately.`;
     }
   }
 
-  function renderOffSeason(rows) {
+  function renderOffSeason(rows, registry) {
     const list = document.getElementById("ski-board-list");
     if (!list) return;
     const filters = document.querySelector(".ski-board-filters");
@@ -128,17 +188,18 @@
       .slice(0, 3);
 
     if (forecast.length) {
-      list.innerHTML = forecast.map((row, i) => formatRow(row, i + 1)).join("");
+      list.innerHTML = forecast.map((row, i) => formatRow(row, i + 1, registry)).join("");
       setState("Preseason snow watch");
       const label = document.getElementById("ski-board-filter-label");
       if (label) label.textContent = "Off-season mode: showing locations with a meaningful modeled near-term snow signal.";
       return;
     }
 
+    const linkedSources = Object.keys(registry?.sources || {}).length;
     list.innerHTML = `
       <div class="ski-preseason">
         <strong>Winter rankings are paused.</strong>
-        <p>The Michigan Nordic Board activates when winter returns. Until then, use the 48-trail map to plan trips and bookmark operator status pages. No meaningful near-term snow signal is showing at the trailheads right now.</p>
+        <p>The Michigan Nordic Board activates when winter returns. Until then, use the 48-trail map to plan trips and bookmark operator status pages. ${linkedSources ? `${linkedSources} live grooming platform source${linkedSources === 1 ? " is" : "s are"} already registered for winter handoff.` : "No external live grooming platform sources are registered yet."}</p>
         <a href="#map">Explore all 48 trails</a>
       </div>`;
     setState("Preseason mode");
@@ -146,12 +207,12 @@
     if (label) label.textContent = "Live rankings return with the winter snow season.";
   }
 
-  function wireInteractions(rows) {
+  function wireInteractions(rows, registry) {
     document.querySelectorAll("[data-board-filter]").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("[data-board-filter]").forEach(b => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
-        render(rows, btn.dataset.boardFilter);
+        render(rows, btn.dataset.boardFilter, registry);
       });
     });
 
@@ -197,7 +258,10 @@
         "&daily=temperature_2m_max,temperature_2m_min,rain_sum,snowfall_sum" +
         "&past_days=3&forecast_days=3&timezone=America%2FDetroit";
 
-      const response = await fetch(url);
+      const [response, registry] = await Promise.all([
+        fetch(url),
+        loadGroomingRegistry()
+      ]);
       if (!response.ok) throw new Error(`weather ${response.status}`);
       let data = await response.json();
       if (!Array.isArray(data)) data = [data];
@@ -231,17 +295,18 @@
       const updated = new Intl.DateTimeFormat("en-US", {
         timeZone: "America/Detroit", hour: "numeric", minute: "2-digit"
       }).format(now);
+      const sourceCount = Object.keys(registry?.sources || {}).length;
 
       const freshness = document.getElementById("ski-board-freshness");
-      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · grooming/open status remains operator-verified`;
+      if (freshness) freshness.textContent = `Weather updated ${updated} ET · Open-Meteo · ${sourceCount} linked live grooming source${sourceCount === 1 ? "" : "s"} · current grooming values remain provider/operator verified`;
 
-      wireInteractions(rows);
-      if (offSeason) renderOffSeason(rows);
+      wireInteractions(rows, registry);
+      if (offSeason) renderOffSeason(rows, registry);
       else {
         const filters = document.querySelector(".ski-board-filters");
         if (filters) filters.hidden = false;
         setState("Live winter board");
-        render(rows, "all");
+        render(rows, "all", registry);
       }
     } catch (error) {
       console.warn("Michigan Nordic Board unavailable:", error);
