@@ -20,22 +20,29 @@ if(!mn.includes('Great Minnesota Ski Pass')||!mn.includes('Twin Cities')||!mn.in
 if(wi.includes('Great Minnesota Ski Pass')) fail('Minnesota pass copy leaked into Wisconsin homepage');
 if(mn.includes('Travel Wisconsin')) fail('Wisconsin report copy leaked into Minnesota homepage');
 if(wi.includes('Michigan<br>Cross Country Ski Trails')||mn.includes('Michigan<br>Cross Country Ski Trails')) fail('Michigan H1 leaked into sibling state product');
-if(!wi.includes('18 launch systems')) fail('Wisconsin launch count missing');
-if(!mn.includes('20 launch systems')) fail('Minnesota launch count missing');
+if(!wi.includes('51 launch systems')) fail('Wisconsin deep coverage count missing');
+if(!mn.includes('60 launch systems')) fail('Minnesota deep coverage count missing');
 if(!wi.includes('/xc-intelligence.js')||!mn.includes('/xc-intelligence.js')) fail('shared XC intelligence engine missing from sibling state home');
 if(!wi.includes('/state-xc.js')||!mn.includes('/state-xc.js')) fail('sibling-state runtime missing');
 if(!runtime.includes('XC_INTEL.analyzeWeather')||!runtime.includes('XC_INTEL.confidence')) fail('shared intelligence functions not used by sibling runtime');
 if(!runtime.includes("filter === 'northwoods'")||!runtime.includes("filter === 'ski-pass'")) fail('state-specific intent filters missing');
 if(!css.includes('body.state-wisconsin')||!css.includes('body.state-minnesota')) fail('state-specific visual identities missing');
 
+for(const marker of ['Black River State Forest','Mirror Lake State Park','Willow River State Park','Point Beach State Forest','Wyalusing State Park','Interstate State Park']) {
+  if(!wi.includes(marker)) fail(`Wisconsin deep-coverage system missing: ${marker}`);
+}
+for(const marker of ['Magney-Snively Ski Trails','Movil Maze','Baker Park Reserve','Central Gunflint Trail Ski System','Gamehaven Park Ski Trails','Jay Cooke State Park']) {
+  if(!mn.includes(marker)) fail(`Minnesota deep-coverage system missing: ${marker}`);
+}
+
 const wiTrails=readdirSync('dist/wisconsin/trails',{withFileTypes:true}).filter(e=>e.isDirectory());
 const mnTrails=readdirSync('dist/minnesota/trails',{withFileTypes:true}).filter(e=>e.isDirectory());
 const wiRegions=readdirSync('dist/wisconsin/regions',{withFileTypes:true}).filter(e=>e.isDirectory());
 const mnRegions=readdirSync('dist/minnesota/regions',{withFileTypes:true}).filter(e=>e.isDirectory());
-if(wiTrails.length!==18) fail(`expected 18 Wisconsin trail pages, found ${wiTrails.length}`);
-if(mnTrails.length!==20) fail(`expected 20 Minnesota trail pages, found ${mnTrails.length}`);
-if(wiRegions.length!==6) fail(`expected 6 Wisconsin regional boards, found ${wiRegions.length}`);
-if(mnRegions.length!==7) fail(`expected 7 Minnesota regional boards, found ${mnRegions.length}`);
+if(wiTrails.length!==51) fail(`expected 51 Wisconsin trail pages, found ${wiTrails.length}`);
+if(mnTrails.length!==60) fail(`expected 60 Minnesota trail pages, found ${mnTrails.length}`);
+if(wiRegions.length!==9) fail(`expected 9 Wisconsin regional boards, found ${wiRegions.length}`);
+if(mnRegions.length!==9) fail(`expected 9 Minnesota regional boards, found ${mnRegions.length}`);
 
 for(const entry of wiTrails){
   const html=readFileSync(path.join('dist','wisconsin','trails',entry.name,'index.html'),'utf8');
@@ -64,8 +71,8 @@ for(const entry of mnRegions){
 
 const wiUrls=(wiMap.match(/<loc>/g)||[]).length;
 const mnUrls=(mnMap.match(/<loc>/g)||[]).length;
-if(wiUrls!==25) fail(`expected 25 Wisconsin sitemap URLs, found ${wiUrls}`);
-if(mnUrls!==28) fail(`expected 28 Minnesota sitemap URLs, found ${mnUrls}`);
+if(wiUrls!==61) fail(`expected 61 Wisconsin sitemap URLs, found ${wiUrls}`);
+if(mnUrls!==70) fail(`expected 70 Minnesota sitemap URLs, found ${mnUrls}`);
 if(!robots.includes('Sitemap: https://xcski.chrisizworski.com/wisconsin/sitemap.xml')) fail('Wisconsin sitemap not advertised in robots');
 if(!robots.includes('Sitemap: https://xcski.chrisizworski.com/minnesota/sitemap.xml')) fail('Minnesota sitemap not advertised in robots');
 if(!mi.includes('More Midwest XC boards')||!mi.includes('/wisconsin/')||!mi.includes('/minnesota/')) fail('Michigan sibling-state discovery links missing');
@@ -80,4 +87,4 @@ const wiDesc=wi.match(/<meta name="description" content="([^"]+)"/)?.[1];
 const mnDesc=mn.match(/<meta name="description" content="([^"]+)"/)?.[1];
 if(!wiDesc||!mnDesc||wiDesc===mnDesc) fail('state meta descriptions are missing or duplicated');
 
-console.log(`Sibling XC readiness: PASS — Wisconsin 18 trails/6 regions/25 URLs; Minnesota 20 trails/7 regions/28 URLs; shared engine with distinct state content (similarity ${similarity.toFixed(2)}).`);
+console.log(`Sibling XC readiness: PASS — Wisconsin 51 trails/9 regions/61 URLs; Minnesota 60 trails/9 regions/70 URLs; shared engine with distinct state content (similarity ${similarity.toFixed(2)}).`);
