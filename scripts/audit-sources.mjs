@@ -8,7 +8,7 @@ const overrides = JSON.parse(await readFile(path.join(root, 'grooming-sources.js
 const trailsMatch = html.match(/const TRAILS = (\[[\s\S]*?\]);\nconst COLORS/);
 if (!trailsMatch) throw new Error('TRAILS dataset missing for source audit');
 const trails = JSON.parse(trailsMatch[1]);
-if (trails.length !== 48) throw new Error(`Expected 48 trails, found ${trails.length}`);
+if (trails.length !== 61) throw new Error(`Expected 61 statewide trails, found ${trails.length}`);
 
 const strip = (s = '') => String(s).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
@@ -60,9 +60,9 @@ for (const trail of trails) {
 }
 
 const audit = {
-  version: 2,
+  version: 3,
   updated: '2026-09-13',
-  policy: 'All 48 current trails receive a source classification. Weather/snow scores are independent of source availability. External current values are ingested only when provider terms explicitly authorize API or machine use.',
+  policy: 'All 61 statewide trails receive a source classification. Weather/snow scores are independent of source availability. External current values are ingested only when provider terms explicitly authorize API or machine use.',
   counts: Object.values(sources).reduce((acc, source) => {
     acc[source.sourceClass || source.kind || 'other'] = (acc[source.sourceClass || source.kind || 'other'] || 0) + 1;
     return acc;
@@ -71,4 +71,4 @@ const audit = {
 };
 
 await writeFile(path.join(out, 'grooming-sources.json'), JSON.stringify(audit, null, 2) + '\n');
-console.log(`Audited ${trails.length} XC status sources across operator, land-manager, reference, and live-platform classes.`);
+console.log(`Audited ${trails.length} statewide XC status sources across operator, land-manager, reference, and live-platform classes.`);
