@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.mjs && node scripts/add-decision-board.mjs && node scripts/generate-trail-pages.mjs && node scripts/inject-site-tags.mjs",
+    "build": "node scripts/build.mjs && node scripts/audit-sources.mjs && node scripts/add-decision-board.mjs && node scripts/generate-trail-pages.mjs && node scripts/generate-region-pages.mjs && node scripts/inject-site-tags.mjs",
     "test": "npm run build && node scripts/check-build.mjs"
   }
 }
