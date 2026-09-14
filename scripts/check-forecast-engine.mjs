@@ -29,7 +29,7 @@ if(!state.includes('weekend:model.weekend')||!state.includes('storm:model.storm'
 if(!midwest.includes('weekendDirection')||!midwest.includes("storm?.signal === 'storm-window'")) fail('Midwest state radar is not consuming weekend/storm summaries');
 if(!mw.includes('/midwest/weekend/')||!mw.includes('/midwest/storm-watch/')) fail('Midwest gateway forecast paths missing');
 if(!mwWeekend.includes('Midwest XC Skiing This Weekend')||!mwStorm.includes('Midwest XC Storm Watch')) fail('Midwest dedicated weekend/storm pages missing');
-if(!forecastPages.includes("ctx.mode==='weekend'")||!forecastPages.includes("ctx.mode==='storm'")) fail('dedicated forecast page modes missing');
+if(!forecastPages.includes("ctx.mode==='weekend'")||!forecastPages.includes('weekendRows(rows):stormRows(rows)')||!forecastPages.includes('stormCard(row')) fail('dedicated weekend/storm forecast branching missing');
 if(!board.includes('Modeled weather/snow comparison only')||!state.includes('current grooming cannot be projected')||!mw.includes('Modeled snow and future windows are screening tools')) fail('forecast trust-boundary language missing');
 for(const slug of ['wisconsin','minnesota']) {
   const trailDir=path.join('dist',slug,'trails');
