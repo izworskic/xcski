@@ -18,11 +18,13 @@ for (const [slug, html] of [['wisconsin',wi],['minnesota',mn]]) {
   if (!html.includes('id="state-live-board" aria-live="polite"')) fail(`${slug} live board accessibility missing`);
 }
 
-const mwBoard = mw.indexOf('<section class="midwest-panel">');
-const mwSummary = mw.indexOf('<section id="midwest-state-summary"');
-if (mwBoard < 0 || mwSummary < 0 || mwBoard > mwSummary) fail('Midwest live decision board must precede state summary cards');
+const mwGateway = mw.indexOf('<section id="midwest-state-summary"');
+const mwPaths = mw.indexOf('<section class="midwest-paths"');
+const mwRadar = mw.indexOf('<section class="midwest-radar-panel">');
+if (mwGateway < 0 || mwPaths < 0 || mwRadar < 0 || !(mwGateway < mwPaths && mwPaths < mwRadar)) fail('Midwest must route by state/persona before cross-state radar');
 if (!mw.includes('aria-label="Quick Midwest XC decisions"')) fail('Midwest quick-decision nav missing');
-if (!mw.includes('id="midwest-board" aria-live="polite"')) fail('Midwest live board accessibility missing');
+if (!mw.includes('id="midwest-radar" aria-live="polite"')) fail('Midwest state radar accessibility missing');
+if (mw.includes('data-midwest-mode=')) fail('generic Midwest cross-state ranking controls must not return');
 
 for (const file of [
   'dist/weekend/index.html','dist/storm-watch/index.html',
@@ -39,11 +41,11 @@ for (const file of [
 }
 
 if (!stateCss.includes('production-audit-pass') || !stateCss.includes('min-height:44px')) fail('state mobile production UX pass missing');
-if (!mwCss.includes('production-audit-pass') || !mwCss.includes('.midwest-decision span{display:none}')) fail('Midwest compact mobile UX missing');
+if (!mwCss.includes('production-audit-pass') || !mwCss.includes('.midwest-state-cta{min-height:42px')) fail('Midwest mobile gateway UX missing');
 if (!forecastCss.includes('production-audit-pass') || !forecastCss.includes('.forecast-coverage-grid')) fail('forecast mobile/static coverage styles missing');
 if (!mwJs.includes('Promise.allSettled(ctx.states.map(loadState))')) fail('Midwest graceful state degradation missing');
 if (!mwJs.includes("failedStates.join(', ')")) fail('Midwest partial-data disclosure missing');
 if (!fpJs.includes('Promise.allSettled(ctx.groups.map(loadGroup))')) fail('forecast graceful group degradation missing');
 if (!fpJs.includes("failedGroups.join(', ')")) fail('forecast partial-data disclosure missing');
 
-console.log('Production XC audit: PASS — decision-first hierarchy, mobile compaction, crawlable forecast support, accessibility and partial-state resilience are enforced.');
+console.log('Production XC audit: PASS — state pages stay decision-first; Midwest routes by skier intent/state before state-level radar; forecast pages remain crawlable, accessible and resilient.');
