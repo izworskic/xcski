@@ -42,18 +42,13 @@ async function patchStateHome(slug) {
 async function patchMidwestHome() {
   const file = path.join(out, 'midwest', 'index.html');
   let html = await readFile(file, 'utf8');
-  const summary = sectionBounds(html, '<section id="midwest-state-summary"');
-  const board = sectionBounds(html, '<section class="midwest-panel">');
-  if (!summary || !board) throw new Error('Midwest production sections missing');
-  if (summary.start < board.start) {
-    const summaryText = summary.text;
-    html = html.slice(0, summary.start) + html.slice(summary.end);
-    const newBoard = sectionBounds(html, '<section class="midwest-panel">');
-    html = html.slice(0, newBoard.end) + summaryText + html.slice(newBoard.end);
-  }
-  const quick = '<nav class="xc-quicknav" aria-label="Quick Midwest XC decisions"><a href="#midwest-board">Today</a><a href="/midwest/weekend/">This weekend</a><a href="/midwest/storm-watch/">Storm watch</a><a href="/">Michigan</a><a href="/wisconsin/">Wisconsin</a><a href="/minnesota/">Minnesota</a></nav>';
+  const gateway = sectionBounds(html, '<section id="midwest-state-summary"');
+  const radar = sectionBounds(html, '<section class="midwest-radar-panel">');
+  if (!gateway || !radar) throw new Error('Midwest gateway/radar sections missing');
+  if (gateway.start > radar.start) throw new Error('Midwest state gateway must precede cross-state radar');
+  const quick = '<nav class="xc-quicknav" aria-label="Quick Midwest XC decisions"><a href="#midwest-state-summary">Choose a state</a><a href="/midwest/weekend/">Weekend trip</a><a href="/midwest/storm-watch/">Storm chase</a><a href="/">Michigan</a><a href="/wisconsin/">Wisconsin</a><a href="/minnesota/">Minnesota</a></nav>';
   if (!html.includes('aria-label="Quick Midwest XC decisions"')) html = insertAfterSection(html, '<section class="midwest-hero">', quick);
-  html = html.replace('<div id="midwest-board">', '<div id="midwest-board" aria-live="polite">');
+  html = html.replace('<div id="midwest-radar">', '<div id="midwest-radar" aria-live="polite">');
   await writeFile(file, html);
 }
 
@@ -104,21 +99,15 @@ async function appendCss(file, css) {
 async function patchStyles() {
   const quick = `.xc-quicknav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px;padding:0}.xc-quicknav a{display:inline-flex;align-items:center;min-height:42px;padding:8px 12px;border:1px solid var(--line,#d6e1e6);border-radius:999px;background:#fff;text-decoration:none;font-size:.8rem;font-weight:800}`;
   await appendCss(path.join(out,'state-xc.css'), `${quick}\n.state-identity{margin-top:18px}.state-filters button{min-height:42px}\n@media(max-width:780px){.state-hero{padding:28px 0 18px}.state-hero h1{font-size:clamp(2.1rem,11vw,3.45rem)}.state-identity{margin-top:14px}.state-decision-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.state-decision-grid span{display:none}.state-decision-grid>div{padding:8px}.state-decision-grid strong{font-size:.8rem}.state-metrics>span{min-width:calc(50% - 4px);flex:1}.xc-quicknav{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.xc-quicknav a{white-space:nowrap;min-height:44px}}`);
-  await appendCss(path.join(out,'midwest-xc.css'), `${quick.replace('var(--line,#d6e1e6)','var(--mw-line)')}\n.midwest-state-summary{margin-top:18px}.midwest-tabs button{min-height:42px}\n@media(max-width:780px){.midwest-hero{padding:28px 0 18px}.midwest-hero h1{font-size:clamp(2.15rem,11vw,3.55rem)}.midwest-decision span{display:none}.midwest-state-summary{margin-top:14px}.xc-quicknav{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.xc-quicknav a{white-space:nowrap;min-height:44px}}`);
+  await appendCss(path.join(out,'midwest-xc.css'), `${quick.replace('var(--line,#d6e1e6)','var(--mw-line)')}\n.midwest-state-cta{min-height:42px;align-items:center}\n@media(max-width:780px){.xc-quicknav{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.xc-quicknav a{white-space:nowrap;min-height:44px}}`);
   await appendCss(path.join(out,'forecast-pages.css'), `${quick.replace('var(--line,#d6e1e6)','var(--fp-line)')}\n.forecast-coverage{margin-top:18px}.forecast-coverage>p{color:var(--fp-muted);font-size:.84rem}.forecast-coverage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.forecast-coverage-grid a{display:block;border:1px solid var(--fp-line);border-radius:11px;padding:11px;text-decoration:none;background:var(--fp-soft)}.forecast-coverage-grid strong,.forecast-coverage-grid span{display:block}.forecast-coverage-grid strong{color:var(--fp-ink);font-size:.86rem}.forecast-coverage-grid span{color:var(--fp-muted);font-size:.72rem;margin-top:2px}\n@media(max-width:780px){.forecast-hero{padding:28px 0 18px}.forecast-hero h1{font-size:clamp(2.1rem,11vw,3.45rem)}.forecast-grid{grid-template-columns:1fr 1fr}.forecast-grid>div:last-child{grid-column:1/-1}.forecast-coverage-grid{grid-template-columns:1fr 1fr}.xc-quicknav{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.xc-quicknav a{white-space:nowrap;min-height:44px}}`);
   await appendCss(path.join(out,'decision-board.css'), `${quick}\n.ski-board-filters button{min-height:42px}\n@media(max-width:720px){.ski-decision-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.ski-decision-strip span{display:none}.ski-decision-strip>div{padding:8px}.ski-decision-strip strong{font-size:.8rem}.xc-quicknav{flex-wrap:nowrap;overflow-x:auto}.xc-quicknav a{white-space:nowrap;min-height:44px}}`);
 }
 
 async function patchGracefulDegradation() {
   const mwPath = path.join(out,'midwest-xc.js');
-  let mw = await readFile(mwPath,'utf8');
-  const oldMw = `      const results = await Promise.all(ctx.states.map(loadState));\n      const rows = results.flatMap(result => result.rows);\n      if (rows.length !== ctx.totalTrails) throw new Error(\`expected \${ctx.totalTrails} rows, got \${rows.length}\`);`;
-  const newMw = `      const settled = await Promise.allSettled(ctx.states.map(loadState));\n      const results = settled.filter(result => result.status === 'fulfilled').map(result => result.value);\n      const failedStates = settled.map((result,index) => result.status === 'rejected' ? ctx.states[index].name : null).filter(Boolean);\n      const rows = results.flatMap(result => result.rows);\n      if (!rows.length) throw new Error('no state weather returned');`;
-  if (!mw.includes(oldMw)) throw new Error('Midwest all-or-nothing load contract changed');
-  mw = mw.replace(oldMw,newMw);
-  mw = mw.replace("if (freshness) freshness.textContent = `Open-Meteo 8-day weather · same-local-hour change since yesterday · weekend + storm-window intelligence · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending.`;", "if (freshness) freshness.textContent = `Open-Meteo 8-day weather · ${rows.length}/${ctx.totalTrails} systems loaded · same-local-hour change since yesterday · weekend + storm-window intelligence · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending${failedStates.length ? ` · partial: ${failedStates.join(', ')} unavailable` : ''}.`;" );
-  mw = mw.replace("if (status) status.textContent = 'Live Midwest board';", "if (status) status.textContent = failedStates.length ? 'Live Midwest board · partial' : 'Live Midwest board';");
-  await writeFile(mwPath,mw);
+  const mw = await readFile(mwPath,'utf8');
+  if (!mw.includes('Promise.allSettled(ctx.states.map(loadState))') || !mw.includes("failedStates.join(', ')")) throw new Error('Midwest graceful state degradation missing');
 
   const fpPath = path.join(out,'forecast-pages.js');
   let fp = await readFile(fpPath,'utf8');
@@ -137,4 +126,4 @@ await patchMidwestHome();
 await patchForecastPages();
 await patchStyles();
 await patchGracefulDegradation();
-console.log('Production audit pass: decision-first hierarchy, compact mobile UX, crawlable forecast coverage, accessibility, and graceful partial-state rendering applied.');
+console.log('Production audit pass: state decision-first UX, skier-first Midwest gateway, crawlable forecast support, accessibility and graceful partial-state rendering applied.');
