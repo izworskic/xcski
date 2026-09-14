@@ -8,9 +8,12 @@ const mi=readFileSync('dist/index.html','utf8');
 const wi=readFileSync('dist/wisconsin/index.html','utf8');
 const mn=readFileSync('dist/minnesota/index.html','utf8');
 const mw=readFileSync('dist/midwest/index.html','utf8');
+const mwWeekend=readFileSync('dist/midwest/weekend/index.html','utf8');
+const mwStorm=readFileSync('dist/midwest/storm-watch/index.html','utf8');
 const board=readFileSync('dist/decision-board.js','utf8');
 const state=readFileSync('dist/state-xc.js','utf8');
 const midwest=readFileSync('dist/midwest-xc.js','utf8');
+const forecastPages=readFileSync('dist/forecast-pages.js','utf8');
 const api=readFileSync('api/xc-model.js','utf8');
 const serverEngine=readFileSync('api/_xc-shared-engine.cjs','utf8');
 
@@ -23,9 +26,11 @@ if(!serverEngine.includes('xc-intelligence.js')||!serverEngine.includes('xc-fore
 if(!api.includes('XC_INTEL.compareYesterday')||!api.includes('XC_FORECAST.weekendOutlook')||!api.includes('XC_FORECAST.stormWindow')) fail('cache endpoint missing shared forecast calculations');
 if(!board.includes('weekend:model.weekend')||!board.includes('storm:model.storm')) fail('Michigan board not consuming cached weekend/storm fields');
 if(!state.includes('weekend:model.weekend')||!state.includes('storm:model.storm')) fail('state boards not consuming cached weekend/storm fields');
-if(!midwest.includes("mode === 'weekend'")||!midwest.includes("mode === 'storm'")) fail('Midwest weekend/storm modes missing');
-if(!mw.includes('data-midwest-mode="weekend"')||!mw.includes('data-midwest-mode="storm"')) fail('Midwest forecast controls missing');
-if(!board.includes('Modeled weather/snow comparison only')||!state.includes('current grooming cannot be projected')||!mw.includes('It is not a grooming prediction')) fail('forecast trust-boundary language missing');
+if(!midwest.includes('weekendDirection')||!midwest.includes("storm?.signal === 'storm-window'")) fail('Midwest state radar is not consuming weekend/storm summaries');
+if(!mw.includes('/midwest/weekend/')||!mw.includes('/midwest/storm-watch/')) fail('Midwest gateway forecast paths missing');
+if(!mwWeekend.includes('Midwest XC Skiing This Weekend')||!mwStorm.includes('Midwest XC Storm Watch')) fail('Midwest dedicated weekend/storm pages missing');
+if(!forecastPages.includes("ctx.mode==='weekend'")||!forecastPages.includes("ctx.mode==='storm'")) fail('dedicated forecast page modes missing');
+if(!board.includes('Modeled weather/snow comparison only')||!state.includes('current grooming cannot be projected')||!mw.includes('Modeled snow and future windows are screening tools')) fail('forecast trust-boundary language missing');
 for(const slug of ['wisconsin','minnesota']) {
   const trailDir=path.join('dist',slug,'trails');
   const sample=readdirSync(trailDir,{withFileTypes:true}).find(e=>e.isDirectory());
@@ -34,5 +39,5 @@ for(const slug of ['wisconsin','minnesota']) {
   if(!html.includes('/xc-forecast.js')||!html.includes('/xc-model-client.js')) fail(`${slug} trail forecast/cache runtime missing`);
 }
 if(/localStorage|sessionStorage|document\.cookie|geolocation|getCurrentPosition/i.test(forecast+board+state+midwest+intel)) fail('forecast engine introduced browser-state collection');
-try{new Function(forecast);new Function(board);new Function(state);new Function(midwest)}catch(error){fail(`forecast JavaScript invalid: ${error.message}`)}
-console.log('XC forecast readiness: PASS — shared 8-day/weekend/storm engine now computes server-side and is consumed from cached state snapshots with trust boundaries intact.');
+try{new Function(forecast);new Function(board);new Function(state);new Function(midwest);new Function(forecastPages)}catch(error){fail(`forecast JavaScript invalid: ${error.message}`)}
+console.log('XC forecast readiness: PASS — shared 8-day/weekend/storm engine computes server-side; state pages consume it directly while Midwest reserves cross-state comparison for dedicated weekend/storm travel decisions.');
