@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const out = path.join(root, 'dist');
 const esc = (s='') => String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
-const js = value => JSON.stringify(value).replace(/</g,'\\u003c');
+const js = value => JSON.stringify(value).replace(/</g,'\u003c');
 
 const michiganHtmlPath = path.join(out, 'index.html');
 let michiganHtml = await readFile(michiganHtmlPath, 'utf8');
@@ -21,6 +21,15 @@ if (mn.trails.length !== 60) throw new Error(`Expected 60 Minnesota trails, foun
 const states = [
   {
     name:'Michigan', slug:'michigan', timezone:'America/Detroit', href:'/',
+    eyebrow:'Great Lakes snowbelts + statewide network',
+    fit:'Start here for the Upper Peninsula, northern Lower Peninsula, West Michigan or Detroit-area skiing.',
+    trip:'Best fit for destination snowbelt trips plus the broadest north-to-south range of skiing in this network.',
+    shortcuts:[
+      {label:'Southeast Michigan',href:'/regions/southeast-michigan/'},
+      {label:'Grayling / Roscommon',href:'/regions/grayling-roscommon/'},
+      {label:'Central U.P.',href:'/regions/central-upper-peninsula/'},
+      {label:'Keweenaw',href:'/regions/keweenaw-houghton-calumet/'}
+    ],
     trails:michiganTrails.map(t => ({
       id:t.id,name:t.name,town:t.town,lat:t.lat,lon:t.lon,cat:t.cat,lit:Boolean(t.lit),rentals:Boolean(t.rentals),skate:Boolean(t.skate),
       href:`/trails/${t.id}/`
@@ -28,6 +37,15 @@ const states = [
   },
   {
     name:'Wisconsin', slug:'wisconsin', timezone:'America/Chicago', href:'/wisconsin/',
+    eyebrow:'Birkie Country + Northwoods + southern snowmaking',
+    fit:'Start here for Hayward/Cable, the Northwoods, Wisconsin state parks, Madison or the Kettle Moraine.',
+    trip:'Best fit for Birkie-country destination skiing, Northwoods natural snow and purpose-built marginal-snow options farther south.',
+    shortcuts:[
+      {label:'Birkie Country',href:'/wisconsin/regions/northwest-birkie/'},
+      {label:'Northwoods',href:'/wisconsin/regions/northwoods/'},
+      {label:'Madison / Southwest',href:'/wisconsin/regions/southwest-madison/'},
+      {label:'Kettle Moraine',href:'/wisconsin/regions/southeast-kettle/'}
+    ],
     trails:wi.trails.map(t => ({
       id:t.id,name:t.name,town:t.town,lat:t.lat,lon:t.lon,cat:t.cat,lit:Boolean(t.lit),rentals:Boolean(t.rentals),skate:Boolean(t.skate),snowmaking:Boolean(t.snowmaking),
       href:`/wisconsin/trails/${t.id}/`
@@ -35,6 +53,15 @@ const states = [
   },
   {
     name:'Minnesota', slug:'minnesota', timezone:'America/Chicago', href:'/minnesota/',
+    eyebrow:'Twin Cities + Duluth + North Shore + Arrowhead',
+    fit:'Start here for Twin Cities snowmaking, Duluth, the North Shore, Arrowhead/Ely and Great Minnesota Ski Pass systems.',
+    trip:'Best fit for metro reliability, North Shore/Arrowhead trips and a large pass-connected public trail network.',
+    shortcuts:[
+      {label:'Twin Cities',href:'/minnesota/regions/twin-cities/'},
+      {label:'Duluth',href:'/minnesota/regions/duluth/'},
+      {label:'North Shore',href:'/minnesota/regions/north-shore/'},
+      {label:'Arrowhead / Ely',href:'/minnesota/regions/arrowhead-ely/'}
+    ],
     trails:mn.trails.map(t => ({
       id:t.id,name:t.name,town:t.town,lat:t.lat,lon:t.lon,cat:t.cat,lit:Boolean(t.lit),rentals:Boolean(t.rentals),skate:Boolean(t.skate),snowmaking:Boolean(t.snowmaking),
       href:`/minnesota/trails/${t.id}/`
@@ -45,17 +72,17 @@ const totalTrails = states.reduce((sum,state) => sum + state.trails.length,0);
 if (totalTrails !== 172) throw new Error(`Expected 172 Midwest systems, found ${totalTrails}`);
 
 const canonical = 'https://xcski.chrisizworski.com/midwest/';
-const title = 'Midwest Cross Country Ski Conditions Today | Michigan, Wisconsin & Minnesota';
-const description = 'Compare Michigan, Wisconsin and Minnesota cross-country ski conditions across 172 Nordic systems, including modeled snow, surface timing, day-over-day change, weekend outlook, storm-window potential and official status provenance.';
+const title = 'Midwest Cross Country Skiing | Michigan, Wisconsin & Minnesota XC Conditions';
+const description = 'Choose the right Midwest XC skiing state or destination area, then open the detailed Michigan, Wisconsin or Minnesota condition board. Includes weekend-trip and storm-window guidance when cross-state comparison actually matters.';
 const schema = {
   '@context':'https://schema.org',
   '@graph':[
     {
       '@type':'CollectionPage',
-      name:'Midwest XC Ski Conditions Today',
+      name:'Midwest Cross Country Skiing Gateway',
       url:canonical,
       description,
-      dateModified:'2026-09-13',
+      dateModified:'2026-09-14',
       about:['Cross-country skiing in Michigan','Cross-country skiing in Wisconsin','Cross-country skiing in Minnesota']
     },
     {
@@ -66,8 +93,12 @@ const schema = {
     }
   ]
 };
-const context = { totalTrails, states, defaultMode:'best' };
-const stateLinks = states.map(state => `<a href="${state.href}"><strong>${esc(state.name)}</strong><span>${state.trails.length} systems</span></a>`).join('');
+const context = { totalTrails, states };
+
+function stateCard(state){
+  const shortcuts=state.shortcuts.map(s=>`<a href="${s.href}">${esc(s.label)}</a>`).join('');
+  return `<article class="midwest-state-card state-${state.slug}" data-state-card="${state.slug}"><div class="midwest-state-card-top"><div><span>${esc(state.eyebrow)}</span><h2>${esc(state.name)}</h2></div><strong>${state.trails.length}<small>systems</small></strong></div><p>${esc(state.fit)}</p><p class="midwest-state-trip">${esc(state.trip)}</p><div class="midwest-state-pulse" data-state-pulse="${state.slug}">Loading current statewide signals…</div><div class="midwest-region-shortcuts">${shortcuts}</div><a class="midwest-state-cta" href="${state.href}">Open ${esc(state.name)} conditions →</a></article>`;
+}
 
 const html = `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -77,14 +108,14 @@ const html = `<!doctype html><html lang="en"><head>
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="https://xcski.chrisizworski.com/og.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/midwest-xc.css">
 <script type="application/ld+json">${js(schema)}</script></head>
-<body class="midwest-xc"><header class="midwest-top"><div class="midwest-wrap"><a href="/midwest/">Midwest XC Today</a><nav class="midwest-nav" aria-label="State XC boards"><a href="/">Michigan</a><a href="/wisconsin/">Wisconsin</a><a href="/minnesota/">Minnesota</a></nav></div></header>
+<body class="midwest-xc"><header class="midwest-top"><div class="midwest-wrap"><a href="/midwest/">Midwest XC</a><nav class="midwest-nav" aria-label="State XC boards"><a href="/">Michigan</a><a href="/wisconsin/">Wisconsin</a><a href="/minnesota/">Minnesota</a></nav></div></header>
 <main class="midwest-wrap">
-<section class="midwest-hero"><p class="midwest-kicker">Upper Midwest Nordic intelligence</p><h1>Midwest XC Ski Conditions Today</h1><p>One decision layer across ${totalTrails} Michigan, Wisconsin and Minnesota Nordic systems. Compare the strongest modeled snow signals, what improved since the same local hour yesterday, the Saturday-versus-Sunday outlook, and where forecast snow may open a cold/dry ski window—while official grooming/open status remains a separate provenance layer.</p></section>
-<section id="midwest-state-summary" class="midwest-state-summary" aria-label="State condition summary"><a class="midwest-state-card state-michigan" href="/"><span>Michigan</span><strong>Loading…</strong><small>61 systems</small></a><a class="midwest-state-card state-wisconsin" href="/wisconsin/"><span>Wisconsin</span><strong>Loading…</strong><small>51 systems</small></a><a class="midwest-state-card state-minnesota" href="/minnesota/"><span>Minnesota</span><strong>Loading…</strong><small>60 systems</small></a></section>
-<section class="midwest-panel"><div class="midwest-board-head"><div><h2 id="midwest-board-label">Best modeled signals across the Midwest</h2><p id="midwest-freshness">Loading weather, change, weekend, storm-window and provider layers…</p></div><span id="midwest-status" class="midwest-status">Loading…</span></div><div class="midwest-tabs"><button type="button" data-midwest-mode="best" aria-pressed="true">Best today</button><button type="button" data-midwest-mode="weekend" aria-pressed="false">This weekend</button><button type="button" data-midwest-mode="storm" aria-pressed="false">Storm watch</button><button type="button" data-midwest-mode="improvers" aria-pressed="false">Biggest improvers</button><button type="button" data-midwest-mode="fresh" aria-pressed="false">Fresh snow</button><button type="button" data-midwest-mode="lighted" aria-pressed="false">Lighted</button><button type="button" data-midwest-mode="skate" aria-pressed="false">Skate</button></div><div id="midwest-board"><div class="midwest-empty"><strong>Building the Midwest board…</strong><p>Checking all ${totalTrails} systems in state-local time with an 8-day forecast.</p></div></div></section>
-<section class="midwest-panel"><h2>How this comparison works</h2><div class="midwest-method"><div><strong>Same engine</strong><span>Michigan, Wisconsin and Minnesota use the same snow, freeze/thaw, surface and best-window intelligence so the cross-state comparison is internally consistent.</span></div><div><strong>Weekend uses the same model</strong><span>Saturday and Sunday are scored with forecast base, recent snow, rain, freeze/thaw and time-of-day windows. It is not a grooming prediction.</span></div><div><strong>Storm windows are conservative</strong><span>The engine needs at least a 1.5-inch modeled 24-hour snow burst, at least 2 inches of modeled depth, subfreezing temperature and low rain before it flags a potential ski window.</span></div><div><strong>Same local hour yesterday</strong><span>Change is reconstructed from Open-Meteo's prior-day hourly model data. No cookies, browser storage or fabricated snapshots are used.</span></div><div><strong>Official status stays separate</strong><span>Fresh authorized provider data can confirm open/closed status and raise confidence. It never rewrites the modeled snow score.</span></div></div></section>
-<section class="midwest-panel"><h2>Go deeper by state</h2><div class="midwest-state-summary">${stateLinks}</div></section>
-</main><footer class="midwest-footer"><div class="midwest-wrap">Midwest XC conditions by Chris Izworski. Modeled weather and future ski-window signals are screening tools; verify grooming, opening and access with the linked operator or land manager before traveling.</div></footer>
+<section class="midwest-hero"><p class="midwest-kicker">Start with the trip you are actually planning</p><h1>Find your Midwest XC starting point</h1><p>This page is a doorway, not a 172-trail horse race. If you already know the state, go straight there. If you are planning a weekend away or willing to cross a state line for a real snow event, use the cross-state tools below.</p></section>
+<section id="midwest-state-summary" class="midwest-state-gateway" aria-label="Choose a state XC conditions board"><div class="midwest-section-head"><p class="midwest-kicker">Most skiers should start here</p><h2>Choose the state or destination area that fits the trip</h2><p>The state tools do the detailed trail-level decision work. These cards help you get into the right one quickly.</p></div><div class="midwest-state-grid">${states.map(stateCard).join('')}</div></section>
+<section class="midwest-paths" aria-labelledby="midwest-paths-title"><div class="midwest-section-head"><p class="midwest-kicker">Different skier, different decision</p><h2 id="midwest-paths-title">What are you trying to decide?</h2></div><div class="midwest-path-grid"><a href="#midwest-state-summary"><small>Local / day skier</small><strong>I already know my state</strong><span>Jump into Michigan, Wisconsin or Minnesota and use the detailed live board.</span></a><a href="/midwest/weekend/"><small>Weekend traveler</small><strong>I could make a destination trip</strong><span>Compare Saturday vs. Sunday across the three states when a border-crossing trip is realistic.</span></a><a href="/midwest/storm-watch/"><small>Storm chaser</small><strong>I will travel for genuinely better snow</strong><span>Only compare states when forecast snow may create a meaningful cold/dry ski window.</span></a><div><small>Reliability seeker</small><strong>I need snowmaking, lights or a dependable metro option</strong><span><a href="/wisconsin/snowmaking/">Wisconsin snowmaking</a> · <a href="/minnesota/snowmaking/">Minnesota snowmaking</a> · <a href="/wisconsin/night-skiing/">WI night skiing</a> · <a href="/minnesota/night-skiing/">MN night skiing</a></span></div></div></section>
+<section class="midwest-radar-panel"><div class="midwest-board-head"><div><p class="midwest-kicker">Cross-state radar</p><h2>When does comparing states actually matter?</h2><p id="midwest-freshness">Loading statewide weather and official-provider signals…</p></div><span id="midwest-status" class="midwest-status">Loading…</span></div><div id="midwest-radar"><div class="midwest-empty"><strong>Building the state-level radar…</strong><p>This section summarizes statewide change, weekend direction and meaningful storm windows. It does not rank individual trails across state lines.</p></div></div></section>
+<section class="midwest-why"><div class="midwest-section-head"><p class="midwest-kicker">How to use this network</p><h2>Use the broad page for routing, the state page for the decision</h2></div><div class="midwest-method"><div><strong>Know your state?</strong><span>Skip the regional comparison entirely. The Michigan, Wisconsin and Minnesota boards are the main products.</span></div><div><strong>Planning a weekend?</strong><span>Cross-state comparison is useful when lodging, drive time and a two-day ski trip make a broader choice realistic.</span></div><div><strong>Chasing a storm?</strong><span>Cross-state intelligence matters when a meaningful snow event creates a temporary window worth traveling for.</span></div><div><strong>Looking for a specific experience?</strong><span>Use regional shortcuts and state decision pages for snowmaking, night skiing, pass systems and destination areas.</span></div><div><strong>Still verify locally.</strong><span>Modeled snow and future windows are screening tools. Grooming, opening and access remain with the operator or land manager.</span></div></div></section>
+</main><footer class="midwest-footer"><div class="midwest-wrap">Midwest XC by Chris Izworski. This gateway routes skiers into detailed state and regional condition tools; modeled weather does not replace operator grooming or opening reports.</div></footer>
 <script>window.MIDWEST_XC=${js(context)};</script><script src="/xc-intelligence.js" defer></script><script src="/midwest-xc.js" defer></script></body></html>`;
 
 const dir = path.join(out,'midwest');
@@ -92,11 +123,11 @@ await mkdir(dir,{recursive:true});
 await writeFile(path.join(dir,'index.html'),html);
 await cp(path.join(root,'midwest-xc.js'),path.join(out,'midwest-xc.js'));
 await cp(path.join(root,'midwest-xc.css'),path.join(out,'midwest-xc.css'));
-await writeFile(path.join(dir,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${canonical}</loc><lastmod>2026-09-13</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>\n</urlset>\n`);
+await writeFile(path.join(dir,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${canonical}</loc><lastmod>2026-09-14</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>\n</urlset>\n`);
 
 const siblingMarker = '<strong>More Midwest XC boards</strong>';
 if (michiganHtml.includes(siblingMarker) && !michiganHtml.includes('href="/midwest/"')) {
-  michiganHtml = michiganHtml.replace(siblingMarker, `${siblingMarker}<a href="/midwest/">Midwest XC Today</a>`);
+  michiganHtml = michiganHtml.replace(siblingMarker, `${siblingMarker}<a href="/midwest/">Midwest XC gateway</a>`);
   await writeFile(michiganHtmlPath,michiganHtml);
 }
 
@@ -104,7 +135,7 @@ for (const slug of ['wisconsin','minnesota']) {
   const statePath = path.join(out,slug,'index.html');
   let stateHtml = await readFile(statePath,'utf8');
   if (!stateHtml.includes('href="/midwest/"')) {
-    stateHtml = stateHtml.replace('<nav class="state-nav" aria-label="Midwest XC tools">','<nav class="state-nav" aria-label="Midwest XC tools"><a href="/midwest/">Midwest Today</a>');
+    stateHtml = stateHtml.replace('<nav class="state-nav" aria-label="Midwest XC tools">','<nav class="state-nav" aria-label="Midwest XC tools"><a href="/midwest/">Midwest gateway</a>');
     await writeFile(statePath,stateHtml);
   }
 }
@@ -115,4 +146,4 @@ const sitemapLine = 'Sitemap: https://xcski.chrisizworski.com/midwest/sitemap.xm
 if (!robots.includes(sitemapLine)) robots = `${robots.trimEnd()}\n${sitemapLine}\n`;
 await writeFile(robotsPath,robots);
 
-console.log(`Generated Midwest XC Today across ${totalTrails} systems with weekend and storm-window intelligence.`);
+console.log(`Generated skier-first Midwest XC gateway across ${totalTrails} systems with state routing plus weekend/storm cross-state decisions.`);
