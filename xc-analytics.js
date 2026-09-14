@@ -47,6 +47,14 @@
     }
   }
 
+  function trailIdFromContext(el) {
+    const current = trailIdFromHref(location.href);
+    if (current) return current;
+    const card = el?.closest?.('.ski-pick,.state-pick,.midwest-pick,.forecast-pick,.region-pick');
+    const trailLink = card?.querySelector?.('a[href*="/trails/"]');
+    return trailLink ? trailIdFromHref(trailLink.href) : null;
+  }
+
   function destinationState(href) {
     try {
       const p = new URL(href, location.origin).pathname;
@@ -129,9 +137,11 @@
       let providerHost = null;
       try { providerHost = new URL(anchor.href).hostname.replace(/^www\./, ''); } catch {}
       emit('xc_official_source', {
-        trail_id: trailIdFromHref(location.href),
+        trail_id: trailIdFromContext(anchor),
         provider_host: providerHost,
-        placement: placement(anchor)
+        placement: placement(anchor),
+        rank: rankFromElement(anchor),
+        active_mode: activeMode()
       });
       return;
     }
