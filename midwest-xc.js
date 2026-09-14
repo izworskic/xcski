@@ -3,8 +3,7 @@
 
   const ctx = window.MIDWEST_XC;
   if (!ctx || !Array.isArray(ctx.states) || !window.XC_INTEL || !window.XC_FORECAST) return;
-  const board = document.getElementById('midwest-board');
-  const stateSummary = document.getElementById('midwest-state-summary');
+  const radar = document.getElementById('midwest-radar');
   const freshness = document.getElementById('midwest-freshness');
   const status = document.getElementById('midwest-status');
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -70,146 +69,80 @@
     return !(row.live?.decisionEligible && row.live.openState === 'closed');
   }
 
-  function avgTop(rows, count = 5) {
-    const scores = rows.filter(eligible).map(r => r.snowScore).sort((a,b) => b-a).slice(0,count);
-    return scores.length ? Math.round(scores.reduce((a,b) => a+b,0) / scores.length) : 0;
+  function average(values) {
+    const clean = values.filter(Number.isFinite);
+    return clean.length ? clean.reduce((a,b)=>a+b,0) / clean.length : null;
   }
 
-  function stateCards(results, offseason) {
-    if (!stateSummary) return;
-    const cards = results.map(result => {
-      const candidates = result.rows.filter(eligible).sort((a,b) => b.snowScore-a.snowScore);
-      const top = candidates[0];
-      const improver = result.rows.filter(r => Number.isFinite(r.scoreDelta)).sort((a,b) => b.scoreDelta-a.scoreDelta)[0];
-      const weekend = result.rows.filter(r => r.weekend?.available).sort((a,b) => Math.max(b.weekend.saturday.snowScore,b.weekend.sunday.snowScore)-Math.max(a.weekend.saturday.snowScore,a.weekend.sunday.snowScore))[0];
-      const storm = result.rows.filter(r => r.storm?.signal === 'storm-window').sort((a,b) => b.storm.eventSnowIn-a.storm.eventSnowIn)[0];
-      const freshLive = result.rows.filter(r => r.live?.decisionEligible).length;
-      const strength = avgTop(result.rows);
-      return `
-        <a class="midwest-state-card state-${result.state.slug}" href="${result.state.href}">
-          <span>${esc(result.state.name)}</span>
-          <strong>${offseason ? 'Preseason' : `${strength}/100`}</strong>
-          <small>${result.state.trails.length} systems${offseason ? '' : top ? ` · strongest model: ${esc(top.name)}` : ''}</small>
-          <small>${weekend ? `weekend leader ${esc(weekend.name)} · ${esc(weekend.weekend.betterDay)}` : 'weekend forecast pending'}${storm ? ` · storm watch ${storm.storm.eventSnowIn.toFixed(1)}&quot;` : ''}</small>
-          <small>${freshLive} fresh official update${freshLive===1?'':'s'}${!offseason && improver && Number.isFinite(improver.scoreDelta) ? ` · best mover ${improver.scoreDelta>0?'+':''}${improver.scoreDelta}` : ''}</small>
-        </a>`;
-    }).join('');
-    stateSummary.innerHTML = cards;
+  function pulseFor(result) {
+    const rows = result.rows.filter(eligible);
+    const freshSnow = rows.filter(r => r.snow24 >= 0.5).length;
+    const stormWindows = rows.filter(r => r.storm?.signal === 'storm-window').length;
+    const snowEvents = rows.filter(r => r.storm?.signal === 'snow-event').length;
+    const official = result.rows.filter(r => r.live?.decisionEligible).length;
+    const weekends = rows.filter(r => r.weekend?.available);
+    const sat = average(weekends.map(r => r.weekend.saturday.snowScore));
+    const sun = average(weekends.map(r => r.weekend.sunday.snowScore));
+    const weekendDirection = sat == null || sun == null ? 'Weekend forecast incomplete' : Math.abs(sat-sun) <= 1 ? 'Weekend: Saturday ≈ Sunday' : sat > sun ? 'Weekend: Saturday trends stronger' : 'Weekend: Sunday trends stronger';
+    const changes = rows.filter(r => Number.isFinite(r.scoreDelta));
+    const improving = changes.filter(r => r.scoreDelta >= 4).length;
+    const declining = changes.filter(r => r.scoreDelta <= -4).length;
+    return { freshSnow, stormWindows, snowEvents, official, weekendDirection, improving, declining };
   }
 
-  function weekendDetail(row) {
-    const w = row.weekend;
-    if (!w?.available) return '';
-    return `<div class="midwest-forecast-detail"><small>Weekend model</small><strong>${esc(w.betterDay === 'Tie' ? 'Saturday ≈ Sunday' : `${w.betterDay} stronger`)}</strong><span>Saturday ${w.saturday.snowScore}/100 · Sunday ${w.sunday.snowScore}/100 · best window ${esc(w.best.bestWindow.label)}</span></div>`;
+  function renderStateCards(results, offseason) {
+    for (const result of results) {
+      const pulse = pulseFor(result);
+      const el = document.querySelector(`[data-state-pulse="${result.state.slug}"]`);
+      if (!el) continue;
+      if (offseason && !pulse.freshSnow && !pulse.stormWindows && !pulse.snowEvents) {
+        el.innerHTML = '<strong>Preseason</strong><span>Use the destination shortcuts now; live winter signals wake up when meaningful snow returns.</span>';
+        continue;
+      }
+      const snow = pulse.freshSnow ? `${pulse.freshSnow} system${pulse.freshSnow===1?'':'s'} with ≥0.5&quot; modeled 24h snow` : 'No broad fresh-snow signal';
+      const storm = pulse.stormWindows ? `${pulse.stormWindows} potential ski window${pulse.stormWindows===1?'':'s'}` : pulse.snowEvents ? `${pulse.snowEvents} modeled snow event${pulse.snowEvents===1?'':'s'} still developing` : 'No meaningful storm window';
+      el.innerHTML = `<strong>Current statewide pulse</strong><span>${snow} · ${storm}</span><span>${esc(pulse.weekendDirection)}${pulse.official ? ` · ${pulse.official} fresh official update${pulse.official===1?'':'s'}` : ''}</span>`;
+    }
   }
 
-  function stormDetail(row) {
-    const s = row.storm;
-    if (!s || s.signal === 'none') return '';
-    if (s.signal === 'storm-window') return `<div class="midwest-forecast-detail"><small>Potential ski window</small><strong>${s.eventSnowIn.toFixed(1)}&quot; modeled</strong><span>opens ~${esc(XC_FORECAST.localHourLabel(s.windowStart))}${s.windowEnd ? ` · thaw/rain risk ~${esc(XC_FORECAST.localHourLabel(s.windowEnd))}` : ' · persists through forecast'} · ${esc(s.confidence)} confidence</span></div>`;
-    return `<div class="midwest-forecast-detail"><small>Snow event</small><strong>${s.eventSnowIn.toFixed(1)}&quot; modeled</strong><span>${esc(s.reason)}</span></div>`;
+  function radarRow(result, offseason) {
+    const pulse = pulseFor(result);
+    const change = pulse.improving > pulse.declining ? `${pulse.improving} systems improving materially` : pulse.declining > pulse.improving ? `${pulse.declining} systems declining materially` : 'No broad day-over-day swing';
+    const storm = pulse.stormWindows ? `${pulse.stormWindows} potential ski window${pulse.stormWindows===1?'':'s'}` : pulse.snowEvents ? `${pulse.snowEvents} snow event${pulse.snowEvents===1?'':'s'} without a qualified window yet` : 'No qualifying storm window';
+    const main = offseason && !pulse.freshSnow && !pulse.stormWindows && !pulse.snowEvents ? 'Preseason routing mode' : change;
+    return `<article class="midwest-radar-row state-${result.state.slug}"><div><span>${esc(result.state.name)}</span><strong>${esc(main)}</strong><small>${esc(pulse.weekendDirection)}</small></div><div class="midwest-radar-metrics"><span><b>${pulse.freshSnow}</b><small>fresh-snow systems</small></span><span><b>${pulse.stormWindows}</b><small>storm windows</small></span><span><b>${pulse.official}</b><small>fresh official updates</small></span></div><div><strong>${esc(storm)}</strong><a href="${result.state.href}">Open ${esc(result.state.name)} conditions →</a></div></article>`;
   }
 
-  function rowCard(row, rank, mode='best') {
-    const delta = Number.isFinite(row.scoreDelta) ? `${row.scoreDelta > 0 ? '+' : ''}${row.scoreDelta}` : '—';
-    const deltaClass = row.scoreDelta > 0 ? 'up' : row.scoreDelta < 0 ? 'down' : 'flat';
-    const live = row.live?.decisionEligible
-      ? `<div class="midwest-live"><small>Official status</small><strong>${esc(row.live.openState)}</strong><span>${esc(row.live.provider)} · ${esc(row.live.freshness)}</span></div>`
-      : '';
-    const shift = row.bestWindowChanged && row.previousBestWindow
-      ? `<span><b>${esc(row.previousBestWindow)} → ${esc(row.bestWindow.label)}</b><small>window shift</small></span>`
-      : '';
-    const forecast = mode === 'weekend' ? weekendDetail(row) : mode === 'storm' ? stormDetail(row) : '';
-    return `
-      <article class="midwest-pick">
-        <div class="midwest-rank">${rank}</div>
-        <div class="midwest-pick-main">
-          <div class="midwest-pick-head">
-            <div><p>${esc(row.state)}</p><h3><a href="${esc(row.href)}">${esc(row.name)}</a></h3><span>${esc(row.town)}</span></div>
-            <div class="midwest-score"><b>${row.snowScore}</b><small>${XC_INTEL.scoreWord(row.snowScore)}</small></div>
-          </div>
-          ${live}${forecast}
-          <div class="midwest-decision">
-            <div><small>Surface</small><strong>${esc(row.surface.label)}</strong><span>${esc(row.surface.detail)}</span></div>
-            <div><small>Best window</small><strong>${esc(row.bestWindow.label)}</strong><span>${esc(row.bestWindow.detail)}</span></div>
-          </div>
-          <div class="midwest-metrics">
-            <span><b>${row.depth.toFixed(1)}&quot;</b><small>modeled base</small></span>
-            <span><b>${row.snow24.toFixed(1)}&quot;</b><small>24h snow</small></span>
-            <span class="delta-${deltaClass}"><b>${delta}</b><small>vs yesterday</small></span>
-            <span><b>${Math.round(row.temp)}°F</b><small>now</small></span>
-            ${shift}
-          </div>
-        </div>
-      </article>`;
-  }
-
-  function selectRows(rows, mode) {
-    const open = rows.filter(eligible);
-    if (mode === 'improvers') return open.filter(r => Number.isFinite(r.scoreDelta) && r.scoreDelta > 0).sort((a,b) => (b.scoreDelta-a.scoreDelta) || (b.snowScore-a.snowScore));
-    if (mode === 'fresh') return open.filter(r => r.snow24 > 0).sort((a,b) => (b.snow24-a.snow24) || (b.snowScore-a.snowScore));
-    if (mode === 'lighted') return open.filter(r => r.lit).sort((a,b) => b.snowScore-a.snowScore);
-    if (mode === 'skate') return open.filter(r => r.skate).sort((a,b) => b.snowScore-a.snowScore);
-    if (mode === 'weekend') return rows.filter(r => r.weekend?.available).sort((a,b) => Math.max(b.weekend.saturday.snowScore,b.weekend.sunday.snowScore)-Math.max(a.weekend.saturday.snowScore,a.weekend.sunday.snowScore));
-    if (mode === 'storm') return rows.filter(r => r.storm?.signal === 'storm-window' || r.storm?.signal === 'snow-event').sort((a,b) => (b.storm?.eventSnowIn||0)-(a.storm?.eventSnowIn||0));
-    return open.sort((a,b) => {
-      const aOpen = a.live?.decisionEligible && a.live.openState === 'open' ? 1 : 0;
-      const bOpen = b.live?.decisionEligible && b.live.openState === 'open' ? 1 : 0;
-      return (bOpen-aOpen) || (b.snowScore-a.snowScore) || ((b.bestWindow.score||0)-(a.bestWindow.score||0));
-    });
-  }
-
-  function renderBoard(rows, mode='best') {
-    if (!board) return;
-    const selected = selectRows([...rows], mode).slice(0,10);
-    const labels = {
-      best:'Best modeled signals across the Midwest',
-      improvers:'Biggest modeled improvements since the same local hour yesterday',
-      fresh:'Most modeled snow in the last 24 hours',
-      lighted:'Best lighted systems',
-      skate:'Best skate-capable systems',
-      weekend:'Best modeled XC signals for Saturday and Sunday',
-      storm:'Storm watch: where a modeled ski window may open'
-    };
-    const heading = document.getElementById('midwest-board-label');
-    if (heading) heading.textContent = labels[mode] || labels.best;
-    board.innerHTML = selected.length
-      ? selected.map((row,i) => rowCard(row,i+1,mode)).join('')
-      : `<div class="midwest-empty"><strong>${mode === 'storm' ? 'No meaningful modeled storm window right now.' : 'No meaningful matches in this view.'}</strong><p>The engine does not manufacture snow, movement, or a future ski window when the forecast does not support it.</p></div>`;
+  function renderRadar(results, offseason, failedStates) {
+    if (!radar) return;
+    radar.innerHTML = results.map(result => radarRow(result, offseason)).join('');
+    if (failedStates.length) {
+      radar.insertAdjacentHTML('beforeend', `<div class="midwest-partial"><strong>Partial statewide data</strong><span>${esc(failedStates.join(', '))} unavailable right now. The available state summaries remain usable.</span></div>`);
+    }
   }
 
   async function load() {
     try {
       if (status) status.textContent = `Updating ${ctx.totalTrails} systems…`;
-      const results = await Promise.all(ctx.states.map(loadState));
+      const settled = await Promise.allSettled(ctx.states.map(loadState));
+      const results = settled.filter(result => result.status === 'fulfilled').map(result => result.value);
+      const failedStates = settled.map((result,index) => result.status === 'rejected' ? ctx.states[index].name : null).filter(Boolean);
       const rows = results.flatMap(result => result.rows);
-      if (rows.length !== ctx.totalTrails) throw new Error(`expected ${ctx.totalTrails} rows, got ${rows.length}`);
+      if (!rows.length) throw new Error('no state weather returned');
 
       const month = Number(new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'numeric'}).format(new Date()));
       const offseason = month >= 5 && month <= 10;
-      const snowWatch = rows.filter(r => r.storm?.signal !== 'none' || r.snowTomorrow >= 0.5 || r.snow24 >= 0.5);
-      stateCards(results, offseason && !snowWatch.length);
+      renderStateCards(results, offseason);
+      renderRadar(results, offseason, failedStates);
 
       const liveCount = rows.filter(r => r.live?.decisionEligible).length;
       const pending = results.reduce((sum,r) => sum + (r.liveLayer.payload.providers || []).filter(p=>p.status==='permission-pending').length, 0);
-      if (freshness) freshness.textContent = `Open-Meteo 8-day weather · same-local-hour change since yesterday · weekend + storm-window intelligence · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending.`;
-
-      if (offseason && !snowWatch.length) {
-        if (status) status.textContent = 'Preseason mode';
-        renderBoard(rows,'weekend');
-      } else {
-        if (status) status.textContent = 'Live Midwest board';
-        renderBoard(rows,ctx.defaultMode || 'best');
-      }
-      document.querySelectorAll('[data-midwest-mode]').forEach(btn => btn.addEventListener('click', () => {
-        document.querySelectorAll('[data-midwest-mode]').forEach(b => b.setAttribute('aria-pressed','false'));
-        btn.setAttribute('aria-pressed','true');
-        renderBoard(rows,btn.dataset.midwestMode);
-      }));
+      if (freshness) freshness.textContent = `State-level radar from ${rows.length}/${ctx.totalTrails} systems · same-local-hour change · weekend direction · storm-window signals · ${liveCount} fresh official provider update${liveCount===1?'':'s'} · ${pending} provider permission${pending===1?'':'s'} pending${failedStates.length ? ` · partial: ${failedStates.join(', ')} unavailable` : ''}.`;
+      if (status) status.textContent = failedStates.length ? 'State radar · partial' : offseason ? 'Preseason routing mode' : 'State radar live';
     } catch (error) {
-      console.warn('Midwest XC Today unavailable:', error);
-      if (status) status.textContent = 'Live board unavailable';
-      if (board) board.innerHTML = '<div class="midwest-empty"><strong>The live Midwest comparison could not load.</strong><p>Use the Michigan, Wisconsin and Minnesota state boards below. Stale modeled values are not substituted.</p></div>';
+      console.warn('Midwest XC gateway radar unavailable:', error);
+      if (status) status.textContent = 'State radar unavailable';
+      if (radar) radar.innerHTML = '<div class="midwest-empty"><strong>The cross-state radar could not load.</strong><p>The Michigan, Wisconsin and Minnesota state gateways above remain the primary way into the network. No stale modeled values are substituted here.</p></div>';
     }
   }
 
