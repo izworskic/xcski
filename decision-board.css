@@ -75,3 +75,11 @@
   .ski-region-links{align-items:flex-start}
   .ski-region-links strong{width:100%}
 }
+
+.ski-destination-pairing{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:16px 0 12px;padding:13px 14px;border:1px solid #bdccd6;border-radius:12px;background:#f6fafc}
+.ski-destination-pairing strong,.ski-destination-pairing span{display:block}
+.ski-destination-pairing strong{font-size:.9rem;color:var(--track)}
+.ski-destination-pairing span{margin-top:2px;font-size:.78rem;line-height:1.4;color:#52606a}
+.ski-destination-pairing a{flex:0 0 auto;font-size:.78rem;font-weight:800;color:var(--track);text-decoration:none}
+.ski-destination-pairing a:hover{text-decoration:underline}
+@media(max-width:720px){.ski-destination-pairing{display:block}.ski-destination-pairing a{display:inline-block;margin-top:8px}}

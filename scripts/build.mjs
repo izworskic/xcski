@@ -38,7 +38,7 @@ html = html.replace(statusAnchor, `${statusAnchor}\n${trustNote}`);
 
 const footerAnchor = '<p class="net">More Michigan field tools:';
 if (!html.includes(footerAnchor)) throw new Error('Footer network anchor missing');
-html = html.replace(footerAnchor, '<p><a href="https://chrisizworski.com/michigan-cross-country-skiing/">Compare flagship Michigan XC trails and planning sources</a></p>\n<p><a href="https://chrisizworski.com/tahquamenon-falls/#winter">Tahquamenon Falls winter + XC visit planner</a></p>\n' + footerAnchor);
+html = html.replace(footerAnchor, '<p><a href="https://chrisizworski.com/michigan-cross-country-skiing/">Compare flagship Michigan XC trails and planning sources</a></p>\n<p><a href="https://chrisizworski.com/tahquamenon-falls/?intent=xc#winter">Tahquamenon Falls winter + XC visit planner</a></p>\n' + footerAnchor);
 
 await writeFile(path.join(out, 'index.html'), html);
 

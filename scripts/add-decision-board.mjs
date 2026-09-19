@@ -59,6 +59,13 @@ const boardMarkup = `
       <a href="/regions/keweenaw-houghton-calumet/">Keweenaw</a>
       <a href="/regions/western-upper-peninsula/">Western UP</a>
     </div>
+    <div class="ski-destination-pairing" aria-label="Tahquamenon Falls winter destination pairing">
+      <div>
+        <strong>Heading to Tahquamenon?</strong>
+        <span>Use the Eastern UP board for regional snow context, then build a Falls + XC day. Tahquamenon grooming still needs local verification.</span>
+      </div>
+      <a href="https://chrisizworski.com/tahquamenon-falls/?intent=xc">Build a Tahquamenon Falls + XC day →</a>
+    </div>
     <p class="ski-board-note"><strong>How to read this:</strong> the 0–100 number remains a modeled natural-snow score. Surface state and best time are hourly weather-derived. Weekend and storm-window calls are modeled forecast signals, not grooming confirmations. Confidence measures source quality, not trail quality. Grooming/open status still comes from the operator or land manager unless an authorized live feed is explicitly connected.</p>
   </div>
 </section>`;

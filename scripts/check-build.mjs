@@ -76,7 +76,8 @@ const regionUrls=(sitemap.match(/<loc>https:\/\/xcski\.chrisizworski\.com\/regio
 if (trailUrls !== 61 || regionUrls !== 12 || (sitemap.match(/<loc>/g)||[]).length !== 74) fail('Michigan sitemap counts changed');
 for (const phrase of ['Groomed systems ski','Most systems skiing well','Everything skis, backcountry included','No base. Nothing to ski yet.','plain language skiability read']) if ((html+llms+boardJs+trailJs+regionJs+intelJs).toLowerCase().includes(phrase.toLowerCase())) fail(`unsupported skiability claim remains: ${phrase}`);
 if (!robots.includes('Sitemap: https://xcski.chrisizworski.com/sitemap.xml')) fail('robots sitemap owner changed');
-if (!html.includes('https://chrisizworski.com/tahquamenon-falls/#winter')) fail('Tahquamenon winter cross-link missing');
+if (!html.includes('https://chrisizworski.com/tahquamenon-falls/?intent=xc#winter')) fail('Tahquamenon winter cross-link missing');
+if (!html.includes('ski-destination-pairing') || !html.includes('Build a Tahquamenon Falls + XC day')) fail('Contextual Tahquamenon XC pairing missing');
 
 const marker='const TRAILS = [';
 const mi=html.indexOf(marker), rs=html.lastIndexOf('<script>',mi), re=html.indexOf('</script>',mi);
