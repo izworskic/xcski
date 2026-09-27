@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm test && node scripts/inject-ga4.mjs && node scripts/submit-indexnow.mjs",
+  "buildCommand": "npm test && node scripts/inject-ga4.mjs && node scripts/submit-indexnow.mjs && node scripts/inject-network-ads.mjs dist",
   "outputDirectory": "dist",
   "functions": {
     "api/xc-live.js": {
