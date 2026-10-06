@@ -19,9 +19,11 @@ if (!html.includes('<link rel="canonical" href="https://xcski.chrisizworski.com/
 if (!html.includes('<h1>Michigan<br>Cross Country Ski Trails</h1>')) fail('statewide H1 missing');
 if (!html.includes('Statewide Michigan cross-country ski conditions for 61 trail systems')) fail('statewide meta description missing');
 if (!html.includes('<link rel="author" href="https://chrisizworski.com/chris-izworski/">')) fail('canonical creator profile link missing');
-const identityJson = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
-if (!identityJson) fail('creator identity graph missing');
-const identityGraph = JSON.parse(identityJson[1]);
+const identityStartTag = '<script type="application/ld+json">';
+const identityStart = html.indexOf(identityStartTag);
+const identityEnd = html.indexOf('</script>', identityStart);
+if (identityStart < 0 || identityEnd <= identityStart) fail('creator identity graph missing');
+const identityGraph = JSON.parse(html.slice(identityStart + identityStartTag.length, identityEnd));
 const creator = identityGraph['@graph']?.find(node => node['@type'] === 'Person' && node['@id'] === 'https://chrisizworski.com/#person');
 if (!creator || creator.name !== 'Chris Izworski' || creator.url !== 'https://chrisizworski.com/') fail('canonical creator Person must resolve to the homepage');
 if (!identityGraph['@graph'].some(node => node.author?.['@id'] === creator['@id'])) fail('page author reference does not resolve to the canonical creator Person');
