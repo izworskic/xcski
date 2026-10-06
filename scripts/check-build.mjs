@@ -19,6 +19,15 @@ if (!html.includes('<link rel="canonical" href="https://xcski.chrisizworski.com/
 if (!html.includes('<h1>Michigan<br>Cross Country Ski Trails</h1>')) fail('statewide H1 missing');
 if (!html.includes('Statewide Michigan cross-country ski conditions for 61 trail systems')) fail('statewide meta description missing');
 if (!html.includes('<link rel="author" href="https://chrisizworski.com/chris-izworski/">')) fail('canonical creator profile link missing');
+const identityStartTag = '<script type="application/ld+json">';
+const identityStart = html.indexOf(identityStartTag);
+const identityEnd = html.indexOf('</script>', identityStart);
+if (identityStart < 0 || identityEnd <= identityStart) fail('creator identity graph missing');
+const identityGraph = JSON.parse(html.slice(identityStart + identityStartTag.length, identityEnd));
+const creator = identityGraph['@graph']?.find(node => node['@type'] === 'Person' && node['@id'] === 'https://chrisizworski.com/#person');
+if (!creator || creator.name !== 'Chris Izworski' || creator.url !== 'https://chrisizworski.com/') fail('canonical creator Person must resolve to the homepage');
+if (!identityGraph['@graph'].some(node => node.author?.['@id'] === creator['@id'])) fail('page author reference does not resolve to the canonical creator Person');
+if (!identityGraph['@graph'].some(node => node.publisher?.['@id'] === creator['@id'])) fail('site publisher reference does not resolve to the canonical creator Person');
 if ((html.match(/class="card"/g)||[]).length !== 61) fail('expected 61 statewide trail cards');
 if ((html.match(/>Verify trail status<\/a>/g)||[]).length !== 61) fail('every trail must retain status verification');
 for (const id of ['huronmeadows','kensington','stonycreek','pigeoncreek','muskegonluge','valleyspur','noque','alqua','michigantech','swedetown','abr','wolverine','porkies']) if (!html.includes(`id="t-${id}"`)) fail(`statewide expansion missing: ${id}`);
